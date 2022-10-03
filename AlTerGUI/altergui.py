@@ -15,7 +15,8 @@ KV = '''
 
 ScreenManager:
     ENTERScreen:
-    MainScreen:
+    OMSScreen:
+    MOSScreen:
 
 <ENTERScreen>:
     name: 'ENTER'
@@ -85,6 +86,7 @@ ScreenManager:
                     md_bg_color: app.theme_cls.primary_dark
                     bold: True
                     font_size: 25
+                    on_press: root.oms()
                     ripple_color: app.theme_cls.primary_color
                     size_hint: .1, .8
                     pos_hint: {'center_x': .3, 'center_y': .8}
@@ -92,14 +94,20 @@ ScreenManager:
                     text: "MOS.RU"
                     md_bg_color: 0.8, 0, 0.1, 1
                     font_size: 45
+                    on_press: root.mos()
                     ripple_color: 1, 0, 0, 0.1
                     pos_hint: {'center_x': .3, 'center_y': .8}
                     size_hint: .1, .8
                     bold: True
 
 
-<MainScreen>:
-    name: 'mainscreen'
+<OMSScreen>:
+    name: 'oms'
+    MDLabel:
+        text: "text"
+        
+<MOSScreen>:
+    name: 'mos'
     MDLabel:
         text: "text"
         
@@ -116,7 +124,8 @@ class ENTERScreen(Screen):
             if len(self.password.text)>=8:
                 self.password.helper_text_color_normal = 'white'
                 self.password.helper_text_color_focus = 'white'
-                self.password.helper_text = ""   
+                self.password.helper_text = ""
+                #вход в emias по логину паролю
             else:
                 self.password.helper_text = "Пароль слишком короткий "
                 self.password.helper_text_color_normal = 'red'
@@ -126,15 +135,24 @@ class ENTERScreen(Screen):
             self.email.helper_text_color_normal = 'red'
             self.email.helper_text_color_focus = 'red'
 
+    def oms(self):
+        self.manager.current = 'oms'
+
+    def mos(self):
+        self.manager.current = 'mos'
+
 
     pass
-class MainScreen(Screen):
+class OMSScreen(Screen):
+    pass
+class MOSScreen(Screen):
     pass
 class AlterApp(MDApp):
     def build(self):
         sm = ScreenManager()
         sm.add_widget(ENTERScreen(name='ENTER'))
-        sm.add_widget(MainScreen(name="mainscreen"))
+        sm.add_widget(OMSScreen(name="oms"))
+        sm.add_widget(MOSScreen(name="mos"))
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
         return Builder.load_string(KV)
