@@ -6,15 +6,12 @@ from kivymd.uix.screenmanager import ScreenManager
 
 import re
 
-#Window.fullscreen = True
-#Window.maximize()
+Window.fullscreen = True
+Window.maximize()
 
 
 
 KV = '''
-<MagicButton@MagicBehavior+MDFillRoundFlatButton>:
-    magic_speed: 0.2
-
 
 ScreenManager:
     ENTERScreen:
@@ -31,14 +28,15 @@ ScreenManager:
             shadow_radius: 6
             shadow_offset: 0, 2
             pos_hint: {'center_x': 0.5, 'center_y': .5}
-            size_hint: .2, .5
+            size_hint: .2, .6
             RelativeLayout:
                 orientation: 'vertical'
-                size_hint: 1, .8
+                size_hint: 1, .7
                 MDLabel:
                     text: "Авторизация"
                     bold: True
                     size_hint: 1, 1
+                    font_size: 45
                     pos_hint: {'center_x': .5, 'center_y': 0.9}
                     halign: 'center'
                 MDTextField:
@@ -47,6 +45,7 @@ ScreenManager:
                     mode: "fill"
                     pos_hint: {'center_x': .5, 'center_y': .7}
                     size_hint_y: .2
+                    font_size: 30
                     helper_text: "mymail@mail.ru"
                     helper_text_mode: "on_focus"
                     icon_left: "account-badge"
@@ -54,44 +53,46 @@ ScreenManager:
                     id: text_field
                     hint_text: "Пароль"
                     password: True
+                    font_size: 30
                     pos_hint: {'center_x': .5, 'center_y': .45}
                     mode: "fill"
                     size_hint_y: .2
                     icon_left: "key-variant"
 
-                MagicButton:
+                MDFillRoundFlatButton:
                     text: "Войти в систему"
                     elevation: 4.5
                     shadow_offset: 0, 6
-                    size_hint: 0.8, .2
+                    ripple_color: app.theme_cls.primary_color
+                    size_hint: 0.8, .15
                     font_size: 45
                     md_bg_color: app.theme_cls.primary_dark
-                    pos_hint: {'center_x': .5, 'center_y': .2}
+                    pos_hint: {'center_x': .5, 'center_y': .23}
                     bold: True
-                    on_release: self.grow()
                     on_press: root.check()
                 MDLabel:
-                    text:"Войти с помощью"
+                    text:"Войти с помощью:"
                     bold: True
+                    font_size: 25
                     size_hint: 1, 1
-                    pos_hint: {'center_x': .5, 'center_y': 0.08}
+                    pos_hint: {'center_x': .5, 'center_y': 0.1}
                     halign: 'center'
             BoxLayout:
                 orientation: 'horizontal'
-                size_hint: 1, .2
-                MagicButton:
+                size_hint: 1, .1
+                MDFillRoundFlatButton:
                     text: "Полиса ОМС"
                     md_bg_color: app.theme_cls.primary_dark
                     bold: True
                     font_size: 25
+                    ripple_color: app.theme_cls.primary_color
                     size_hint: .1, .8
                     pos_hint: {'center_x': .3, 'center_y': .8}
-                    on_release: self.grow()
-                MagicButton:
+                MDFillRoundFlatButton:
                     text: "MOS.RU"
                     md_bg_color: 0.8, 0, 0.1, 1
-                    on_release: self.grow()
                     font_size: 45
+                    ripple_color: 1, 0, 0, 0.1
                     pos_hint: {'center_x': .3, 'center_y': .8}
                     size_hint: .1, .8
                     bold: True
