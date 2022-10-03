@@ -19,7 +19,7 @@ ScreenManager:
     MOSScreen:
 
 <ENTERScreen>:
-    name: 'ENTER'
+    name: 'enter'
     email: email_input
     password: text_field
     FloatLayout:
@@ -103,13 +103,23 @@ ScreenManager:
 
 <OMSScreen>:
     name: 'oms'
-    MDLabel:
-        text: "text"
+    MDFillRoundFlatButton:
+        text: "Вернуться"
+        md_bg_color: 0.8, 0, 0.1, 1
+        font_size: 45
+        on_press: root.getback()
+        ripple_color: 1, 0, 0, 0.1
+        bold: True
         
 <MOSScreen>:
     name: 'mos'
-    MDLabel:
-        text: "text"
+    MDFillRoundFlatButton:
+        text: "Вернуться"
+        md_bg_color: 0.8, 0, 0.1, 1
+        font_size: 45
+        on_press: root.getback()
+        ripple_color: 1, 0, 0, 0.1
+        bold: True
         
         
 
@@ -144,13 +154,17 @@ class ENTERScreen(Screen):
 
     pass
 class OMSScreen(Screen):
+    def getback(self):
+        self.manager.current = 'enter'
     pass
 class MOSScreen(Screen):
+    def getback(self):
+        self.manager.current = 'enter'
     pass
 class AlterApp(MDApp):
     def build(self):
         sm = ScreenManager()
-        sm.add_widget(ENTERScreen(name='ENTER'))
+        sm.add_widget(ENTERScreen(name='enter'))
         sm.add_widget(OMSScreen(name="oms"))
         sm.add_widget(MOSScreen(name="mos"))
         self.theme_cls.primary_palette = "Blue"
