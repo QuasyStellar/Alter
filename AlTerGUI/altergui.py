@@ -1,9 +1,9 @@
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
-from kivymd.uix.screen import Screen
-from kivymd.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import Screen, ScreenManager, FadeTransition
 from kivy.uix.behaviors import ButtonBehavior
+
 
 from kivymd.uix.behaviors import (
     RectangularRippleBehavior,
@@ -15,12 +15,12 @@ from kivymd.uix.behaviors import (
 import re
 
 Window.fullscreen = True
-Window.maximize()
+Window.size = (1920, 1080)
+#Window.maximize()
 
 
 
 KV = '''
-
 ScreenManager:
     ENTERScreen:
     OMSScreen:
@@ -32,75 +32,70 @@ ScreenManager:
     Image:
         source: 'bg.png'
         allow_stretch: True
+        keep_ratio: False
+
+
     RelativeLayout:
-        MDLabel:
-            text: "Добро пожаловать!"
-            bold: True
-            font_name: 'roboto'
-            font_size: 45
-            pos_hint: {'center_x': .5, 'center_y': 0.92}
-            halign: 'center'
-        MDLabel:
-            text: "Для использования АльТер"
-            bold: True
-            font_name: 'roboto'
-            font_size: 45
-            pos_hint: {'center_x': .5, 'center_y': 0.88}
-            halign: 'center'
-        MDLabel:
-            text: "необходимо авторизоваться в [color=#006ad4]EMIAS[/color]"
-            bold: True
-            font_size: 45
-            font_name: 'roboto'
-            markup: True
-            pos_hint: {'center_x': .5, 'center_y': 0.84}
-            halign: 'center'
+        Image:
+            source: 'alter.png'
+            pos_hint: {'center_x': 0.5, 'center_y': .9}
+
         MDCard:
             orientation: "vertical"
             elevation: 4
             shadow_radius: 6
             shadow_offset: 0, 2
             pos_hint: {'center_x': 0.5, 'center_y': .65}
-            size_hint: .2, .25
+            size_hint: .2, .4
             RelativeLayout:
                 orientation: 'vertical'
                 size_hint: 1, 1
+                MDLabel:
+                    text: "Войти через [color=1560db]EMIAS[/color]:"
+                    bold: True
+                    markup: True
+                    font_size: dp(30)
+                    font_name: 'roboto'
+                    pos_hint: {'center_x': .5, 'center_y': .958}
+                    halign: 'center'
                 MDTextField:
                     id: email_input
                     hint_text: "Логин"
                     mode: "fill"
+                    font_size: dp(30)
                     pos_hint: {'center_x': .5, 'center_y': .8}
                     size_hint: 1, .20
+                    helper_text_mode: "persistent"
                     font_name: 'roboto'
-                    font_size: 30
                     helper_text: "mymail@mail.ru"
-                    helper_text_mode: "on_focus"
                     icon_left: "account-badge"
                 MDTextField:
                     id: text_field
                     hint_text: "Пароль"
                     password: True
+                    font_size: dp(30)
+                    helper_text_mode: "persistent"
                     size_hint: 1, .20
-                    font_size: 30
                     font_name: 'roboto'
                     pos_hint: {'center_x': .5, 'center_y': .50}
                     mode: "fill"
 
                     icon_left: "key-variant"
-                MDFillRoundFlatButton:
-                    text: "Войти в EMIAS"
-                    elevation: 4.5
-                    shadow_offset: 0, 6
+                MDTextButton:
                     ripple_color: app.theme_cls.primary_color
                     font_name: 'roboto'
-                    font_size: 45
-                    size_hint: .8, .27
-                    md_bg_color: 0/255, 106/255, 240/255
+                    font_size: dp(30)
+                    size_hint: .8, .17
                     pos_hint: {'center_x': .5, 'center_y': .20}
                     bold: True
                     on_press: root.check()
+                    Image:
+                        source: 'emias.png'
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        size: 362, 65
         MDSeparator:
-            pos_hint: {'center_x': .435, 'center_y': .4888}
+            pos_hint: {'center_x': .435, 'center_y': .415}
             size_hint_x: .1
             color: 128/255, 128/255, 128/255
         MDLabel:
@@ -108,11 +103,10 @@ ScreenManager:
             bold: True
             markup: True
             font_name: 'roboto'
-            font_size: 30
-            pos_hint: {'center_x': .5, 'center_y': .4888}
+            pos_hint: {'center_x': .5, 'center_y': .415}
             halign: 'center'
         MDSeparator:
-            pos_hint: {'center_x': .565, 'center_y': .4888}
+            pos_hint: {'center_x': .565, 'center_y': .415}
             size_hint_x: .1
             color: 128/255, 128/255, 128/255
 
@@ -121,58 +115,121 @@ ScreenManager:
             elevation: 4
             shadow_radius: 6
             shadow_offset: 0, 2
-            pos_hint: {'center_x': 0.5, 'center_y': .35}
+            pos_hint: {'center_x': 0.5, 'center_y': .27}
             size_hint: .2, .20
             MDRelativeLayout:
                 orientation: 'horizontal'
-                MDFillRoundFlatButton:
-                    text: "По полису ОМС"
-                    md_bg_color: 0/255, 106/255, 240/255
-                    bold: True
-                    font_size: 35
-                    font_name: 'roboto'
-                    on_press: root.oms()
-                    ripple_color: app.theme_cls.primary_color
-                    size_hint: .6, .3
-                    pos_hint: {'center_x': .38, 'center_y': 0.70}
-                MDFillRoundFlatButton:
-                    text: "MOS.RU"
-                    md_bg_color: 0.8, 0, 0.1, 1
-                    font_size: 35
-                    font_name: 'roboto'
+                MDTextButton:
+                    size_hint: 1, .45
+                    halign: 'center'
+                    pos_hint: {'center_x': .5, 'center_y': .30}
+                    font_size: dp(25)
                     on_press: root.mos()
-                    ripple_color: 1, 0, 0, 0.1
-                    pos_hint: {'center_x': .38, 'center_y': .30}
-                    size_hint: .6, .3
-                    bold: True
-                MDIcon:
-                    icon: "emias.png"
-                    pos_hint: {'center_x': .8, 'center_y': .70}
-                    font_size: 90
-                MDIcon:
-                    icon: "mos.png"
-                    pos_hint: {'center_x': .8, 'center_y': .30}
-                    font_size: 90
+                    Image:
+                        source: 'mos.png'
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        size: 358, 60
+                MDTextButton:
+                    size_hint: 1, .45
+                    halign: 'center'
+                    pos_hint: {'center_x': .5, 'center_y': .70}
+                    font_size: dp(25)
+                    on_press: root.oms()
+                    Image:
+                        source: 'oms.png'
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        size: 362, 65
+                    
+                
                     
     
 <OMSScreen>:
     name: 'oms'
     MDFillRoundFlatButton:
-        text: "Вернуться"
-        md_bg_color: 0/255, 106/255, 240/255
-        font_size: 45
-        on_press: root.getback()
+        text: "На экран авторизации"
+        pos_hint: {'center_x': .1, 'center_y': .92}
         font_name: 'roboto'
+        font_size: dp(30)
+        size_hint_y: .1
+        md_bg_color: 0/255, 106/255, 240/255
+        on_press: root.getback()
         ripple_color: 1, 0, 0, 0.1
         bold: True
+    RelativeLayout:
+        Image:
+            source: 'alter.png'
+            pos_hint: {'center_x': 0.5, 'center_y': .9}
+
+        MDCard:
+            orientation: "vertical"
+            elevation: 4
+            shadow_radius: 6
+            shadow_offset: 0, 2
+            pos_hint: {'center_x': 0.5, 'center_y': .65}
+            size_hint: .2, .4
+            RelativeLayout:
+                orientation: 'vertical'
+                size_hint: 1, 1
+                MDLabel:
+                    text: "Вход по полису ОМС:"
+                    bold: True
+                    markup: True
+                    font_size: dp(30)
+                    font_name: 'roboto'
+                    pos_hint: {'center_x': .5, 'center_y': .958}
+                    halign: 'center'
+                MDTextField:
+                    id: email_input
+                    hint_text: "Номер полиса"
+                    mode: "fill"
+                    font_size: dp(30)
+                    pos_hint: {'center_x': .5, 'center_y': .8}
+                    size_hint: 1, .20
+                    helper_text_mode: "persistent"
+                    font_name: 'roboto'
+                    helper_text: "Например, 7100 0000 0000 0000"
+                    icon_left: "account-badge"
+                MDTextField:
+                    id: text_field
+                    hint_text: "Пароль"
+                    password: True
+                    font_size: dp(30)
+                    helper_text_mode: "persistent"
+                    size_hint: 1, .20
+                    font_name: 'roboto'
+                    pos_hint: {'center_x': .5, 'center_y': .50}
+                    mode: "fill"
+
+                    icon_left: "key-variant"
+                MDFillRoundFlatButton:
+                    text: "Войти"
+                    ripple_color: app.theme_cls.primary_color
+                    font_name: 'roboto'
+                    font_size: 45
+                    size_hint: .8, .1
+                    md_bg_color: 0/255, 106/255, 240/255
+                    pos_hint: {'center_x': .5, 'center_y': .25}
+                    bold: True
+                    on_press: root.check()
+                MDLabel:
+                    text: "[color=#808080]Авторизируясь по полису вам будет доступен не полный функционал![/color]"
+                    bold: True
+                    markup: True
+                    font_name: 'roboto'
+                    pos_hint: {'center_x': .5, 'center_y': .10}
+                    halign: 'center'
         
 <MOSScreen>:
     name: 'mos'
     MDFillRoundFlatButton:
-        text: "Вернуться"
+        text: "На экран авторизации"
+        pos_hint: {'center_x': .1, 'center_y': .92}
         font_name: 'roboto'
+        font_size: dp(30)
+        size_hint_y: .1
         md_bg_color: 0/255, 106/255, 240/255
-        font_size: 45
         on_press: root.getback()
         ripple_color: 1, 0, 0, 0.1
         bold: True
@@ -182,14 +239,13 @@ ScreenManager:
 class ENTERScreen(Screen):
     def check(self):
         pattern = r"^[-\w\.]+@([-\w]+\.)+[-\w]{2,4}$"
-        if re.match(pattern, self.email.text) is not None:
+        if self.email.text != "" and re.match(pattern, self.email.text) is not None:
             self.email.helper_text_color_normal = 'white'
             self.email.helper_text_color_focus = 'white'
             self.email.helper_text = ""
             if len(self.password.text)>=8:
                 self.password.helper_text_color_normal = 'white'
                 self.password.helper_text_color_focus = 'white'
-                self.password.helper_text = ""
                 #вход в emias по логину паролю
             else:
                 self.password.helper_text = "Пароль слишком короткий "
@@ -201,9 +257,11 @@ class ENTERScreen(Screen):
             self.email.helper_text_color_focus = 'red'
 
     def oms(self):
+        self.manager.transition = FadeTransition(clearcolor=(1, 1, 1, 1))
         self.manager.current = 'oms'
 
     def mos(self):
+        self.manager.transition = FadeTransition(clearcolor=(1, 1, 1, 1))
         self.manager.current = 'mos'
 
 
