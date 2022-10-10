@@ -1,6 +1,5 @@
 import re
 import time
-import threading
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
@@ -11,7 +10,7 @@ from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.dialog import MDDialog
 from kivymd_extensions.akivymd.uix.datepicker import AKDatePicker
-from kivymd.utils import asynckivy
+import asynckivy as ak
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -33,7 +32,6 @@ Window.size = (1920, 1080)
 
 
 KV = '''
-#: import Thread threading.Thread
 ScreenManager:
     ENTERScreen:
     OMSScreen:
@@ -237,7 +235,7 @@ ScreenManager:
                     md_bg_color: 0/255, 106/255, 240/255
                     pos_hint: {'center_x': .5, 'center_y': .25}
                     bold: True
-                    on_release: Thread(target = root.omslogin()).start()
+                    on_release: root.omslogin()
                 MDLabel:
                     text: "[color=#808080]Авторизируясь по полису[/color]"
                     bold: True
@@ -364,7 +362,7 @@ ScreenManager:
                     halign: 'center'
                     pos_hint: {'center_x': .5, 'center_y': .20}
                     font_size: dp(25)
-                    on_release: root.mobile()
+                    on_release: root.check()
                     Image:
                         source: 'mos.png'
                         center_x: self.parent.center_x
@@ -763,58 +761,60 @@ class OMSScreen(Screen):
             self.bdate.text = day+"."+ month +"."+year
         except:
             None
+    
+    def chromedriverfunc(self):
+        try:
+            options = webdriver.ChromeOptions()
+            options.add_argument("headless")
+            driver = webdriver.Chrome(
+                executable_path="chromedriver.exe",
+                options=options
+            )
+            driver.get("https://emias.info/")
+            driver.implicitly_wait(30)
+            police_input = driver.find_element(By.NAME, 'policy')
+            police_input.send_keys(self.policy.text)
+            day_input = driver.find_element(By.NAME, 'day')
+            day_input.send_keys(day) 
+            month_input = driver.find_element(By.NAME, 'month')
+            month_input.send_keys(month) 
+            year_input = driver.find_element(By.NAME, 'year')
+            year_input.send_keys(year)
+            login_button = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div/div/div/div/form/button").click() 
+            element_present = EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div'))
+            page = WebDriverWait(driver, 10).until(element_present)
+            self.manager.get_screen('oms').ids.policy.text = ""
+            self.manager.get_screen('oms').ids.bdate.text = ""
+            try:
+                check = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div[1]/div[1]/a[1]").click() 
+                element_present = EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]'))
+                page = WebDriverWait(driver, 10).until(element_present)
+                error = driver.find_element(By.XPATH, '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]').text
+                self.show_alert_dialog()
+            except:
+                global curuserid 
+                curuserid = driver.find_element(By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div').text
+                self.manager.get_screen('loged').ids.curuser.text = ("Полис: "+ curuserid)
+                self.manager.current = "loged"
+
+
+        finally:
+            driver.close()
+            driver.quit()
+
             
     def omslogin(self):
-        async def omslogin():
-            if len(self.policy.text)<16 or len(self.policy.text)>16:
-                self.policy.helper_text = "Некорректный полис"
-                self.policy.helper_text_color_normal = 'red'
-                self.policy.helper_text_color_focus = 'red'
-            elif self.bdate.text != "":
-                self.policy.helper_text = ""
-                try:
-                    options = webdriver.ChromeOptions()
-                    options.add_argument("headless")
-                    driver = webdriver.Chrome(
-                        executable_path="chromedriver.exe",
-                        options=options
-                    )
-                    driver.get("https://emias.info/")
-                    driver.implicitly_wait(30)
-                    police_input = driver.find_element(By.NAME, 'policy')
-                    police_input.send_keys(self.policy.text)
-                    day_input = driver.find_element(By.NAME, 'day')
-                    day_input.send_keys(day) 
-                    month_input = driver.find_element(By.NAME, 'month')
-                    month_input.send_keys(month) 
-                    year_input = driver.find_element(By.NAME, 'year')
-                    year_input.send_keys(year)
-                    login_button = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div/div/div/div/form/button").click() 
-                    element_present = EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div'))
-                    page = WebDriverWait(driver, 10).until(element_present)
-                    self.manager.get_screen('oms').ids.policy.text = ""
-                    self.manager.get_screen('oms').ids.bdate.text = ""
-                    try:
-                        check = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div[1]/div[1]/a[1]").click() 
-                        element_present = EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]'))
-                        page = WebDriverWait(driver, 10).until(element_present)
-                        error = driver.find_element(By.XPATH, '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]').text
-                        self.show_alert_dialog()
-                    except:
-                        global curuserid 
-                        curuserid = driver.find_element(By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div').text
-                        self.manager.get_screen('loged').ids.curuser.text = ("Полис: "+ curuserid)
-                        self.manager.current = "loged"
-
-
-                finally:
-                    driver.close()
-                    driver.quit()
-            else:
-                self.bdate.helper_text = "Введите дату"
-                self.bdate.helper_text_color_normal = 'red'
-                self.bdate.helper_text_color_focus = 'red'
-        asynckivy.start(omslogin())
+        if len(self.policy.text)<16 or len(self.policy.text)>16:
+            self.policy.helper_text = "Некорректный полис"
+            self.policy.helper_text_color_normal = 'red'
+            self.policy.helper_text_color_focus = 'red'
+        elif self.bdate.text != "":
+            self.policy.helper_text = ""
+            self.chromedriverfunc()
+        else:
+            self.bdate.helper_text = "Введите дату"
+            self.bdate.helper_text_color_normal = 'red'
+            self.bdate.helper_text_color_focus = 'red'
     def exits(self):
         self.manager.current = 'enter'
     def show_alert_dialog(self):
@@ -922,9 +922,28 @@ class MOSScreen(Screen):
             )
         self.mobiles.open()
 
-    
-        
-
+    def chromedriverfunc(self):
+        #ВХОД ТОЛЬКО ЧЕРЕЗ MOS.RU
+        options = webdriver.ChromeOptions()
+        #options.add_argument("headless")
+        driver = webdriver.Chrome(
+            executable_path="chromedriver.exe",
+            options=options
+        )
+        driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
+        driver.implicitly_wait(30)
+        loginmos = driver.find_element(By.NAME, 'login')
+        loginmos.send_keys(self.email.text)
+        passwordmos = driver.find_element(By.NAME, 'password')
+        passwordmos.send_keys(self.password.text)
+        login_button = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
+        try:
+            error = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text    
+            self.error_dialog()
+            driver.quit
+        except:
+            self.mobile()
+            
 
     def check(self):
         global curuserid, verifcode
@@ -936,37 +955,8 @@ class MOSScreen(Screen):
                 self.password.helper_text_color_normal = 'white'
                 self.password.helper_text_color_focus = 'white'
                 if self.policy.text=="" and self.bdatemos.text == "":
-                    #ВХОД ТОЛЬКО ЧЕРЕЗ MOS.RU
-                    options = webdriver.ChromeOptions()
-                    #options.add_argument("headless")
-                    driver = webdriver.Chrome(
-                        executable_path="chromedriver.exe",
-                        options=options
-                    )
-                    driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
-                    driver.implicitly_wait(30)
-                    loginmos = driver.find_element(By.NAME, 'login')
-                    loginmos.send_keys(self.email.text)
-                    passwordmos = driver.find_element(By.NAME, 'password')
-                    passwordmos.send_keys(self.password.text)
-                    login_button = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
-                    try:
-                        error = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text    
-                        self.error_dialog()
-                        driver.quit
-                    except:
-                        self.mobile()
-                        while verifcode == None:
-                            None
-                        else:
-                            print("код введен")
+                    self.chromedriverfunc()
                         
-
-                        
-
-
-
-                    
                 elif self.policy.text!="" or self.bdatemos.text != "":
                     if len(self.policy.text)<16 or len(self.policy.text)>16:
                         self.policy.helper_text = "Некорректный полис"
@@ -989,7 +979,6 @@ class MOSScreen(Screen):
             self.email.helper_text = "Введите телефон, электронная почта или СНИЛС "
             self.email.helper_text_color_normal = 'red'
             self.email.helper_text_color_focus = 'red'
-
 
 class OMSLoged(Screen):
     def moslogin(self):
