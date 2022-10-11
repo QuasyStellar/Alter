@@ -1,5 +1,7 @@
 import re
 import time
+from selenium.webdriver.chrome.options import Options
+import threading
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
@@ -10,7 +12,6 @@ from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.dialog import MDDialog
 from kivymd_extensions.akivymd.uix.datepicker import AKDatePicker
-import asynckivy as ak
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -25,10 +26,9 @@ from kivymd.uix.behaviors import (
     RoundedRectangularElevationBehavior,
 )
 
-
-#Window.fullscreen = True
+# Window.fullscreen = True
 Window.size = (1920, 1080)
-#Window.maximize()
+# Window.maximize()
 
 
 KV = '''
@@ -703,9 +703,9 @@ ScreenManager:
         
 '''
 
+
 class Item(RelativeLayout):
     pass
-
 
 
 class ENTERScreen(Screen):
@@ -715,10 +715,10 @@ class ENTERScreen(Screen):
             self.email.helper_text_color_normal = 'white'
             self.email.helper_text_color_focus = 'white'
             self.email.helper_text = ""
-            if len(self.password.text)>=8:
+            if len(self.password.text) >= 8:
                 self.password.helper_text_color_normal = 'white'
                 self.password.helper_text_color_focus = 'white'
-                #вход в emias по логину паролю
+                # вход в emias по логину паролю
             else:
                 self.password.helper_text = "Пароль слишком короткий "
                 self.password.helper_text_color_normal = 'red'
@@ -736,87 +736,90 @@ class ENTERScreen(Screen):
         self.manager.transition = FadeTransition(clearcolor=(1, 1, 1, 1))
         self.manager.current = 'mos'
 
-
     pass
+
+
 class OMSScreen(Screen):
     dialog = None
     dialogs = None
+
     def back(self):
         self.manager.current = 'enter'
+
     def datepicker(self):
         self.date = AKDatePicker(callback=self.callback, opposite_colors='ffffff')
         self.date.open()
+
     def callback(self, date):
         global day, month, year
         try:
             year = str(date.year)
-            if len(str(date.day))>1:
+            if len(str(date.day)) > 1:
                 day = str(date.day)
             else:
-                day = "0"+str(date.day)
-            if len(str(date.month))>1:
+                day = "0" + str(date.day)
+            if len(str(date.month)) > 1:
                 month = str(date.month)
             else:
-                month = "0"+str(date.month)
-            self.bdate.text = day+"."+ month +"."+year
+                month = "0" + str(date.month)
+            self.bdate.text = day + "." + month + "." + year
         except:
             None
-    
-    def chromedriverfunc(self):
-        try:
-            options = webdriver.ChromeOptions()
-            options.add_argument("headless")
-            driver = webdriver.Chrome(
-                executable_path="chromedriver.exe",
-                options=options
-            )
+
+    def omsfunc(self, policy, day, month, year):
+        threading.Thread(target=self.open_omslogin, args=[policy, day, month, year], daemon=True).start()
+
+    def open_omslogin(self, policy, day, month, year):
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        with webdriver.Chrome("chromedriver.exe", options=chrome_options) as driver:
             driver.get("https://emias.info/")
             driver.implicitly_wait(30)
             police_input = driver.find_element(By.NAME, 'policy')
-            police_input.send_keys(self.policy.text)
+            police_input.send_keys(policy)
             day_input = driver.find_element(By.NAME, 'day')
-            day_input.send_keys(day) 
+            day_input.send_keys(day)
             month_input = driver.find_element(By.NAME, 'month')
-            month_input.send_keys(month) 
+            month_input.send_keys(month)
             year_input = driver.find_element(By.NAME, 'year')
             year_input.send_keys(year)
-            login_button = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div/div/div/div/form/button").click() 
-            element_present = EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div'))
+            login_button = driver.find_element(By.XPATH,
+                                               "/html/body/div[2]/main/div/div[2]/div/div/div/div/form/button").click()
+            element_present = EC.presence_of_element_located(
+                (By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div'))
             page = WebDriverWait(driver, 10).until(element_present)
-            self.manager.get_screen('oms').ids.policy.text = ""
-            self.manager.get_screen('oms').ids.bdate.text = ""
             try:
-                check = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div[1]/div[1]/a[1]").click() 
-                element_present = EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]'))
+                check = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div[1]/div[1]/a[1]").click()
+                element_present = EC.presence_of_element_located(
+                    (By.XPATH, '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]'))
                 page = WebDriverWait(driver, 10).until(element_present)
-                error = driver.find_element(By.XPATH, '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]').text
-                self.show_alert_dialog()
+                error = driver.find_element(By.XPATH,
+                                            '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]').text
+                print(error)
+                driver.quit()
             except:
-                global curuserid 
-                curuserid = driver.find_element(By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div').text
-                self.manager.get_screen('loged').ids.curuser.text = ("Полис: "+ curuserid)
-                self.manager.current = "loged"
+                global curuserid
+                curuserid = driver.find_element(By.XPATH,
+                                                '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div').text
+                print(curuserid)
+                driver.quit()
 
-
-        finally:
-            driver.close()
-            driver.quit()
-
-            
     def omslogin(self):
-        if len(self.policy.text)<16 or len(self.policy.text)>16:
+        if len(self.policy.text) < 16 or len(self.policy.text) > 16:
             self.policy.helper_text = "Некорректный полис"
             self.policy.helper_text_color_normal = 'red'
             self.policy.helper_text_color_focus = 'red'
         elif self.bdate.text != "":
             self.policy.helper_text = ""
-            self.chromedriverfunc()
+            self.omsfunc(self.policy.text, day, month, year)
         else:
             self.bdate.helper_text = "Введите дату"
             self.bdate.helper_text_color_normal = 'red'
             self.bdate.helper_text_color_focus = 'red'
+
     def exits(self):
         self.manager.current = 'enter'
+
     def show_alert_dialog(self):
         if not self.dialog:
             self.dialog = MDDialog(
@@ -829,7 +832,7 @@ class OMSScreen(Screen):
                 ],
             )
         self.dialog.open()
-    
+
     def show_alert_dialog_info(self):
         if not self.dialogs:
             self.dialogs = MDDialog(
@@ -851,26 +854,30 @@ class MOSScreen(Screen):
     dialog = None
     dialogerror = None
     mobiles = None
+
     def back(self):
         self.manager.current = 'enter'
+
     def datepicker(self):
         self.date = AKDatePicker(callback=self.callback, opposite_colors='ffffff')
         self.date.open()
+
     def callback(self, date):
         global day, month, year
         try:
             year = str(date.year)
-            if len(str(date.day))>1:
+            if len(str(date.day)) > 1:
                 day = str(date.day)
             else:
-                day = "0"+str(date.day)
-            if len(str(date.month))>1:
+                day = "0" + str(date.day)
+            if len(str(date.month)) > 1:
                 month = str(date.month)
             else:
-                month = "0"+str(date.month)
-            self.bdatemos.text = day+"."+ month +"."+year
+                month = "0" + str(date.month)
+            self.bdatemos.text = day + "." + month + "." + year
         except:
             None
+
     def show_alert_dialog(self):
         if not self.dialogs:
             self.dialogs = MDDialog(
@@ -883,7 +890,7 @@ class MOSScreen(Screen):
                 ],
             )
         self.dialogs.open()
-    
+
     def error_dialog(self):
         if not self.dialogerror:
             self.dialogerror = MDDialog(
@@ -899,8 +906,10 @@ class MOSScreen(Screen):
 
     def mobile(self):
         global verifcode
+
         def use_input(obj):
-            if self.mobiles.content_cls.ids.verif1.text =="" or  self.mobiles.content_cls.ids.verif2.text == "" or  self.mobiles.content_cls.ids.verif3.text == "" or self.mobiles.content_cls.ids.verif4.text == "" or self.mobiles.content_cls.ids.verif5.text == "" or self.mobiles.content_cls.ids.verif6.text =="" or len(self.mobiles.content_cls.ids.verif1.text + self.mobiles.content_cls.ids.verif2.text + self.mobiles.content_cls.ids.verif3.text + self.mobiles.content_cls.ids.verif4.text + self.mobiles.content_cls.ids.verif5.text + self.mobiles.content_cls.ids.verif6.text)>6:
+            if self.mobiles.content_cls.ids.verif1.text == "" or self.mobiles.content_cls.ids.verif2.text == "" or self.mobiles.content_cls.ids.verif3.text == "" or self.mobiles.content_cls.ids.verif4.text == "" or self.mobiles.content_cls.ids.verif5.text == "" or self.mobiles.content_cls.ids.verif6.text == "" or len(
+                    self.mobiles.content_cls.ids.verif1.text + self.mobiles.content_cls.ids.verif2.text + self.mobiles.content_cls.ids.verif3.text + self.mobiles.content_cls.ids.verif4.text + self.mobiles.content_cls.ids.verif5.text + self.mobiles.content_cls.ids.verif6.text) > 6:
                 print("Код не введен")
             else:
                 verifcode = self.mobiles.content_cls.ids.verif1.text + self.mobiles.content_cls.ids.verif2.text + self.mobiles.content_cls.ids.verif3.text + self.mobiles.content_cls.ids.verif4.text + self.mobiles.content_cls.ids.verif5.text + self.mobiles.content_cls.ids.verif6.text
@@ -916,49 +925,53 @@ class MOSScreen(Screen):
                     MDFillRoundFlatButton(
                         text="Ввести",
                         on_release=use_input
-                        
+
                     )
                 ],
             )
         self.mobiles.open()
 
-    def chromedriverfunc(self):
-        #ВХОД ТОЛЬКО ЧЕРЕЗ MOS.RU
-        options = webdriver.ChromeOptions()
-        #options.add_argument("headless")
-        driver = webdriver.Chrome(
-            executable_path="chromedriver.exe",
-            options=options
-        )
-        driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
-        driver.implicitly_wait(30)
-        loginmos = driver.find_element(By.NAME, 'login')
-        loginmos.send_keys(self.email.text)
-        passwordmos = driver.find_element(By.NAME, 'password')
-        passwordmos.send_keys(self.password.text)
-        login_button = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
-        try:
-            error = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text    
-            self.error_dialog()
-            driver.quit
-        except:
-            self.mobile()
-            
+    def mosfunc(self, login, password):
+        threading.Thread(target=self.open_moslogin, args=[login, password], daemon=True).start()
+
+    def open_moslogin(self, login, password):
+        # chrome_options = Options()
+        # chrome_options.add_argument("--headless")
+        with webdriver.Chrome("chromedriver.exe") as driver:
+            driver.get(
+                "https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
+            driver.implicitly_wait(30)
+            loginmos = driver.find_element(By.NAME, 'login')
+            loginmos.send_keys(login)
+            passwordmos = driver.find_element(By.NAME, 'password')
+            passwordmos.send_keys(password)
+            login_button = driver.find_element(By.XPATH,
+                                               "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
+            try:
+                error = driver.find_element(By.XPATH,
+                                            "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
+                print(error + "Ошибка")
+                driver.quit()
+            except:
+                print("Вошел")
+                driver.quit()
 
     def check(self):
-        global curuserid, verifcode
+        global login, password
         if self.email.text != "":
             self.email.helper_text_color_normal = 'white'
             self.email.helper_text_color_focus = 'white'
             self.email.helper_text = ""
-            if len(self.password.text)>=8:
+            if len(self.password.text) >= 8:
                 self.password.helper_text_color_normal = 'white'
                 self.password.helper_text_color_focus = 'white'
-                if self.policy.text=="" and self.bdatemos.text == "":
-                    self.chromedriverfunc()
-                        
-                elif self.policy.text!="" or self.bdatemos.text != "":
-                    if len(self.policy.text)<16 or len(self.policy.text)>16:
+                if self.policy.text == "" and self.bdatemos.text == "":
+                    login = self.email.text
+                    password = self.password.text
+                    self.mosfunc(login, password)
+
+                elif self.policy.text != "" or self.bdatemos.text != "":
+                    if len(self.policy.text) < 16 or len(self.policy.text) > 16:
                         self.policy.helper_text = "Некорректный полис"
                         self.policy.helper_text_color_normal = 'red'
                         self.policy.helper_text_color_focus = 'red'
@@ -968,9 +981,9 @@ class MOSScreen(Screen):
                         self.bdatemos.helper_text_color_focus = 'red'
                         self.policy.helper_text = ""
                     else:
-                        #ВХОД С ПОЛИСОМ И МОС РУ
+                        # ВХОД С ПОЛИСОМ И МОС РУ
                         self.bdatemos.helper_text = ""
-                        
+
             else:
                 self.password.helper_text = "Пароль слишком короткий "
                 self.password.helper_text_color_normal = 'red'
@@ -980,9 +993,11 @@ class MOSScreen(Screen):
             self.email.helper_text_color_normal = 'red'
             self.email.helper_text_color_focus = 'red'
 
+
 class OMSLoged(Screen):
     def moslogin(self):
         self.manager.current = 'omsmos'
+
     def exits(self):
         self.manager.get_screen('oms').ids.policy.text = ""
         self.manager.get_screen('oms').ids.bdate.text = ""
@@ -990,25 +1005,24 @@ class OMSLoged(Screen):
         global day
         global year
         global month
-        day  = None
+        day = None
         year = None
         month = None
 
-
-
     pass
-
 
 
 class AlterApp(MDApp):
     def build(self):
         global day
         global year
-        global month, verifcode
-        day  = None
+        global month, verifcode, login, password
+        day = None
         year = None
         month = None
         verifcode = None
+        login = None
+        password = None
         sm = ScreenManager()
         sm.add_widget(ENTERScreen(name='enter'))
         sm.add_widget(OMSScreen(name="oms"))
