@@ -1,5 +1,6 @@
 import re
 import time
+from kivy.clock import Clock
 from selenium.webdriver.chrome.options import Options
 import threading
 from kivy.lang import Builder
@@ -45,13 +46,10 @@ ScreenManager:
         source: 'bg.png'
         allow_stretch: True
         keep_ratio: False
-
-
     RelativeLayout:
         Image:
             source: 'alter.png'
             pos_hint: {'center_x': 0.5, 'center_y': .9}
-
         MDCard:
             orientation: "vertical"
             elevation: 4
@@ -91,7 +89,6 @@ ScreenManager:
                     font_name: 'roboto'
                     pos_hint: {'center_x': .5, 'center_y': .50}
                     mode: "fill"
-
                     icon_left: "key-variant"
                 MDTextButton:
                     ripple_color: app.theme_cls.primary_color
@@ -121,7 +118,6 @@ ScreenManager:
             pos_hint: {'center_x': .565, 'center_y': .415}
             size_hint_x: .1
             color: 128/255, 128/255, 128/255
-
         MDCard:
             orientation: "vertical"
             elevation: 4
@@ -224,8 +220,6 @@ ScreenManager:
                     font_name: 'roboto'
                     readonly: True
                     icon_left: "account-details"
-
-
                 MDFillRoundFlatButton:
                     text: "Войти"
                     ripple_color: app.theme_cls.primary_color
@@ -319,14 +313,12 @@ ScreenManager:
                     markup: True
                     font_name: 'roboto'
                     pos_hint: {'center_x': .5, 'center_y': .10}
-
                 MDLabel:
                     text: "[color=#808080]будет доступен не весь функционал:[/color]"
                     bold: True
                     markup: True
                     font_name: 'roboto'
                     pos_hint: {'center_x': .5, 'center_y': .07}
-
                 MDLabel:
                     text: "Войти через MOS.RU:"
                     bold: True
@@ -341,7 +333,6 @@ ScreenManager:
                     mode: "fill"
                     font_size: dp(30)
                     pos_hint: {'center_x': .5, 'center_y': .8}
-
                     helper_text_mode: "persistent"
                     font_name: 'roboto'
                     helper_text: "mymail@mail.ru"
@@ -355,7 +346,6 @@ ScreenManager:
                     font_name: 'roboto'
                     pos_hint: {'center_x': .5, 'center_y': .65}
                     mode: "fill"
-
                     icon_left: "key-variant"
                 MDTextButton:
                     size_hint: .8, .17
@@ -472,7 +462,6 @@ ScreenManager:
                 pos_hint: {'center_x': .75, 'center_y': .20}
                 halign: 'center'
             
-
     MDCard:
         orientation: "vertical"
         elevation: 4
@@ -652,7 +641,7 @@ ScreenManager:
         on_text: verif2.focus = True
         size_hint: .1, .5
         max_text_length: 1
-        pos_hint: {'center_x': .15, 'center_y': .65}
+        pos_hint: {'center_x': .10, 'center_y': .65}
         mode: "fill"
     MDTextField:
         id: verif2
@@ -660,7 +649,7 @@ ScreenManager:
         font_name: 'roboto'
         size_hint: .1, .5
         on_text: verif3.focus = True
-        pos_hint: {'center_x': .30, 'center_y': .65}
+        pos_hint: {'center_x': .28, 'center_y': .65}
         mode: "fill"
         max_text_length: 1
     MDTextField:
@@ -669,7 +658,7 @@ ScreenManager:
         font_name: 'roboto'
         size_hint: .1, .5
         on_text: verif4.focus = True
-        pos_hint: {'center_x': .45, 'center_y': .65}
+        pos_hint: {'center_x': .46, 'center_y': .65}
         mode: "fill"
         max_text_length: 1
     MDTextField:
@@ -678,7 +667,7 @@ ScreenManager:
         font_name: 'roboto'
         size_hint: .1, .5
         on_text: verif5.focus = True
-        pos_hint: {'center_x': .60, 'center_y': .65}
+        pos_hint: {'center_x': .64, 'center_y': .65}
         mode: "fill"
         max_text_length: 1
     MDTextField:
@@ -686,19 +675,9 @@ ScreenManager:
         helper_text_mode: "persistent"
         font_name: 'roboto'
         max_text_length: 1
-        on_text: verif6.focus = True
         size_hint: .1, .5
-        pos_hint: {'center_x': .75, 'center_y': .65}
+        pos_hint: {'center_x': .82, 'center_y': .65}
         mode: "fill"
-    MDTextField:
-        id: verif6
-        size_hint: .1, .5
-        max_text_length: 1
-        helper_text_mode: "persistent"
-        font_name: 'roboto'
-        pos_hint: {'center_x': .90, 'center_y': .65}
-        mode: "fill"
-
 
         
 '''
@@ -742,6 +721,7 @@ class ENTERScreen(Screen):
 class OMSScreen(Screen):
     dialog = None
     dialogs = None
+    global result
 
     def back(self):
         self.manager.current = 'enter'
@@ -767,9 +747,12 @@ class OMSScreen(Screen):
             None
 
     def omsfunc(self, policy, day, month, year):
-        threading.Thread(target=self.open_omslogin, args=[policy, day, month, year], daemon=True).start()
+        t = threading.Thread(target=self.open_omslogin, args=[policy, day, month, year], daemon=True)
+        t.start()
+        
 
     def open_omslogin(self, policy, day, month, year):
+        global result, curuserid
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         with webdriver.Chrome("chromedriver.exe", options=chrome_options) as driver:
@@ -795,16 +778,29 @@ class OMSScreen(Screen):
                 page = WebDriverWait(driver, 10).until(element_present)
                 error = driver.find_element(By.XPATH,
                                             '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]').text
-                print(error)
+                result = 1
                 driver.quit()
             except:
-                global curuserid
+                result = 0
                 curuserid = driver.find_element(By.XPATH,
                                                 '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div').text
-                print(curuserid)
                 driver.quit()
 
     def omslogin(self):
+        def checkglobal(*args):
+            global curuserid, result
+            if result == None:
+                None
+            elif result == 1:
+                result = None
+                self.show_alert_dialog()
+                Clock.unschedule(clocks)
+            else:
+                self.manager.current = "loged"
+                self.manager.get_screen('loged').ids.curuser.text = curuserid
+                Clock.unschedule(clocks)
+                result = None
+
         if len(self.policy.text) < 16 or len(self.policy.text) > 16:
             self.policy.helper_text = "Некорректный полис"
             self.policy.helper_text_color_normal = 'red'
@@ -812,10 +808,13 @@ class OMSScreen(Screen):
         elif self.bdate.text != "":
             self.policy.helper_text = ""
             self.omsfunc(self.policy.text, day, month, year)
+            clocks = Clock.schedule_interval(checkglobal, 2)
+
         else:
             self.bdate.helper_text = "Введите дату"
             self.bdate.helper_text_color_normal = 'red'
             self.bdate.helper_text_color_focus = 'red'
+        
 
     def exits(self):
         self.manager.current = 'enter'
@@ -853,6 +852,7 @@ class MOSScreen(Screen):
     dialogs = None
     dialog = None
     dialogerror = None
+    dialogerror1 = None
     mobiles = None
 
     def back(self):
@@ -903,23 +903,42 @@ class MOSScreen(Screen):
                 ],
             )
         self.dialogerror.open()
+    
+    def error_dialog1(self):
+        if not self.dialogerror1:
+            self.dialogerror1 = MDDialog(
+                text="Введен неверный полис ОМС или дата рождения ",
+                buttons=[
+                    MDFillRoundFlatButton(
+                        text="ОК",
+                        on_release=lambda _: self.dialogerror1.dismiss()
+                    )
+                ],
+            )
+        self.dialogerror1.open()
 
     def mobile(self):
-        global verifcode
-
         def use_input(obj):
-            if self.mobiles.content_cls.ids.verif1.text == "" or self.mobiles.content_cls.ids.verif2.text == "" or self.mobiles.content_cls.ids.verif3.text == "" or self.mobiles.content_cls.ids.verif4.text == "" or self.mobiles.content_cls.ids.verif5.text == "" or self.mobiles.content_cls.ids.verif6.text == "" or len(
-                    self.mobiles.content_cls.ids.verif1.text + self.mobiles.content_cls.ids.verif2.text + self.mobiles.content_cls.ids.verif3.text + self.mobiles.content_cls.ids.verif4.text + self.mobiles.content_cls.ids.verif5.text + self.mobiles.content_cls.ids.verif6.text) > 6:
-                print("Код не введен")
+            global verifcode
+            if self.mobiles.content_cls.ids.verif1.text == "" or self.mobiles.content_cls.ids.verif2.text == "" or self.mobiles.content_cls.ids.verif3.text == "" or self.mobiles.content_cls.ids.verif4.text == "" or self.mobiles.content_cls.ids.verif5.text == ""  or len(
+                    self.mobiles.content_cls.ids.verif1.text + self.mobiles.content_cls.ids.verif2.text + self.mobiles.content_cls.ids.verif3.text + self.mobiles.content_cls.ids.verif4.text + self.mobiles.content_cls.ids.verif5.text) > 5:
+                        None
             else:
-                verifcode = self.mobiles.content_cls.ids.verif1.text + self.mobiles.content_cls.ids.verif2.text + self.mobiles.content_cls.ids.verif3.text + self.mobiles.content_cls.ids.verif4.text + self.mobiles.content_cls.ids.verif5.text + self.mobiles.content_cls.ids.verif6.text
+                verifcode = self.mobiles.content_cls.ids.verif1.text + self.mobiles.content_cls.ids.verif2.text + self.mobiles.content_cls.ids.verif3.text + self.mobiles.content_cls.ids.verif4.text + self.mobiles.content_cls.ids.verif5.text
+                self.mobiles.content_cls.ids.verif1.text = "" 
+                self.mobiles.content_cls.ids.verif2.text = ""
+                self.mobiles.content_cls.ids.verif3.text = ""
+                self.mobiles.content_cls.ids.verif4.text = ""
+                self.mobiles.content_cls.ids.verif5.text = ""
                 self.mobiles.dismiss()
-                print(verifcode)
+                
+
 
         if not self.mobiles:
             self.mobiles = MDDialog(
                 title="Введите СМС КОД",
                 type="custom",
+                auto_dismiss = False,
                 content_cls=Item(),
                 buttons=[
                     MDFillRoundFlatButton(
@@ -930,13 +949,20 @@ class MOSScreen(Screen):
                 ],
             )
         self.mobiles.open()
-
+    
+    
     def mosfunc(self, login, password):
-        threading.Thread(target=self.open_moslogin, args=[login, password], daemon=True).start()
+        t = threading.Thread(target=self.open_moslogin, args=[login, password], daemon=True)
+        t.start()
+    def mosfuncpol(self, login, password, policy, day, year, month):
+        t = threading.Thread(target=self.open_mosloginpol, args=[login, password, policy, day, year, month], daemon=True)
+        t.start()    
 
     def open_moslogin(self, login, password):
-        # chrome_options = Options()
-        # chrome_options.add_argument("--headless")
+        global result, verifcode, curuserid
+        
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
         with webdriver.Chrome("chromedriver.exe") as driver:
             driver.get(
                 "https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
@@ -945,19 +971,120 @@ class MOSScreen(Screen):
             loginmos.send_keys(login)
             passwordmos = driver.find_element(By.NAME, 'password')
             passwordmos.send_keys(password)
-            login_button = driver.find_element(By.XPATH,
-                                               "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
+            login_button = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
             try:
-                error = driver.find_element(By.XPATH,
-                                            "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
-                print(error + "Ошибка")
+                error = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
+                result = 0
                 driver.quit()
             except:
-                print("Вошел")
+                while True:
+                    if verifcode == None:
+                        None
+                    else:
+                        usercode = driver.find_element(By.ID, 'otp_input')
+                        usercode.send_keys(verifcode)
+                        time.sleep(3)
+                        curuserid = driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
+                        result = 1
+                        break
                 driver.quit()
 
+    def open_mosloginpol(self, login, password, policy, day, year, month):
+        global result, curuserid, polic
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        with webdriver.Chrome("chromedriver.exe") as driver:
+            driver.get("https://emias.info/")
+            driver.implicitly_wait(30)
+            police_input = driver.find_element(By.NAME, 'policy')
+            police_input.send_keys(policy)
+            day_input = driver.find_element(By.NAME, 'day')
+            day_input.send_keys(day)
+            month_input = driver.find_element(By.NAME, 'month')
+            month_input.send_keys(month)
+            year_input = driver.find_element(By.NAME, 'year')
+            year_input.send_keys(year)
+            login_button = driver.find_element(By.XPATH,
+                                               "/html/body/div[2]/main/div/div[2]/div/div/div/div/form/button").click()
+            element_present = EC.presence_of_element_located(
+                (By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div'))
+            page = WebDriverWait(driver, 10).until(element_present)
+            try:
+                check = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div[1]/div[1]/a[1]").click() 
+                element_present = EC.presence_of_element_located(
+                    (By.XPATH, '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]'))
+                page = WebDriverWait(driver, 10).until(element_present)
+                error = driver.find_element(By.XPATH,
+                                            '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]').text
+                result = 1
+                driver.quit()
+            except:
+                polic = driver.find_element(By.XPATH,
+                                                '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div').text
+                driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
+                loginmos = driver.find_element(By.NAME, 'login')
+                loginmos.send_keys(login)
+                passwordmos = driver.find_element(By.NAME, 'password')
+                passwordmos.send_keys(password)
+                login_mos = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
+                try:
+                    error = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
+                    result = 0
+                    driver.quit()
+                except:
+                    while True:
+                        if verifcode == None:
+                            None
+                        else:
+                            usercode = driver.find_element(By.ID, 'otp_input')
+                            usercode.send_keys(verifcode)
+                            time.sleep(3)
+                            curuserid = driver.find_element(By.XPATH,"/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
+                            result = "вошел"
+                            break
+                    driver.quit()
+
     def check(self):
-        global login, password
+        global login, password, year, month, day
+        
+        def checkglobal(*args):
+            global curuserid, result, polic
+            if result == None:
+                None
+            elif result == 1:
+                self.error_dialog1()
+                self.mobiles.dismiss
+                Clock.unschedule(clocks)
+            elif result == 0:
+                self.error_dialog()
+                self.mobiles.dismiss
+                Clock.unschedule(clocks)
+            else:
+                self.manager.current = "loged"
+                self.manager.get_screen('loged').ids.curuser.text = "Пользователь: "+curuserid+polic
+                self.email.text = ""
+                self.password.text = ""
+                self.bdatemos.text = ""
+                result = None
+                Clock.unschedule(vclocks)
+
+        def checkglobals(*args):
+            global curuserid, result, polic
+            if result == None:
+                None
+            elif result == 0:
+                self.error_dialog()
+                self.mobiles.dismiss
+                Clock.unschedule(clocks)
+            else:
+                self.manager.current = "loged"
+                self.manager.get_screen('loged').ids.curuser.text = "Пользователь: "+curuserid
+                self.email.text = ""
+                self.password.text = ""
+                self.bdatemos.text = ""
+                result = None
+                Clock.unschedule(clocks)
+        
         if self.email.text != "":
             self.email.helper_text_color_normal = 'white'
             self.email.helper_text_color_focus = 'white'
@@ -969,6 +1096,8 @@ class MOSScreen(Screen):
                     login = self.email.text
                     password = self.password.text
                     self.mosfunc(login, password)
+                    self.mobile()
+                    clocks = Clock.schedule_interval(checkglobals, 2)
 
                 elif self.policy.text != "" or self.bdatemos.text != "":
                     if len(self.policy.text) < 16 or len(self.policy.text) > 16:
@@ -981,8 +1110,13 @@ class MOSScreen(Screen):
                         self.bdatemos.helper_text_color_focus = 'red'
                         self.policy.helper_text = ""
                     else:
-                        # ВХОД С ПОЛИСОМ И МОС РУ
-                        self.bdatemos.helper_text = ""
+                        login = self.email.text
+                        password = self.password.text
+                        policy = self.policy.text
+                        self.mosfuncpol(login, password, policy, day, year, month)
+                        self.mobile()
+                        vclocks = Clock.schedule_interval(checkglobal, 2)
+                        
 
             else:
                 self.password.helper_text = "Пароль слишком короткий "
@@ -1002,12 +1136,15 @@ class OMSLoged(Screen):
         self.manager.get_screen('oms').ids.policy.text = ""
         self.manager.get_screen('oms').ids.bdate.text = ""
         self.manager.current = 'enter'
-        global day
-        global year
-        global month
+        global day, year, month, verifcode, login, password, result, polic
         day = None
         year = None
         month = None
+        verifcode = None
+        login = None
+        password = None
+        result = None
+        polic = None
 
     pass
 
@@ -1016,13 +1153,15 @@ class AlterApp(MDApp):
     def build(self):
         global day
         global year
-        global month, verifcode, login, password
+        global month, verifcode, login, password, result, curuserid, polic
         day = None
         year = None
         month = None
         verifcode = None
         login = None
         password = None
+        result = None
+        polic = None
         sm = ScreenManager()
         sm.add_widget(ENTERScreen(name='enter'))
         sm.add_widget(OMSScreen(name="oms"))
