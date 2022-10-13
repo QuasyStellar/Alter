@@ -1,7 +1,7 @@
 import re
 import time
 from kivy.clock import Clock
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 import threading
 from kivy.lang import Builder
 from kivymd.app import MDApp
@@ -630,6 +630,7 @@ ScreenManager:
                 halign: 'center'
         
 <Item>
+    id: mobiledialog
     orientation: "horizontal"
     spacing: "12dp"
     size_hint_y: None
@@ -749,13 +750,12 @@ class OMSScreen(Screen):
     def omsfunc(self, policy, day, month, year):
         t = threading.Thread(target=self.open_omslogin, args=[policy, day, month, year], daemon=True)
         t.start()
-        
 
     def open_omslogin(self, policy, day, month, year):
         global result, curuserid
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        with webdriver.Chrome("chromedriver.exe", options=chrome_options) as driver:
+        firefox_options = Options()
+        firefox_options.add_argument("--headless")
+        with webdriver.Firefox(executable_path="C:\\Users\\Student_2\\Desktop\\Alter-main\\AlTerGUI\\geckodriver.exe" ,options=firefox_options) as driver:
             driver.get("https://emias.info/")
             driver.implicitly_wait(30)
             police_input = driver.find_element(By.NAME, 'policy')
@@ -814,7 +814,6 @@ class OMSScreen(Screen):
             self.bdate.helper_text = "Введите дату"
             self.bdate.helper_text_color_normal = 'red'
             self.bdate.helper_text_color_focus = 'red'
-        
 
     def exits(self):
         self.manager.current = 'enter'
@@ -903,7 +902,7 @@ class MOSScreen(Screen):
                 ],
             )
         self.dialogerror.open()
-    
+
     def error_dialog1(self):
         if not self.dialogerror1:
             self.dialogerror1 = MDDialog(
@@ -920,25 +919,23 @@ class MOSScreen(Screen):
     def mobile(self):
         def use_input(obj):
             global verifcode
-            if self.mobiles.content_cls.ids.verif1.text == "" or self.mobiles.content_cls.ids.verif2.text == "" or self.mobiles.content_cls.ids.verif3.text == "" or self.mobiles.content_cls.ids.verif4.text == "" or self.mobiles.content_cls.ids.verif5.text == ""  or len(
+            if self.mobiles.content_cls.ids.verif1.text == "" or self.mobiles.content_cls.ids.verif2.text == "" or self.mobiles.content_cls.ids.verif3.text == "" or self.mobiles.content_cls.ids.verif4.text == "" or self.mobiles.content_cls.ids.verif5.text == "" or len(
                     self.mobiles.content_cls.ids.verif1.text + self.mobiles.content_cls.ids.verif2.text + self.mobiles.content_cls.ids.verif3.text + self.mobiles.content_cls.ids.verif4.text + self.mobiles.content_cls.ids.verif5.text) > 5:
-                        None
+                None
             else:
                 verifcode = self.mobiles.content_cls.ids.verif1.text + self.mobiles.content_cls.ids.verif2.text + self.mobiles.content_cls.ids.verif3.text + self.mobiles.content_cls.ids.verif4.text + self.mobiles.content_cls.ids.verif5.text
-                self.mobiles.content_cls.ids.verif1.text = "" 
+                self.mobiles.content_cls.ids.verif1.text = ""
                 self.mobiles.content_cls.ids.verif2.text = ""
                 self.mobiles.content_cls.ids.verif3.text = ""
                 self.mobiles.content_cls.ids.verif4.text = ""
                 self.mobiles.content_cls.ids.verif5.text = ""
                 self.mobiles.dismiss()
-                
-
 
         if not self.mobiles:
             self.mobiles = MDDialog(
                 title="Введите СМС КОД",
                 type="custom",
-                auto_dismiss = False,
+                auto_dismiss=False,
                 content_cls=Item(),
                 buttons=[
                     MDFillRoundFlatButton(
@@ -949,31 +946,31 @@ class MOSScreen(Screen):
                 ],
             )
         self.mobiles.open()
-    
-    
+
     def mosfunc(self, login, password):
         t = threading.Thread(target=self.open_moslogin, args=[login, password], daemon=True)
         t.start()
+
     def mosfuncpol(self, login, password, policy, day, year, month):
-        t = threading.Thread(target=self.open_mosloginpol, args=[login, password, policy, day, year, month], daemon=True)
-        t.start()    
+        t = threading.Thread(target=self.open_mosloginpol, args=[login, password, policy, day, year, month],
+                             daemon=True)
+        t.start()
 
     def open_moslogin(self, login, password):
         global result, verifcode, curuserid
-        
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        with webdriver.Chrome("chromedriver.exe") as driver:
-            driver.get(
-                "https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
-            driver.implicitly_wait(30)
+
+        firefox_options = Options()
+        firefox_options.add_argument("--headless")
+        with webdriver.Firefox(executable_path="C:\\Users\\Student_2\\Desktop\\Alter-main\\AlTerGUI\\geckodriver.exe") as driver:
+            driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
+            element = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "login")))
             loginmos = driver.find_element(By.NAME, 'login')
             loginmos.send_keys(login)
             passwordmos = driver.find_element(By.NAME, 'password')
             passwordmos.send_keys(password)
             login_button = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
             try:
-                error = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
+                error = driver.find_element(By.XPATH,"/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
                 result = 0
                 driver.quit()
             except:
@@ -984,16 +981,17 @@ class MOSScreen(Screen):
                         usercode = driver.find_element(By.ID, 'otp_input')
                         usercode.send_keys(verifcode)
                         time.sleep(3)
-                        curuserid = driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
+                        curuserid = driver.find_element(By.XPATH,
+                                                        "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
                         result = 1
                         break
                 driver.quit()
 
     def open_mosloginpol(self, login, password, policy, day, year, month):
         global result, curuserid, polic
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        with webdriver.Chrome("chromedriver.exe") as driver:
+        firefox_options = Options()
+        firefox_options.add_argument("--headless")
+        with webdriver.Firefox(executable_path="C:\\Users\\Student_2\\Desktop\\Alter-main\\AlTerGUI\\geckodriver.exe") as driver:
             driver.get("https://emias.info/")
             driver.implicitly_wait(30)
             police_input = driver.find_element(By.NAME, 'policy')
@@ -1010,7 +1008,7 @@ class MOSScreen(Screen):
                 (By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div'))
             page = WebDriverWait(driver, 10).until(element_present)
             try:
-                check = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div[1]/div[1]/a[1]").click() 
+                check = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div[1]/div[1]/a[1]").click()
                 element_present = EC.presence_of_element_located(
                     (By.XPATH, '/html/body/div[2]/main/div/div[2]/div[2]/div/div[2]/div/div[3]'))
                 page = WebDriverWait(driver, 10).until(element_present)
@@ -1020,15 +1018,16 @@ class MOSScreen(Screen):
                 driver.quit()
             except:
                 polic = driver.find_element(By.XPATH,
-                                                '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div').text
+                                            '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div').text
                 driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
                 loginmos = driver.find_element(By.NAME, 'login')
                 loginmos.send_keys(login)
                 passwordmos = driver.find_element(By.NAME, 'password')
                 passwordmos.send_keys(password)
-                login_mos = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
+                login_mos = driver.find_element(By.XPATH,"/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
                 try:
-                    error = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
+                    error = driver.find_element(By.XPATH,
+                                                "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
                     result = 0
                     driver.quit()
                 except:
@@ -1039,29 +1038,30 @@ class MOSScreen(Screen):
                             usercode = driver.find_element(By.ID, 'otp_input')
                             usercode.send_keys(verifcode)
                             time.sleep(3)
-                            curuserid = driver.find_element(By.XPATH,"/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
+                            curuserid = driver.find_element(By.XPATH,
+                                                            "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
                             result = "вошел"
                             break
                     driver.quit()
 
     def check(self):
         global login, password, year, month, day
-        
+
         def checkglobal(*args):
             global curuserid, result, polic
             if result == None:
                 None
             elif result == 1:
                 self.error_dialog1()
-                self.mobiles.dismiss
+                self.mobiledialog.dismiss
                 Clock.unschedule(clocks)
             elif result == 0:
                 self.error_dialog()
-                self.mobiles.dismiss
+                self.mobiledialog.dismiss
                 Clock.unschedule(clocks)
             else:
                 self.manager.current = "loged"
-                self.manager.get_screen('loged').ids.curuser.text = "Пользователь: "+curuserid+polic
+                self.manager.get_screen('loged').ids.curuser.text = "Пользователь: " + curuserid + polic
                 self.email.text = ""
                 self.password.text = ""
                 self.bdatemos.text = ""
@@ -1074,17 +1074,17 @@ class MOSScreen(Screen):
                 None
             elif result == 0:
                 self.error_dialog()
-                self.mobiles.dismiss
+                self.ids.`mobiledialog.dismiss
                 Clock.unschedule(clocks)
             else:
                 self.manager.current = "loged"
-                self.manager.get_screen('loged').ids.curuser.text = "Пользователь: "+curuserid
+                self.manager.get_screen('loged').ids.curuser.text = "Пользователь: " + curuserid
                 self.email.text = ""
                 self.password.text = ""
                 self.bdatemos.text = ""
                 result = None
                 Clock.unschedule(clocks)
-        
+
         if self.email.text != "":
             self.email.helper_text_color_normal = 'white'
             self.email.helper_text_color_focus = 'white'
@@ -1116,7 +1116,7 @@ class MOSScreen(Screen):
                         self.mosfuncpol(login, password, policy, day, year, month)
                         self.mobile()
                         vclocks = Clock.schedule_interval(checkglobal, 2)
-                        
+
 
             else:
                 self.password.helper_text = "Пароль слишком короткий "
