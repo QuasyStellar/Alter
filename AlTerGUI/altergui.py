@@ -38,6 +38,7 @@ ScreenManager:
     OMSScreen:
     MOSScreen:
     OMSLoged:
+    Loading:
 <ENTERScreen>:
     name: 'enter'
     email: email_input
@@ -256,6 +257,11 @@ ScreenManager:
     policy: policy
     email: email_input
     password: text_field
+    MDSpinner:
+        size_hint: None, None
+        size: dp(46), dp(46)
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        active: True 
     MDFillRoundFlatButton:
         text: "На экран авторизации"
         pos_hint: {'center_x': .1, 'center_y': .92}
@@ -365,16 +371,29 @@ ScreenManager:
                     theme_icon_color: "Custom"
                     icon_color: 1,1,1,1
                     on_release: root.show_alert_dialog()
-        
+
 <OMSLoged>:
     name: 'loged'
+    MDFillRoundFlatButton:
+        id: authname
+        bold: True
+        markup: True
+        icon_color: 1, 0,0,1
+        font_name: 'roboto'
+        pos_hint: {'center_x': .9, 'center_y': .92}
+        font_size: dp(30)
+        size_hint: .2,.05
+        ripple_scale: 0
+        right_icon: "delete"
+        md_bg_color: 0/255, 106/255, 240/255
+        bold: True
     MDFillRoundFlatButton:
         id: curuser
         bold: True
         markup: True
         icon_color: 1, 0,0,1
         font_name: 'roboto'
-        pos_hint: {'center_x': .9, 'center_y': .92}
+        pos_hint: {'center_x': .9, 'center_y': .86}
         font_size: dp(30)
         size_hint: .2,.05
         ripple_scale: 0
@@ -397,11 +416,12 @@ ScreenManager:
         ripple_color: 1, 1, 1, 1
         bold: True
     MDFillRoundFlatButton:
+        id: full
         text: "Войти в полную версию"
         bold: True
         markup: True
         font_name: 'roboto'
-        pos_hint: {'center_x': .9, 'center_y': .86}
+        pos_hint: {'center_x': .9, 'center_y': .74}
         font_size: dp(30)
         size_hint: .2,.05
         md_bg_color: 0/255, 106/255, 240/255
@@ -629,6 +649,14 @@ ScreenManager:
                 pos_hint: {'center_x': .75, 'center_y': .20}
                 halign: 'center'
         
+<Loading>:
+    name: "load"
+    MDSpinner:
+        size_hint: None, None
+        size: dp(46), dp(46)
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        active: True 
+        
 <Item>
     id: mobiledialog
     orientation: "horizontal"
@@ -725,6 +753,9 @@ class OMSScreen(Screen):
     global result
 
     def back(self):
+        self.bdate.text = ""
+        self.policy.text = ""
+        self.policy.helper_text = "Например, 7100 0000 0000 0000"
         self.manager.current = 'enter'
 
     def datepicker(self):
@@ -755,7 +786,7 @@ class OMSScreen(Screen):
         global result, curuserid
         firefox_options = Options()
         firefox_options.add_argument("--headless")
-        with webdriver.Firefox(executable_path="C:\\Users\\Student_2\\Desktop\\Alter-main\\AlTerGUI\\geckodriver.exe" ,options=firefox_options) as driver:
+        with webdriver.Firefox(executable_path="C:\\Users\\PCWORK\Desktop\\alter\AlterGUI\\geckodriver.exe" ,options=firefox_options) as driver:
             driver.get("https://emias.info/")
             driver.implicitly_wait(30)
             police_input = driver.find_element(By.NAME, 'policy')
@@ -793,10 +824,12 @@ class OMSScreen(Screen):
                 None
             elif result == 1:
                 result = None
+                self.manager.current = "oms"
                 self.show_alert_dialog()
                 Clock.unschedule(clocks)
             else:
                 self.manager.current = "loged"
+                self.manager.get_screen('loged').ids.authname.text = "Полис:"
                 self.manager.get_screen('loged').ids.curuser.text = curuserid
                 Clock.unschedule(clocks)
                 result = None
@@ -808,6 +841,7 @@ class OMSScreen(Screen):
         elif self.bdate.text != "":
             self.policy.helper_text = ""
             self.omsfunc(self.policy.text, day, month, year)
+            self.manager.current = "load"
             clocks = Clock.schedule_interval(checkglobal, 2)
 
         else:
@@ -815,8 +849,6 @@ class OMSScreen(Screen):
             self.bdate.helper_text_color_normal = 'red'
             self.bdate.helper_text_color_focus = 'red'
 
-    def exits(self):
-        self.manager.current = 'enter'
 
     def show_alert_dialog(self):
         if not self.dialog:
@@ -855,6 +887,12 @@ class MOSScreen(Screen):
     mobiles = None
 
     def back(self):
+        self.email.text = ""
+        self.password.text = ""
+        self.bdatemos.text = ""
+        self.policy.text = ""
+        self.policy.helper_text = "Например, 7100 0000 0000 0000"
+        self.bdatemos.text = ""
         self.manager.current = 'enter'
 
     def datepicker(self):
@@ -930,6 +968,7 @@ class MOSScreen(Screen):
                 self.mobiles.content_cls.ids.verif4.text = ""
                 self.mobiles.content_cls.ids.verif5.text = ""
                 self.mobiles.dismiss()
+                self.manager.current = "load"
 
         if not self.mobiles:
             self.mobiles = MDDialog(
@@ -949,21 +988,22 @@ class MOSScreen(Screen):
 
     def mosfunc(self, login, password):
         t = threading.Thread(target=self.open_moslogin, args=[login, password], daemon=True)
-        t.start()
+        if not t.is_alive():
+            t.start()
 
     def mosfuncpol(self, login, password, policy, day, year, month):
-        t = threading.Thread(target=self.open_mosloginpol, args=[login, password, policy, day, year, month],
-                             daemon=True)
-        t.start()
+        t = threading.Thread(target=self.open_mosloginpol, args=[login, password, policy, day, year, month],daemon=True)
+        if not t.is_alive():
+            t.start()
 
     def open_moslogin(self, login, password):
         global result, verifcode, curuserid
-
         firefox_options = Options()
         firefox_options.add_argument("--headless")
-        with webdriver.Firefox(executable_path="C:\\Users\\Student_2\\Desktop\\Alter-main\\AlTerGUI\\geckodriver.exe") as driver:
+        firefox_options.add_argument("window_size=1920, 1080")
+        with webdriver.Firefox(executable_path="C:\\Users\\PCWORK\Desktop\\alter\AlterGUI\\geckodriver.exe", options=firefox_options) as driver:
             driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
-            element = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "login")))
+            element = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.ID, "login")))
             loginmos = driver.find_element(By.NAME, 'login')
             loginmos.send_keys(login)
             passwordmos = driver.find_element(By.NAME, 'password')
@@ -974,24 +1014,27 @@ class MOSScreen(Screen):
                 result = 0
                 driver.quit()
             except:
+                result = 1
                 while True:
                     if verifcode == None:
                         None
                     else:
+                        elements = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "otp_input")))
                         usercode = driver.find_element(By.ID, 'otp_input')
                         usercode.send_keys(verifcode)
-                        time.sleep(3)
+                        userid = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,
+                                                        "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]")))
                         curuserid = driver.find_element(By.XPATH,
                                                         "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
-                        result = 1
+                        result = 2
                         break
-                driver.quit()
+                        driver.quit()
 
     def open_mosloginpol(self, login, password, policy, day, year, month):
         global result, curuserid, polic
         firefox_options = Options()
         firefox_options.add_argument("--headless")
-        with webdriver.Firefox(executable_path="C:\\Users\\Student_2\\Desktop\\Alter-main\\AlTerGUI\\geckodriver.exe") as driver:
+        with webdriver.Firefox(executable_path="C:\\Users\\PCWORK\Desktop\\alter\AlterGUI\\geckodriver.exe", options=firefox_options) as driver:
             driver.get("https://emias.info/")
             driver.implicitly_wait(30)
             police_input = driver.find_element(By.NAME, 'policy')
@@ -1006,7 +1049,7 @@ class MOSScreen(Screen):
                                                "/html/body/div[2]/main/div/div[2]/div/div/div/div/form/button").click()
             element_present = EC.presence_of_element_located(
                 (By.XPATH, '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div'))
-            page = WebDriverWait(driver, 10).until(element_present)
+            page = WebDriverWait(driver, 20).until(element_present)
             try:
                 check = driver.find_element(By.XPATH, "/html/body/div[2]/main/div/div[2]/div[1]/div[1]/a[1]").click()
                 element_present = EC.presence_of_element_located(
@@ -1020,6 +1063,7 @@ class MOSScreen(Screen):
                 polic = driver.find_element(By.XPATH,
                                             '/html/body/div[2]/header/div/div[2]/div[2]/div/button/div/div').text
                 driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
+                element = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.ID, "login")))
                 loginmos = driver.find_element(By.NAME, 'login')
                 loginmos.send_keys(login)
                 passwordmos = driver.find_element(By.NAME, 'password')
@@ -1031,18 +1075,19 @@ class MOSScreen(Screen):
                     result = 0
                     driver.quit()
                 except:
+                    result = 22
                     while True:
                         if verifcode == None:
                             None
                         else:
+                            elements = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "otp_input")))
                             usercode = driver.find_element(By.ID, 'otp_input')
                             usercode.send_keys(verifcode)
-                            time.sleep(3)
                             curuserid = driver.find_element(By.XPATH,
                                                             "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
                             result = "вошел"
                             break
-                    driver.quit()
+                            driver.quit()
 
     def check(self):
         global login, password, year, month, day
@@ -1052,16 +1097,22 @@ class MOSScreen(Screen):
             if result == None:
                 None
             elif result == 1:
+                result = None
                 self.error_dialog1()
-                self.mobiledialog.dismiss
+                self.manager.current = "mos"
                 Clock.unschedule(clocks)
             elif result == 0:
+                result = None
                 self.error_dialog()
-                self.mobiledialog.dismiss
                 Clock.unschedule(clocks)
+            elif result == 22:
+                self.manager.current = "mos"
+                self.mobile()
+                result = None
             else:
                 self.manager.current = "loged"
-                self.manager.get_screen('loged').ids.curuser.text = "Пользователь: " + curuserid + polic
+                self.manager.get_screen('loged').ids.authname.text = "Полис:" + polic
+                self.manager.get_screen('loged').ids.curuser.text = curuserid
                 self.email.text = ""
                 self.password.text = ""
                 self.bdatemos.text = ""
@@ -1074,10 +1125,16 @@ class MOSScreen(Screen):
                 None
             elif result == 0:
                 self.error_dialog()
-                self.ids.`mobiledialog.dismiss
+                self.manager.current = "mos"
+                result = None
                 Clock.unschedule(clocks)
-            else:
+            elif result == 1:
+                self.manager.current = "mos"
+                self.mobile()
+                result = None
+            else: 
                 self.manager.current = "loged"
+                self.manager.get_screen('loged').ids.authname.text = "Пользователь: "
                 self.manager.get_screen('loged').ids.curuser.text = "Пользователь: " + curuserid
                 self.email.text = ""
                 self.password.text = ""
@@ -1095,8 +1152,8 @@ class MOSScreen(Screen):
                 if self.policy.text == "" and self.bdatemos.text == "":
                     login = self.email.text
                     password = self.password.text
+                    self.manager.current = "load"
                     self.mosfunc(login, password)
-                    self.mobile()
                     clocks = Clock.schedule_interval(checkglobals, 2)
 
                 elif self.policy.text != "" or self.bdatemos.text != "":
@@ -1114,7 +1171,7 @@ class MOSScreen(Screen):
                         password = self.password.text
                         policy = self.policy.text
                         self.mosfuncpol(login, password, policy, day, year, month)
-                        self.mobile()
+                        self.manager.current = "load"
                         vclocks = Clock.schedule_interval(checkglobal, 2)
 
 
@@ -1123,7 +1180,7 @@ class MOSScreen(Screen):
                 self.password.helper_text_color_normal = 'red'
                 self.password.helper_text_color_focus = 'red'
         else:
-            self.email.helper_text = "Введите телефон, электронная почта или СНИЛС "
+            self.email.helper_text = "Введите телефон, электронную почта или СНИЛС "
             self.email.helper_text_color_normal = 'red'
             self.email.helper_text_color_focus = 'red'
 
@@ -1148,6 +1205,8 @@ class OMSLoged(Screen):
 
     pass
 
+class Loading(Screen):
+    pass
 
 class AlterApp(MDApp):
     def build(self):
@@ -1167,6 +1226,7 @@ class AlterApp(MDApp):
         sm.add_widget(OMSScreen(name="oms"))
         sm.add_widget(MOSScreen(name="mos"))
         sm.add_widget(OMSLoged(name="loged"))
+        sm.add_widget(Loading(name="load"))
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
         return Builder.load_string(KV)
