@@ -10,7 +10,106 @@ datespec = 'https://emias.info/api/emc/appointment-eip/v1/?getAvailableResourceS
 create = "https://emias.info/api/emc/appointment-eip/v1/?createAppointment"
 cancel = "https://emias.info/api/emc/appointment-eip/v1/?cancelAppointment"
 shift = "https://emias.info/api/emc/appointment-eip/v1/?shiftAppointment"
+info = 'https://emias.info/api/emc/appointment-eip/v1/?getPatientInfo3'
 
+def information(oms, bdate):
+    inf = requests.post(info, json = {"jsonrpc":"2.0","id":"RUi98VgEkYYc8PPKR-OdE","method":"getPatientInfo3","params":{"omsNumber":oms,"birthDate":bdate,"typeAttach":[0,1,2], "onlyMoscowPolicy":False}})
+    jsinf = inf.json()
+    for i in range(len(jsinf['result']['attachments']['attachment'])):
+        print(jsinf['result']['attachments']['attachment'][i]['lpu']['name'])
+        print(jsinf['result']['attachments']['attachment'][i]['lpu']['address'])
+        print(jsinf['result']['attachments']['attachment'][i]['status'])
+        print(jsinf['result']['attachments']['attachment'][i]['createDate'])
+def perenos(oms,bdate):
+    compID = None
+    c = 0
+    spisokzapisei = requests.post(doclist, json = {"jsonrpc":"2.0","id":"H0XYtGjt9CtPQqfGt7NYp","method":"getAppointmentReceptionsByPatient","params":{"omsNumber":oms,"birthDate":bdate}})
+    jsspisok = spisokzapisei.json()
+    for i in range(len(jsspisok["result"])):
+        if jsspisok["result"][i]['type'] == "RECEPTION":
+            print(f"({i})",jsspisok["result"][i]['toDoctor']["specialityName"])
+            print("Врач\n")
+        else:
+            print(f"({i})",jsspisok["result"][i]['toLdp']["ldpTypeName"])
+            print("Процедура\n")
+    zapisvibor = int(input("Выберите запись для переноса\n"))
+    if jsspisok["result"][zapisvibor]['type'] == "RECEPTION":
+        appID = jsspisok["result"][zapisvibor]['id']
+        specID = jsspisok["result"][zapisvibor]["toDoctor"]['specialityId']
+        recpID = jsspisok["result"][zapisvibor]["toDoctor"]['receptionTypeId']
+        spisokvrachei = requests.post(speclist, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdate,"appointmentId":appID,"specialityId":specID}})
+        jsvrachi = spisokvrachei.json()
+        for i in range(len(jsvrachi["result"])):
+            for j in range(len(jsvrachi["result"][i]['complexResource'])):
+                    if 'room' in jsvrachi["result"][i]['complexResource'][j]:
+                        print(f"({i})",jsvrachi["result"][i]['name'])
+                        c+=1
+        if c == 0:
+            print("Перенос не доступен")
+        else:
+            for i in range(len(jsvrachi["result"])):
+                for j in range(len(jsvrachi["result"][i]['complexResource'])):
+                        if 'room' in jsvrachi["result"][i]['complexResource'][j]:
+                            print(f"({i})",jsvrachi["result"][i]['name'])
+            vrachchoose = int(input("Выберите врача\n"))
+            resID = jsvrachi["result"][vrachchoose]["id"]
+            for j in range(len(jsvrachi["result"][vrachchoose]['complexResource'])):
+                if 'room' in jsvrachi["result"][vrachchoose]['complexResource'][j]:
+                    complID = jsvrachi["result"][vrachchoose]['complexResource'][j]['id']
+            dati = requests.post(datespec, json = {"jsonrpc":"2.0","id":"RUi98VgEkYYc8PPKR-OdE","method":"getAvailableResourceScheduleInfo","params":{"omsNumber":oms,"birthDate":bdate,"availableResourceId":resID,"complexResourceId":complID,"appointmentId":appID,"specialityId":specID}})
+            jsdati = dati.json()
+            for i in range(len(jsdati["result"]['scheduleOfDay'])):
+                print(f"({i})", jsdati["result"]['scheduleOfDay'][i]['date'])
+            datechoose = int(input("Выбор даты: \n"))
+            for j in range(len(jsdati["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'])):
+                print(f"({j})", jsdati["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][j]['startTime'])
+            vremya = int(input("Выбор времени:\n"))
+            times = jsdati["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][vremya]['startTime']
+            endTime = jsdati["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][vremya]['endTime']
+            perenes = requests.post(shift, json = {"jsonrpc":"2.0","id":"RUi98VgEkYYc8PPKR-OdE","method":"shiftAppointment","params":{"omsNumber":oms,"birthDate":bdate,"appointmentId":appID,"specialityId":specID,"availableResourceId":resID,"complexResourceId":complID,"receptionTypeId":recpID,"startTime":times,"endTime":endTime}})
+            jscheck = perenes.json()
+            if "error" not in jscheck:
+                print("Успешно")
+            else:
+                print("Произошла непредвиденная ошибка")
+    else:
+        appID = jsspisok["result"][zapisvibor]['id']
+        recpID = jsspisok["result"][zapisvibor]["toLdp"]['ldpTypeId']
+        spisokvrachei = requests.post(speclist, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdate,"appointmentId":appID}})
+        jsvrachi = spisokvrachei.json()
+        for i in range(len(jsvrachi["result"])):
+            for j in range(len(jsvrachi["result"][i]['complexResource'])):
+                if 'room' in jsvrachi["result"][i]['complexResource'][j]:
+                    print(f"({i})",jsvrachi["result"][i]['name'])
+                    c+=1
+        if c == 0:
+            print("Перенос не доступен")
+        else:
+            for i in range(len(jsvrachi["result"])):
+                for j in range(len(jsvrachi["result"][i]['complexResource'])):
+                    if 'room' in jsvrachi["result"][i]['complexResource'][j]:
+                        print(f"({i})",jsvrachi["result"][i]['name'])
+            vrachchoose = int(input("Выберите врача\n"))
+            resID = jsvrachi["result"][vrachchoose]["id"]
+            for j in range(len(jsvrachi["result"][vrachchoose]['complexResource'])):
+                if 'room' in jsvrachi["result"][vrachchoose]['complexResource'][j]:
+                    complID = jsvrachi["result"][vrachchoose]['complexResource'][j]['id']
+            dati = requests.post(datespec, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"getAvailableResourceScheduleInfo","params":{"omsNumber":oms,"birthDate":bdate,"availableResourceId":resID,"complexResourceId":complID,"appointmentId":appID}})
+            jsdati = dati.json()
+            for i in range(len(jsdati["result"]['scheduleOfDay'])):
+                print(f"({i})", jsdati["result"]['scheduleOfDay'][i]['date'])
+            datechoose = int(input("Выбор даты: \n"))
+            for j in range(len(jsdati["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'])):
+                print(f"({j})", jsdati["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][j]['startTime'])
+            vremya = int(input("Выбор времени:\n"))
+            times = jsdati["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][vremya]['startTime']
+            endTime = jsdati["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][vremya]['endTime']
+            perenes = requests.post(shift, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"shiftAppointment","params":{"omsNumber":oms,"birthDate":bdate,"appointmentId":appID,"availableResourceId":resID,"complexResourceId":complID,"receptionTypeId":recpID,"startTime":times,"endTime":endTime}})
+            jscheck = perenes.json()
+            if "error" not in jscheck:
+                print("Успешно")
+            else:
+                print("Произошла непредвиденная ошибка")
 def otmena(oms, bdate):
     prosmotr = requests.post(doclist, json = {"jsonrpc":"2.0","id":"tnSZKjovHE_X2b-JYQ0PB","method":"getAppointmentReceptionsByPatient","params":{"omsNumber":oms,"birthDate":bdate}})
     jsps = prosmotr.json()
@@ -79,48 +178,44 @@ def vrach(oms, bdate):
 
     specialities = requests.post(ass, json = {"jsonrpc":"2.0","id":"ULHOof43sz6OfDTK4KRf1","method":"getSpecialitiesInfo","params":{"omsNumber":oms,"birthDate":bdate}})
     jsspec = specialities.json()
-    
-    if "error" in jsass or "error" in jsspec:
-        print("error")
+    userid = jsass["id"]
+    for i in range(len(jsspec["result"])):
+        print(f"({i})", jsspec['result'][i]["name"])
+    choose = int(input("Выберите запись\n"))
+    specId = jsspec['result'][choose]["code"]
+    zapis = requests.post(speclist, json = {"jsonrpc":"2.0","id":userid,"method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdate,"specialityId": specId}})
+    jszapis = zapis.json()
+    for i in range(len(jszapis["result"])):
+        for j in range(len(jszapis["result"][i]['complexResource'])):
+            if 'room' in jszapis["result"][i]['complexResource'][j]:
+                receptionTypeId = jszapis["result"][i]['receptionType'][0]['code']
+                count+=1
+    if count == 0:
+        print("Записей нет")
     else:
-        userid = jsass["id"]
-        for i in range(len(jsspec["result"])):
-            print(f"({i})", jsspec['result'][i]["name"])
-        choose = int(input("Выберите запись\n"))
-        specId = jsspec['result'][choose]["code"]
-        zapis = requests.post(speclist, json = {"jsonrpc":"2.0","id":userid,"method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdate,"specialityId": specId}})
-        jszapis = zapis.json()
         for i in range(len(jszapis["result"])):
             for j in range(len(jszapis["result"][i]['complexResource'])):
                 if 'room' in jszapis["result"][i]['complexResource'][j]:
-                    receptionTypeId = jszapis["result"][i]['receptionType'][0]['code']
-                    count+=1
-        if count == 0:
-            print("Записей нет")
-        else:
-            for i in range(len(jszapis["result"])):
+                    print(f"({c})",jszapis['result'][i]["name"])
+                    c+=1
+        uchoose = int(input("Выбор доктора\n"))
+        docchoose = jszapis['result'][uchoose]["id"]
+        for i in range(len(jszapis["result"])):
+            if jszapis['result'][i]["id"] == docchoose:
                 for j in range(len(jszapis["result"][i]['complexResource'])):
                     if 'room' in jszapis["result"][i]['complexResource'][j]:
-                        print(f"({c})",jszapis['result'][i]["name"])
-                        c+=1
-            uchoose = int(input("Выбор доктора\n"))
-            docchoose = jszapis['result'][uchoose]["id"]
-            for i in range(len(jszapis["result"])):
-                if jszapis['result'][i]["id"] == docchoose:
-                    for j in range(len(jszapis["result"][i]['complexResource'])):
-                        if 'room' in jszapis["result"][i]['complexResource'][j]:
-                            resid = jszapis["result"][i]['complexResource'][j]['id']
-            proczapis = requests.post(datespec, json = {"jsonrpc":"2.0","id":"7g9bgvEa8VkCd6A2XHJ7p","method":"getAvailableResourceScheduleInfo","params":{"omsNumber":oms,"birthDate":bdate,"availableResourceId":docchoose,"complexResourceId":resid,"specialityId":"11"}})
-            jsproczapis = proczapis.json()
-            for i in range(len(jsproczapis["result"]['scheduleOfDay'])):
-                print("\n",f"({i})", jsproczapis["result"]['scheduleOfDay'][i]["date"])            
-            datechoose = int(input("Выберите дату\n"))
-            for j in range(len(jsproczapis["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'])):
-                times = jsproczapis["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][j]['startTime']
-                endtime = jsproczapis["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][j]['endTime']
-                print(f"({j})",times)
-            timechoose = int(input("Время\n"))
-            appocreate = requests.post(create, json ={"jsonrpc":"2.0","id":"AvyJzHk1dm8eNqyg5uzLx","method":"createAppointment","params":{"omsNumber":oms,"birthDate":bdate,"availableResourceId":docchoose,"complexResourceId":resid,"receptionTypeId":receptionTypeId,"startTime":times,"endTime":endtime}})
+                        resid = jszapis["result"][i]['complexResource'][j]['id']
+        proczapis = requests.post(datespec, json = {"jsonrpc":"2.0","id":"7g9bgvEa8VkCd6A2XHJ7p","method":"getAvailableResourceScheduleInfo","params":{"omsNumber":oms,"birthDate":bdate,"availableResourceId":docchoose,"complexResourceId":resid,"specialityId":"11"}})
+        jsproczapis = proczapis.json()
+        for i in range(len(jsproczapis["result"]['scheduleOfDay'])):
+            print("\n",f"({i})", jsproczapis["result"]['scheduleOfDay'][i]["date"])            
+        datechoose = int(input("Выберите дату\n"))
+        for j in range(len(jsproczapis["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'])):
+            print(f"({j})",jsproczapis["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][j]['startTime'])
+        timechoose = int(input("Время\n"))
+        times = jsproczapis["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][timechoose]['startTime']
+        endtime = jsproczapis["result"]['scheduleOfDay'][datechoose]['scheduleBySlot'][0]['slot'][timechoose]['endTime']
+        appocreate = requests.post(create, json ={"jsonrpc":"2.0","id":"AvyJzHk1dm8eNqyg5uzLx","method":"createAppointment","params":{"omsNumber":oms,"birthDate":bdate,"availableResourceId":docchoose,"complexResourceId":resid,"receptionTypeId":receptionTypeId,"startTime":times,"endTime":endtime}})
 
 
 oms = int(input("Полис:\n"))
@@ -136,7 +231,7 @@ if "error" in jsass or "error" in jsspec:
     print(jsass["error"]["message"])
 else:
     print(oms)
-    emiaschoose = int(input("\nВыберите опцию:\n0 - Запись к врачу\n1 - Учреждения\n2 - Справки\n3 - Рецепты\n"))
+    emiaschoose = int(input("\nВыберите опцию:\n0 - Запись к врачу\n1 - Прикрепления\n2 - Справки\n3 - Рецепты\n"))
 
 
     if emiaschoose == 0:
@@ -148,11 +243,11 @@ else:
         elif vrachchoose == 2:
             prosmotrnapr(oms, bdate)
         elif vrachchoose == 3:
-            None
+            perenos(oms,bdate)
         elif vrachchoose == 4:
             otmena(oms, bdate)
     elif emiaschoose == 1:
-        None
+        information(oms,bdate)
     elif emiaschoose == 2:
         None
     elif emiaschoose == 3:
