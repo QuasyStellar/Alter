@@ -13,47 +13,47 @@ shift = "https://emias.info/api/emc/appointment-eip/v1/?shiftAppointment"
 info = 'https://emias.info/api/emc/appointment-eip/v1/?getPatientInfo3'
 
 from selenium import webdriver
-from requestium import Session, Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.options import Options
 
+
+
 def mosloginemias(oms, password):
     firefox_options = Options()
-
-    firefox_driver = webdriver.Firefox(executable_path="/home/user/Загрузки/Alter-main/AlTerGUI/geckodriver",
-                                       options=firefox_options)
-    s = Session(driver=firefox_driver)
-    s.driver.get(
+    firefox_options.add_argument("--headless")
+    driver = webdriver.Firefox(executable_path="C:\\Users\\PCWORK\Desktop\\alter\AlterGUI\\geckodriver.exe", options=firefox_options)
+    driver.get(
         "https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
-    element = WebDriverWait(s.driver, 20).until(EC.element_to_be_clickable((By.ID, "login")))
-    loginmos = s.driver.find_element(By.NAME, 'login')
+    element = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.ID, "login")))
+    loginmos = driver.find_element(By.NAME, 'login')
     loginmos.send_keys(login)
-    passwordmos = s.driver.find_element(By.NAME, 'password')
+    passwordmos = driver.find_element(By.NAME, 'password')
     passwordmos.send_keys(password)
-    login_button = s.driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
+    login_button = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
     try:
-        error = s.driver.find_element(By.XPATH,
+        error = driver.find_element(By.XPATH,
                                       "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
         print("Ошибка")
     except:
         verifcode = input("Код верификации\n")
-        elements = WebDriverWait(s.driver, 20).until(EC.presence_of_element_located((By.ID, "otp_input")))
-        usercode = s.driver.find_element(By.ID, 'otp_input')
+        elements = WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.ID, "otp_input")))
+        usercode = driver.find_element(By.ID, 'otp_input')
         usercode.send_keys(verifcode)
-        userid = WebDriverWait(s.driver, 20).until(EC.presence_of_element_located((By.XPATH,
+        userid = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,
                                                                                    "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]")))
-        name = s.driver.find_element(By.XPATH,
+        name = driver.find_element(By.XPATH,
                                      "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
-        surename = s.driver.find_element(By.XPATH,
+        surename = driver.find_element(By.XPATH,
                                          '/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[2]').text
-        male = s.driver.find_element(By.ID, "profile_select_gender").text
-        age = s.driver.find_element(By.ID, "profile_select_birth_date").text
+        male = driver.find_element(By.ID, "profile_select_gender").text
+        age = driver.find_element(By.ID, "profile_select_birth_date").text
         print("Пользователь: ", name, surename)
         print("Пол: ", male)
         print("Возраст", age)
-        profdata = s.driver.execute_script("return window.sessionStorage.getItem('profile/profileData')")
+        profdata = driver.execute_script("return window.sessionStorage.getItem('profile/profileData')")
         jsdata = json.loads(profdata)
         oms = jsdata['profile']['policyNum']
         bdate = jsdata['profile']['birthDate']
@@ -85,41 +85,84 @@ def mosloginemias(oms, password):
             elif emiaschoose == 1:
                 information(oms, bdate)
 
-    s.driver.quit()
+    driver.quit()
 
 def moslogin(login, password):
+    def covidtest(*args):
+        print(idus)
+        covid = s.get(f"https://lk.emias.mos.ru/api/1/documents/covid-analyzes?ehrId=4f0253b8-c477-4fb6-ac22-b846afe9d6ac&shortDateFilter=all_time")
+        jscov = covid.json()
+        print(jscov)
+        for i in range(len(jscov['documents'])):
+            print(f'({i})',jscov['documents'][i]['title'])
+            print(jscov['documents'][i]['date'])
+        prosmotr = int(input("Для просмотра выберите тест\n"))
+        documentID = jscov['documents'][prosmotr]['documentId']
+        covidprosmotr = requests.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={documentID}')
+        jscovpros = covidprosmotr.json()
+        print(jscovpros['title'])
+        print(jscovpros['documentHtml'])
+        print(jscovpros['date'])
+    def myvacine(*args):
+        None
     firefox_options = Options()
-
-    firefox_driver = webdriver.Firefox(executable_path="/home/user/Загрузки/Alter-main/AlTerGUI/geckodriver", options = firefox_options)
-    s = Session(driver=firefox_driver)
-    s.driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
-    element = WebDriverWait(s.driver, 20).until(EC.element_to_be_clickable((By.ID, "login")))
-    loginmos = s.driver.find_element(By.NAME, 'login')
+    firefox_options.add_argument("--headless")
+    driver = webdriver.Firefox(executable_path="C:\\Users\\PCWORK\Desktop\\alter\AlterGUI\\geckodriver.exe", options=firefox_options)
+    driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
+    element = WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.ID, "login")))
+    loginmos = driver.find_element(By.NAME, 'login')
     loginmos.send_keys(login)
-    passwordmos = s.driver.find_element(By.NAME, 'password')
+    passwordmos = driver.find_element(By.NAME, 'password')
     passwordmos.send_keys(password)
-    login_button = s.driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
+    login_button = driver.find_element(By.XPATH, "/html/body/div[1]/main/section/div/div[2]/div/form/button").click()
     try:
-        error = s.driver.find_element(By.XPATH,"/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
+        error = driver.find_element(By.XPATH,"/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
         print("Ошибка")
     except:
         verifcode = input("Код верификации\n")
-        elements = WebDriverWait(s.driver, 20).until(EC.presence_of_element_located((By.ID, "otp_input")))
-        usercode = s.driver.find_element(By.ID, 'otp_input')
+        elements = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "otp_input")))
+        usercode = driver.find_element(By.ID, 'otp_input')
         usercode.send_keys(verifcode)
-        userid = WebDriverWait(s.driver, 20).until(EC.presence_of_element_located((By.XPATH,
+        userid = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,
                                         "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]")))
-        name = s.driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
-        surename = s.driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[2]').text
-        male = s.driver.find_element(By.ID, "profile_select_gender").text
-        age = s.driver.find_element(By.ID,"profile_select_birth_date").text
+        name = driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
+        surename = driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[2]').text
+        male = driver.find_element(By.ID, "profile_select_gender").text
+        age = driver.find_element(By.ID,"profile_select_birth_date").text
         print("Пользователь: ",name, surename)
         print("Пол: ",male)
         print("Возраст",age)
-        idus = s.driver.execute_script("return window.sessionStorage.getItem('profile/currentProfileId')").replace('"', '')
+        idus = driver.execute_script("return window.sessionStorage.getItem('profile/currentProfileId')").replace('"', '')
+        s = requests.Session()
+        for cookie in driver.get_cookies():
+            c = {cookie['name']:  cookie['value']}
+            s.cookies.update(c)
         chooselist = int(input("(0) мои тесты на covid-19\n(1) мои прививки\n(2) мои приемы в поликлинике\n(3) мои анализы\n(4) мои исследования\n(5) мои больничные\n(6) мои справки и мед. заключения\n(7) мои выписки из стационара\n(8) мои рецепты\n(9) моя скорая помощь\n(10) мои врачебные консилиумы\n(11) мой дневник здоровья\n"))
-    s.driver.quit()
-
+        if chooselist == 0:
+            covidtest()
+        elif chooselist == 1:
+            myvacine()
+        elif chooselist == 2:
+            myanamnes()
+        elif chooselist == 3:
+            myanaliz()
+        elif chooselist == 4:
+            myldp()
+        elif chooselist == 5:
+            myboln()
+        elif chooselist == 6:
+            myspravki()
+        elif chooselist == 7:
+            mystacionar()
+        elif chooselist == 8:
+            myrecepies()
+        elif chooselist == 9:
+            myemergency()
+        elif chooselist == 10:
+            doccons()
+        elif chooselist == 11:
+            mydiary()
+    driver.quit()
 
 def information(oms, bdate):
     inf = requests.post(info, json = {"jsonrpc":"2.0","id":"RUi98VgEkYYc8PPKR-OdE","method":"getPatientInfo3","params":{"omsNumber":oms,"birthDate":bdate,"typeAttach":[0,1,2], "onlyMoscowPolicy":False}})
