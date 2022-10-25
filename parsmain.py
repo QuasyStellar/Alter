@@ -38,7 +38,7 @@ def mosloginemias(oms, password):
                                       "/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
         print("Ошибка")
     except:
-        verifcode = int(input("Код верификации\n"))
+        verifcode = input("Код верификации\n")
         elements = WebDriverWait(s.driver, 20).until(EC.presence_of_element_located((By.ID, "otp_input")))
         usercode = s.driver.find_element(By.ID, 'otp_input')
         usercode.send_keys(verifcode)
@@ -56,7 +56,7 @@ def mosloginemias(oms, password):
         profdata = s.driver.execute_script("return window.sessionStorage.getItem('profile/profileData')")
         jsdata = json.loads(profdata)
         oms = jsdata['profile']['policyNum']
-        bdate = jsdata['profile']['birthDAte']
+        bdate = jsdata['profile']['birthDate']
         assignment = requests.post(ass, json={"jsonrpc": "2.0", "id": "ULHOof43sz6OfDTK4KRf1",
                                               "method": "getAssignmentsInfo",
                                               "params": {"omsNumber": oms, "birthDate": bdate}})
@@ -103,7 +103,7 @@ def moslogin(login, password):
         error = s.driver.find_element(By.XPATH,"/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
         print("Ошибка")
     except:
-        verifcode = int(input("Код верификации\n"))
+        verifcode = input("Код верификации\n")
         elements = WebDriverWait(s.driver, 20).until(EC.presence_of_element_located((By.ID, "otp_input")))
         usercode = s.driver.find_element(By.ID, 'otp_input')
         usercode.send_keys(verifcode)
