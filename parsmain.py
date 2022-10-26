@@ -89,16 +89,15 @@ def mosloginemias(oms, password):
 
 def moslogin(login, password):
     def covidtest(*args):
-        print(idus)
-        covid = s.get(f"https://lk.emias.mos.ru/api/1/documents/covid-analyzes?ehrId=4f0253b8-c477-4fb6-ac22-b846afe9d6ac&shortDateFilter=all_time")
+        covid = s.get(f"https://lk.emias.mos.ru/api/1/documents/covid-analyzes?ehrId={idus}&shortDateFilter=all_time", headers = {'X-Access-JWT': authtoken})
         jscov = covid.json()
         print(jscov)
         for i in range(len(jscov['documents'])):
             print(f'({i})',jscov['documents'][i]['title'])
             print(jscov['documents'][i]['date'])
-        prosmotr = int(input("Для просмотра выберите тест\n"))
+        prosmotr = int(input("Для просмотра результатов выберите тест\n"))
         documentID = jscov['documents'][prosmotr]['documentId']
-        covidprosmotr = requests.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={documentID}')
+        covidprosmotr = requests.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={documentID}', headers = {'X-Access-JWT': authtoken})
         jscovpros = covidprosmotr.json()
         print(jscovpros['title'])
         print(jscovpros['documentHtml'])
@@ -133,6 +132,7 @@ def moslogin(login, password):
         print("Пол: ",male)
         print("Возраст",age)
         idus = driver.execute_script("return window.sessionStorage.getItem('profile/currentProfileId')").replace('"', '')
+        authtoken = driver.execute_script("return window.localStorage.getItem('patient.web.v2.accessToken')").replace('"', '')
         s = requests.Session()
         for cookie in driver.get_cookies():
             c = {cookie['name']:  cookie['value']}
