@@ -1,6 +1,6 @@
 import requests
 import json
-
+import time
 ref = 'https://emias.info/api/emc/appointment-eip/v1/?getReferralsInfo'
 ass = 'https://emias.info/api/emc/appointment-eip/v1/?getAssignmentsInfo'
 spec = 'https://emias.info/api/emc/appointment-eip/v1/?getSpecialitiesInfo'
@@ -91,11 +91,10 @@ def moslogin(login, password):
     def covidtest(*args):
         covid = s.get(f"https://lk.emias.mos.ru/api/1/documents/covid-analyzes?ehrId={idus}&shortDateFilter=all_time", headers = {'X-Access-JWT': authtoken})
         jscov = covid.json()
-        print(jscov)
         for i in range(len(jscov['documents'])):
             print(f'({i})',jscov['documents'][i]['title'])
             print(jscov['documents'][i]['date'])
-        prosmotr = int(input("Для просмотра результатов выберите тест\n"))
+        prosmotr = int(input("Для просмотра результатов выберите тест:\n"))
         documentID = jscov['documents'][prosmotr]['documentId']
         covidprosmotr = requests.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={documentID}', headers = {'X-Access-JWT': authtoken})
         jscovpros = covidprosmotr.json()
@@ -103,9 +102,25 @@ def moslogin(login, password):
         print(jscovpros['documentHtml'])
         print(jscovpros['date'])
     def myvacine(*args):
+        vacin = s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={idus}", headers = {'X-Access-JWT': authtoken})
+        jsvac = vacin.json()
+        vacinchoose = int(input('(0) Профилактические прививки\n(1) Иммунодиагностические тесты\n'))
+        if vacinchoose == 0:
+            for i in range(len(jsvac['doneList'])):
+                print(f"({i})",jsvac['doneList'][i]['infectionList'][0]['infectionName'])
+                print(jsvac['doneList'][i]['dateVaccination'])
+                print('Возраст: ',jsvac['doneList'][i]['age'])
+            viewchoose = int(input('Выберите тест или прививку для просмотра реузльтатов'))
+        else:
+            for i in range(len(jsvac['tubList'])):
+                print(f"({i})",jsvac['tubList'][i]['infectionList'][0]['infectionName'])
+                print(jsvac['tubList'][i]['dateVaccination'])
+                print('Возраст: ',jsvac['tubList'][i]['age'])
+            viewchoose = int(input('Выберите тест или прививку для просмотра реузльтатов'))
+
         None
     firefox_options = Options()
-    firefox_options.add_argument("--headless")
+    #firefox_options.add_argument("--headless")
     driver = webdriver.Firefox(executable_path="C:\\Users\\PCWORK\Desktop\\alter\AlterGUI\\geckodriver.exe", options=firefox_options)
     driver.get("https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
     element = WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.ID, "login")))
@@ -118,10 +133,27 @@ def moslogin(login, password):
         error = driver.find_element(By.XPATH,"/html/body/div[1]/main/section/div/div[2]/div/div[2]/blockquote/p/a").text
         print("Ошибка")
     except:
-        verifcode = input("Код верификации\n")
+        c = 0
+        flag = False
         elements = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "otp_input")))
         usercode = driver.find_element(By.ID, 'otp_input')
-        usercode.send_keys(verifcode)
+        while driver.current_url == 'https://lk.emias.mos.ru/':
+            while c!=3:
+                verifcode = input("Код верификации\n")
+                usercode.send_keys(verifcode)
+                time.sleep(5)
+                if driver.current_url != 'https://lk.emias.mos.ru/':
+                    flag = True
+                    break
+                else:
+                    print("Введен не верный код")
+                    c+=1
+            if flag == True:
+                break
+            else:
+                print("Было введено слишком много неправильных кодов, доступ временно заблокирован")
+                time.sleep(60)
+                c = 0
         userid = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,
                                         "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]")))
         name = driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]").text
@@ -162,7 +194,7 @@ def moslogin(login, password):
             doccons()
         elif chooselist == 11:
             mydiary()
-    driver.quit()
+   
 
 def information(oms, bdate):
     inf = requests.post(info, json = {"jsonrpc":"2.0","id":"RUi98VgEkYYc8PPKR-OdE","method":"getPatientInfo3","params":{"omsNumber":oms,"birthDate":bdate,"typeAttach":[0,1,2], "onlyMoscowPolicy":False}})
