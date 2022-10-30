@@ -105,6 +105,7 @@ def mosloginemias(oms, password):
         print("Пользователь: ", name, surename)
         print("Пол: ", male)
         print("Возраст", age)
+
         profdata = driver.execute_script(
             "return window.sessionStorage.getItem('profile/profileData')")
         driver.quit()
@@ -118,6 +119,7 @@ def mosloginemias(oms, password):
         specialities = requests.post(
             ass, json=get_json(oms, bdate, "getSpecialitiesInfo"))
         jsspec = specialities.json(object_hook=lambda d: AlterNamespace(**d))
+
         if "error" in jsass or "error" in jsspec:
             print(jsass.error.message)
         else:
