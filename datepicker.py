@@ -6,6 +6,7 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.theming import ThemableBehavior
 from kivymd.uix.behaviors import RectangularRippleBehavior
+from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.dialog import BaseDialog
 
 Builder.load_string(
@@ -40,7 +41,7 @@ Builder.load_string(
         orientation: "vertical"
         canvas.before:
             Color:
-                rgba: root.theme_cls.bg_normal
+                rgba:  0/255, 106/255, 240/255, .4
             RoundedRectangle:
                 size: self.size
                 pos: self.pos
@@ -49,33 +50,48 @@ Builder.load_string(
             height: dp(50)
             canvas.before:
                 Color:
-                    rgba: root.theme_cls.primary_color
+                    rgba: 0/255, 106/255, 240/255, .4
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
                     radius:[(10.0, 10.0), (10.0, 10.0), (0, 0), (0, 0)]
             MDLabeltitle2:
                 text: root._year_title
+                markup: True
             MDLabeltitle2:
                 text: root._month_title
+                markup: True
             MDLabeltitle2:
                 text: root._day_title
+                markup: True
         BoxLayout:
             size_hint_y: None
             height: dp(50)
             canvas.before:
                 Color:
-                    rgba: root.theme_cls.bg_dark
+                    rgba: 0/255, 106/255, 240/255, .4
                 Rectangle:
                     size: self.size
                     pos: self.pos
             MDLabeltitle:
-                text: "Год"
+                markup: True
+                font_size: 20
+                text: "[color=#ffffff]Год[/color]"
             MDLabeltitle:
-                text: "Месяц"
+                markup: True
+                font_size: 20
+                text: "[color=#ffffff]Месяц[/color]"
             MDLabeltitle:
-                text: "День"
+                markup: True
+                font_size: 20
+                text: "[color=#ffffff]День[/color]"
         BoxLayout:
+            canvas.before:
+                Color:
+                    rgba: 0/255, 106/255, 240/255, .4
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
             ScrollView:
                 MDBoxLayout:
                     id: year_view
@@ -96,19 +112,24 @@ Builder.load_string(
             height: dp(40)
             padding: [dp(10), 0]
             spacing: dp(10)
+            md_bg_color: 0/255, 106/255, 240/255, .4
             canvas.before:
                 Color:
-                    rgba: root.theme_cls.bg_dark
+                    rgba: 0/255, 106/255, 240/255, .4
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
                     radius: [(0.0, 10.0), (0.0, 10.0), (10, 10), (10, 10)]
             MDFlatButton:
-                text: "Отмена"
+                text: '[color=#ffffff]Отмена[/color]'
+                markup: True
+                font_size:20
                 pos_hint: {"center_x": .5, "center_y": .5}
                 on_release: root.cancel()
             MDFlatButton:
-                text: "Выбрать"
+                text: '[color=#ffffff]Выбрать[/color]'
+                markup: True
+                font_size:20
                 pos_hint: {"center_x": .5, "center_y": .5}
                 on_release: root._choose()
 """
@@ -143,7 +164,7 @@ class AKDatePicker(BaseDialog, ThemableBehavior):
         self.callback = callback
         for x in reversed(range(self.year_range[0], self.year_range[1])):
             self.ids.year_view.add_widget(
-                ButtonBase(text="%d" % x, on_release=self._set_year)
+                MDFillRoundFlatButton(text="%d" % x, on_release=self._set_year, md_bg_color=(1,1,1,0), size_hint=(1,1), font_size= 20)
             )
         for x in reversed(range(1, 13)):
             if self.month_type == "string":
@@ -152,11 +173,11 @@ class AKDatePicker(BaseDialog, ThemableBehavior):
                 month = str(x)
 
             self.ids.month_view.add_widget(
-                ButtonBase(text=month, on_release=self._set_month)
+               MDFillRoundFlatButton(text=month, on_release=self._set_month,md_bg_color=(1,1,1,0), size_hint=(1,1), font_size= 20)
             )
         for x in reversed(range(1, 32)):
             self.ids.day_view.add_widget(
-                ButtonBase(text="%d" % x, on_release=self._set_day)
+                MDFillRoundFlatButton(text="%d" % x, on_release=self._set_day,md_bg_color=(1,1,1,0), size_hint=(1,1), font_size= 20)
             )
 
     def _set_day(self, instance):
