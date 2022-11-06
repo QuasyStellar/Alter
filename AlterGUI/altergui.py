@@ -163,7 +163,7 @@ ScreenManager:
         pos_hint: {'center_x': .626, 'center_y': .2}
         font_name: 'roboto'
         font_size: dp(40)
-        size_hint: .2,.1
+        size_hint: .25,.1
         md_bg_color: 0/255, 106/255, 240/255, .4
         on_press: root.back()
         ripple_color: 1, 0, 0, 0.1
@@ -173,7 +173,7 @@ ScreenManager:
         MDCard:
             orientation: "vertical"
             pos_hint: {'center_x': .626, 'center_y': .5}
-            size_hint: .2, .4
+            size_hint: .25, .45
             radius:[30]
             md_bg_color: 0/255, 106/255, 240/255, .4
             RelativeLayout:
@@ -193,7 +193,7 @@ ScreenManager:
                     helper_text: 'Например 7700 0000 0000 0000'
                     min_text_length: 16
                     text_color_normal: "white"
-                    font_size: dp(30)
+                    font_size: dp(40)
                     input_filter: 'int'
                     pos_hint: {'center_x': .5, 'center_y': .8}
                     size_hint: 1, .20
@@ -209,7 +209,7 @@ ScreenManager:
                     helper_text_color_normal: "white"
                     text_color_normal: "white"
                     mode: "fill"
-                    font_size: dp(30)
+                    font_size: dp(40)
                     pos_hint: {'center_x': .5, 'center_y': .5}
                     size_hint: 1, .20
                     helper_text_mode: "persistent"
@@ -273,7 +273,7 @@ ScreenManager:
         pos_hint: {'center_x': .6, 'center_y': .2}
         font_name: 'roboto'
         font_size: dp(40)
-        size_hint: .2,.1
+        size_hint: .25,.1
         md_bg_color: 255/255, 255/255, 255/255, .3
         on_press: root.back()
         ripple_color: 1, 0, 0, 0.1
@@ -283,7 +283,7 @@ ScreenManager:
         MDCard:
             orientation: "vertical"
             pos_hint: {'center_x': 0.6, 'center_y': .5}
-            size_hint: .2, .37
+            size_hint: .25, .45
             radius:[30]
             RelativeLayout:
                 orientation: 'vertical'
@@ -292,9 +292,9 @@ ScreenManager:
                     id: email_input
                     hint_text: "Логин"
                     mode: "fill"
-                    font_size: dp(30)
+                    font_size: dp(40)
                     pos_hint: {'center_x': .5, 'center_y': .8}
-                    size_hint: 1, .20
+                    size_hint: 1, .22
                     helper_text_mode: "persistent"
                     font_name: 'roboto'
                     helper_text: "mymail@mail.ru"
@@ -303,9 +303,9 @@ ScreenManager:
                     id: text_field
                     hint_text: "Пароль"
                     password: True
-                    font_size: dp(30)
+                    font_size: dp(40)
                     helper_text_mode: "persistent"
-                    size_hint: 1, .20
+                    size_hint: 1, .22
                     font_name: 'roboto'
                     pos_hint: {'center_x': .5, 'center_y': .50}
                     mode: "fill"
@@ -315,13 +315,14 @@ ScreenManager:
                     halign: 'center'
                     pos_hint: {'center_x': .5, 'center_y': .2}
                     font_size: dp(25)
-                    on_release: root.check()
+                    #on_release: root.check()
+                    on_release: root.manager.current = 'mosloged'
                     Image:
                         source: 'assets/firstscreen/mos.png'
                         center_x: self.parent.center_x
                         center_y: self.parent.center_y
-                        size: 358, 60
-
+                        allow_stretch: True
+                        size: 450, 100
 <OMSLoged>:
     name: 'loged'
     Image:
@@ -341,11 +342,11 @@ ScreenManager:
             allow_stretch: True
             size: 300, 350
     MDTextButton:
-        size_hint: .25, .2
+        size_hint: .2, .2
         halign: 'center'
         pos_hint: {'center_x': .89, 'center_y': .65}
         font_size: dp(25)
-        on_release: root.exits()
+        on_release: root.full_dialog()
         Image:
             source: 'assets/omsloged/enterfull.png'
             center_x: self.parent.center_x
@@ -437,282 +438,103 @@ ScreenManager:
         
 <MOSLoged>:
     name: 'mosloged'
+    Image:
+        source: 'assets/mosloged/mainmenubgmos.png'
+        allow_stretch: True
+        keep_ratio: False
+    MDTextButton:
+        size_hint: .2, .15
+        halign: 'center'
+        pos_hint: {'center_x': .89, 'center_y': .1}
+        font_size: dp(25)
+        on_release: root.exits()
+        Image:
+            source: 'assets/exitbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 300, 350
+    MDLabel:
+        id: authname
+        text:'[color=#ffffff]7700 0000 0000 0000[/color]'
+        markup: True
+        size_hint: .2, .15
+        halign: 'center'
+        pos_hint: {'center_x': .89, 'center_y': .8}
+        font_size: dp(35) 
     MDCard:
         orientation: "vertical"
-        elevation: 4
-        shadow_radius: 6
-        shadow_offset: 0, 2
-        pos_hint: {'center_x': .925, 'center_y': .84}
-        size_hint: .14, .3
-        ripple_behaviour: True
-        MDLabel:
-            id: authname
-            text: 'Имя'
-            bold: True
-            markup: True
-            font_size: dp(30)
-            font_name: 'roboto'
-            halign: 'center'
-        MDLabel:
-            id: curuser
-            text: 'Фамилия'
-            bold: True
-            markup: True
-            multiline: True
-            font_size: dp(30)
-            font_name: 'roboto'
-            halign: 'center'
-        MDLabel:
-            id: males
-            text: 'Пол: '
-            bold: True
-            markup: True
-            font_size: dp(30)
-            font_name: 'roboto'
-            halign: 'center'
-        MDLabel:
-            id: ages
-            text: 'Возраст'
-            bold: True
-            markup: True
-            font_size: dp(30)
-            font_name: 'roboto'
-            halign: 'center'
-        MDFillRoundFlatIconButton:
-            text: "Выйти"
-            bold: True
-            icon: "delete"
-            markup: True
-            icon_color: 1, 0,0,1
-            font_name: 'roboto'
-            font_size: dp(30)
-            right_icon: "delete"
-            md_bg_color: 0/255, 106/255, 240/255
-            on_release: root.exits()
-            ripple_color: 1, 1, 1, 1
-            bold: True
+        pos_hint: {'center_x': .5, 'center_y': .7}
+        size_hint: .339, .3
+        radius: [30]
+        ripple_behavior: True
+        ripple_color: 0,0,1,1
+        on_release: root.exits()
+        Image:
+            source: 'assets/omsloged/emiasmainbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+    MDCard:
+        orientation: "vertical"
+        pos_hint: {'center_x': .5, 'center_y': .3}
+        size_hint: .331, .3
+        radius: [30]
+        ripple_behavior: True
+        ripple_color: 1,0,1,1
+        Image:
+            source: 'assets/omsloged/priemmainbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size:  1000, 700
+    MDLabel:
+        id: time
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .7}
+        font_size: dp(90)
+        font_name: 'roboto'
+    MDLabel:
+        id: days
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .2, 'center_y': .6}
+        font_size: dp(90)
+        font_name: 'roboto'
+        halign: 'center'
+    MDLabel:
+        id: months
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .5}
+        font_size: dp(90)
+        font_name: 'roboto'
+    MDLabel:
+        id: years
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .4}
+        font_size: dp(90)
+        font_name: 'roboto'
+    MDLabel:
+        id: week
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .6}
+        font_size: dp(90)
+        font_name: 'roboto'
 
-    MDCard:
-        orientation: "vertical"
-        elevation: 4
-        shadow_radius: 6
-        shadow_offset: 0, 2
-        pos_hint: {'center_x': .30, 'center_y': .75}
-        size_hint: .2, .3
-        ripple_behaviour: True
-        on_release: print("ЖАЛОБА")
-        RelativeLayout:
-            orientation: 'vertical'
-            size_hint: 1, 1
-            MDFillRoundFlatButton:
-                text: "Запись к врачу"
-                bold: True
-                markup: True
-                icon_color: 1, 0,0,1
-                font_name: 'roboto'
-                pos_hint: {'center_x': .35, 'center_y': .82}
-                font_size: dp(30)
-                size_hint: .2,.05
-                ripple_scale: 0
-                right_icon: "delete"
-                md_bg_color: 0/255, 106/255, 240/255
-                bold: True
-            MDLabel:
-                text: "[color=#808080]Запись[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .25, 'center_y': .40}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Просмотр записей[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .75, 'center_y': .40}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Перенос записей[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .25, 'center_y': .20}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Рецепты[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .75, 'center_y': .20}
-                halign: 'center'
-            
-    MDCard:
-        orientation: "vertical"
-        elevation: 4
-        shadow_radius: 6
-        shadow_offset: 0, 2
-        pos_hint: {'center_x': .60, 'center_y': .75}
-        size_hint: .2, .3
-        ripple_behaviour: True
-        on_release: print("Запись")
-        RelativeLayout:
-            orientation: 'vertical'
-            size_hint: 1, 1
-            MDFillRoundFlatButton:
-                text: "Справки"
-                bold: True
-                markup: True
-                icon_color: 1, 0,0,1
-                font_name: 'roboto'
-                pos_hint: {'center_x': .25, 'center_y': .82}
-                font_size: dp(30)
-                size_hint: .2,.05
-                ripple_scale: 0
-                right_icon: "delete"
-                md_bg_color: 0/255, 106/255, 240/255
-                bold: True
-            MDLabel:
-                text: "[color=#808080]COVID - 19[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .25, 'center_y': .40}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Освобождение от[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .70, 'center_y': .42}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]посещения учреждений[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .70, 'center_y': .35}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Медосмотр[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .25, 'center_y': .20}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Перенесенное заболевание[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .70, 'center_y': .20}
-                halign: 'center'
-    MDCard:
-        orientation: "vertical"
-        elevation: 4
-        shadow_radius: 6
-        shadow_offset: 0, 2
-        pos_hint: {'center_x': .30, 'center_y': .30}
-        size_hint: .2, .3
-        ripple_behaviour: True
-        on_release: print("ЖАЛОБА")
-        RelativeLayout:
-            orientation: 'vertical'
-            size_hint: 1, 1
-            MDFillRoundFlatButton:
-                text: "Первичный прием"
-                bold: True
-                markup: True
-                icon_color: 1, 0,0,1
-                font_name: 'roboto'
-                pos_hint: {'center_x': .40, 'center_y': .82}
-                font_size: dp(30)
-                size_hint: .2,.05
-                ripple_scale: 0
-                right_icon: "delete"
-                md_bg_color: 0/255, 106/255, 240/255
-                bold: True
-            MDLabel:
-                text: "[color=#808080]Простуда[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .25, 'center_y': .40}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Болезни кожи AI[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .75, 'center_y': .40}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Болезни горла AI[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .25, 'center_y': .20}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Давление/Пульс/ЭКГ AI[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .75, 'center_y': .20}
-                halign: 'center'
-    MDCard:
-        orientation: "vertical"
-        elevation: 4
-        shadow_radius: 6
-        shadow_offset: 0, 2
-        pos_hint: {'center_x': .60, 'center_y': .30}
-        size_hint: .2, .3
-        ripple_behaviour: True
-        on_release: print("Запись")
-        RelativeLayout:
-            orientation: 'vertical'
-            size_hint: 1, 1
-            MDFillRoundFlatButton:
-                text: "Медкарта"
-                bold: True
-                markup: True
-                icon_color: 1, 0,0,1
-                font_name: 'roboto'
-                pos_hint: {'center_x': .35, 'center_y': .82}
-                font_size: dp(30)
-                size_hint: .2,.05
-                ripple_scale: 0
-                right_icon: "delete"
-                md_bg_color: 0/255, 106/255, 240/255
-                bold: True
-            MDLabel:
-                text: "[color=#808080]История визитов[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .25, 'center_y': .40}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Результаты исследований[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .75, 'center_y': .40}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Результаты анализова[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .25, 'center_y': .20}
-                halign: 'center'
-            MDLabel:
-                text: "[color=#808080]Поиск отклонений[/color]"
-                bold: True
-                markup: True
-                font_name: 'roboto'
-                pos_hint: {'center_x': .75, 'center_y': .20}
-                halign: 'center'
-        
 <Loading>:
     name: "load"
     canvas.before:
@@ -791,6 +613,65 @@ ScreenManager:
         max_text_length: 1
         size_hint: .1, .5
         pos_hint: {'center_x': .82, 'center_y': .65}
+        mode: "fill"
+
+<Itemfactor>
+    orientation: "horizontal"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "120dp"
+    MDTextField:
+        id: verif1
+        helper_text_mode: "persistent"
+        font_name: 'roboto'
+        on_text: verif2.focus = True
+        size_hint: .1, .5
+        max_text_length: 1
+        pos_hint: {'center_x': .05, 'center_y': .65}
+        mode: "fill"
+    MDTextField:
+        id: verif2
+        helper_text_mode: "persistent"
+        font_name: 'roboto'
+        size_hint: .1, .5
+        on_text: verif3.focus = True
+        pos_hint: {'center_x': .23, 'center_y': .65}
+        mode: "fill"
+        max_text_length: 1
+    MDTextField:
+        id: verif3
+        helper_text_mode: "persistent"
+        font_name: 'roboto'
+        size_hint: .1, .5
+        on_text: verif4.focus = True
+        pos_hint: {'center_x': .41, 'center_y': .65}
+        mode: "fill"
+        max_text_length: 1
+    MDTextField:
+        id: verif4
+        helper_text_mode: "persistent"
+        font_name: 'roboto'
+        size_hint: .1, .5
+        on_text: verif5.focus = True
+        pos_hint: {'center_x': .59, 'center_y': .65}
+        mode: "fill"
+        max_text_length: 1
+    MDTextField:
+        id: verif5
+        helper_text_mode: "persistent"
+        font_name: 'roboto'
+        max_text_length: 1
+        on_text: verif6.focus = True
+        size_hint: .1, .5
+        pos_hint: {'center_x': .77, 'center_y': .65}
+        mode: "fill"
+    MDTextField:
+        id: verif6
+        helper_text_mode: "persistent"
+        font_name: 'roboto'
+        max_text_length: 1
+        size_hint: .1, .5
+        pos_hint: {'center_x': .95, 'center_y': .65}
         mode: "fill"
 
 <Itemerrors>
@@ -901,73 +782,29 @@ ScreenManager:
         BoxLayout:
             orientation: 'vertical'
             id: scrollid
-<FullScreen>:
-    name: 'full'
-    email: email_input
-    password: text_field
-    Image:
-        source: 'assets/mosscreen/mosbg.png'
-        allow_stretch: True
-        keep_ratio: False
-    MDFillRoundFlatButton:
-        text: '< Назад'
-        markup: True
-        pos_hint: {'center_x': .6, 'center_y': .2}
-        font_name: 'roboto'
-        font_size: dp(40)
-        size_hint: .2,.1
-        md_bg_color: 255/255, 255/255, 255/255, .3
-        on_press: root.back()
-        ripple_color: 1, 0, 0, 0.1
+<Full>
+    id: fulldialog
+    orientation: "horizontal"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "120dp"
+    MDLabel:
         bold: True
-    RelativeLayout:
-        id: omsrefresh
-        MDCard:
-            orientation: "vertical"
-            pos_hint: {'center_x': 0.6, 'center_y': .5}
-            size_hint: .2, .37
-            radius:[30]
-            RelativeLayout:
-                orientation: 'vertical'
-                size_hint: 1, 1
-                MDTextField:
-                    id: email_input
-                    hint_text: "Логин"
-                    mode: "fill"
-                    font_size: dp(30)
-                    pos_hint: {'center_x': .5, 'center_y': .8}
-                    size_hint: 1, .20
-                    helper_text_mode: "persistent"
-                    font_name: 'roboto'
-                    helper_text: "mymail@mail.ru"
-                    icon_left: "account-badge"
-                MDTextField:
-                    id: text_field
-                    hint_text: "Пароль"
-                    password: True
-                    font_size: dp(30)
-                    helper_text_mode: "persistent"
-                    size_hint: 1, .20
-                    font_name: 'roboto'
-                    pos_hint: {'center_x': .5, 'center_y': .50}
-                    mode: "fill"
-                    icon_left: "key-variant"
-                MDTextButton:
-                    size_hint: 1, .45
-                    halign: 'center'
-                    pos_hint: {'center_x': .5, 'center_y': .2}
-                    font_size: dp(25)
-                    on_release: root.check()
-                    Image:
-                        source: 'assets/firstscreen/mos.png'
-                        center_x: self.parent.center_x
-                        center_y: self.parent.center_y
-                        size: 358, 60
+        theme_text_color: 'Custom'
+        text_color: 'grey'
+        markup: True
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        font_size: dp(20)
+        font_name: 'roboto'
+        text: "Чтобы войти в полную версию необходимо авторизоваться через mos.ru. Текущая авторизация будет прервана и вы будете перенаправлены на страницу входа через mos.ru"
 """
 class ZapisScreen(Screen):
     pass
-
+class Itemfactor(RelativeLayout):
+    pass
 class Item(RelativeLayout):
+    pass
+class Full(RelativeLayout):
     pass
 
 
@@ -1016,6 +853,7 @@ class OMSScreen(Screen):
     dialog = None
     dialog1 = None
     dialogs = None
+    timeclocks = None
     global result
 
     def back(self):
@@ -1081,6 +919,7 @@ class OMSScreen(Screen):
                 result = policy
         except:
             result = 666
+        sys.exit()
 
 
     def omslogin(self):
@@ -1123,7 +962,8 @@ class OMSScreen(Screen):
             self.policy.helper_text_color_focus = "white"
             self.manager.current = "loadoms"
             clocks = Clock.schedule_interval(checkglobal, 2)
-            Clock.schedule_interval(self.manager.get_screen('loged').update, 2)
+            if self.timeclocks == None:
+                self.timeclocks = Clock.schedule_interval(self.manager.get_screen('loged').update, 2)
 
         else:
             self.bdate.helper_text = "Введите дату"
@@ -1185,6 +1025,8 @@ class MOSScreen(Screen):
     mobiles = None
     mobileerror = None
     waiterror = None
+    factor = None
+    timeclock = None
 
     def back(self):
         self.manager.current = "enter"
@@ -1210,7 +1052,59 @@ class MOSScreen(Screen):
                 ],
             )
         self.dialogerror.open()
+    def Twofactordialog(self):
+        def use_input(obj):
+            global Twofactorverifcode
+            if (
+                self.factor.content_cls.ids.verif1.text == ""
+                or self.factor.content_cls.ids.verif2.text == ""
+                or self.factor.content_cls.ids.verif3.text == ""
+                or self.factor.content_cls.ids.verif4.text == ""
+                or self.factor.content_cls.ids.verif5.text == ""
+                or self.factor.content_cls.ids.verif6.text == ""
+                or len(
+                    self.factor.content_cls.ids.verif1.text
+                    + self.factor.content_cls.ids.verif2.text
+                    + self.factor.content_cls.ids.verif3.text
+                    + self.factor.content_cls.ids.verif4.text
+                    + self.factor.content_cls.ids.verif5.text
+                    + self.factor.content_cls.ids.verif6.text
+                )
+                > 6
+            ):
+                None
+            else:
+                Twofactorverifcode = (
+                    self.factor.content_cls.ids.verif1.text
+                    + self.factor.content_cls.ids.verif2.text
+                    + self.factor.content_cls.ids.verif3.text
+                    + self.factor.content_cls.ids.verif4.text
+                    + self.factor.content_cls.ids.verif5.text
+                    + self.factor.content_cls.ids.verif6.text
+                )
+                self.factor.content_cls.ids.verif1.text = ""
+                self.factor.content_cls.ids.verif2.text = ""
+                self.factor.content_cls.ids.verif3.text = ""
+                self.factor.content_cls.ids.verif4.text = ""
+                self.factor.content_cls.ids.verif5.text = ""
+                self.factor.content_cls.ids.verif6.text = ""
+                self.manager.current = "load"
+                self.factor.dismiss()
 
+        if not self.factor:
+            self.factor = MDDialog(
+                title="Введите СМС КОД",
+                type="custom",
+                auto_dismiss=False,
+                content_cls=Itemfactor(),
+                buttons=[
+                    MDFillRoundFlatButton(
+                        text="Ввести", md_bg_color="ff0000", on_release=use_input
+                    )
+                ],
+            )
+        self.factor.open()
+    
     def mobile(self):
         def use_input(obj):
             global verifcode
@@ -1361,8 +1255,46 @@ class MOSScreen(Screen):
             t.start()
 
     def open_moslogin(self, login, password):
-        global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken
-
+        global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken, Twofactorverifcode
+        def emias(*args):
+            c = 0
+            flag = False
+            elements = WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.ID, "otp_input"))
+            )
+            usercode = driver.find_element(By.ID, "otp_input")
+            result = 2
+            while verifcode == None:
+                None
+            else:
+                usercode.send_keys(verifcode)
+                time.sleep(5)
+                if driver.current_url == "https://lk.emias.mos.ru/":
+                    result = 3
+                    verifcode = None
+                    while verifcode == None:
+                        None
+                    else:
+                        usercode.send_keys(verifcode)
+                        time.sleep(5)
+                        if driver.current_url == "https://lk.emias.mos.ru/":
+                            result = 3
+                            verifcode = None
+                            while verifcode == None:
+                                None
+                            else:
+                                usercode.send_keys(verifcode)
+                                time.sleep(5)
+                                if driver.current_url == "https://lk.emias.mos.ru/":
+                                    result = 4
+                                    verifcode = None
+                                    driver.quit()
+                                else:
+                                    refferals()
+                        else:
+                            refferals()
+                else:
+                    refferals()
         def refferals(*args):
             global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken
             userid = WebDriverWait(driver, 20).until(
@@ -1404,7 +1336,7 @@ class MOSScreen(Screen):
 
         try:
             firefox_options = Options()
-            firefox_options.add_argument("--headless")
+            #firefox_options.add_argument("--headless")
             driver = webdriver.Firefox(
                 executable_path="C:\\Users\\PCWORK\Desktop\\alter\AlterGUI\\geckodriver.exe",
                 options=firefox_options,
@@ -1412,7 +1344,7 @@ class MOSScreen(Screen):
             driver.get(
                 "https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth"
             )
-            element = WebDriverWait(driver, 120).until(
+            element = WebDriverWait(driver, 1200).until(
                 EC.element_to_be_clickable((By.ID, "login"))
             )
             loginmos = driver.find_element(By.NAME, "login")
@@ -1430,48 +1362,25 @@ class MOSScreen(Screen):
                 result = 0
                 driver.quit()
             except:
-                c = 0
-                flag = False
-                elements = WebDriverWait(driver, 20).until(
-                    EC.presence_of_element_located((By.ID, "otp_input"))
-                )
-                usercode = driver.find_element(By.ID, "otp_input")
-                result = 2
-                while verifcode == None:
-                    None
-                else:
-                    usercode.send_keys(verifcode)
-                    time.sleep(5)
-                    if driver.current_url == "https://lk.emias.mos.ru/":
-                        result = 3
-                        verifcode = None
-                        while verifcode == None:
+                try:
+                    Twofactor = driver.find_element(By.NAME, "sms-code")
+                    while driver.current_url != "https://lk.emias.mos.ru/":
+                        result = 22
+                        while Twofactorverifcode == None:
                             None
                         else:
-                            usercode.send_keys(verifcode)
+                            Twofactor.send_keys(Twofactorverifcode)
+                            verif_button = driver.find_element(By.ID, "verifyBtn").click()
                             time.sleep(5)
-                            if driver.current_url == "https://lk.emias.mos.ru/":
-                                result = 3
-                                verifcode = None
-                                while verifcode == None:
-                                    None
-                                else:
-                                    usercode.send_keys(verifcode)
-                                    time.sleep(5)
-                                    if driver.current_url == "https://lk.emias.mos.ru/":
-                                        result = 4
-                                        verifcode = None
-                                        driver.quit()
-                                    else:
-                                        refferals()
-                            else:
-                                refferals()
+                            Twofactorverifcode = None
                     else:
-                        refferals()
+                        emias()
+                except:
+                    emias()
         except:
             result = 0
-        driver.quit()
-        sys.exit()
+            driver.quit()
+            sys.exit()
 
     def check(self):
         global login, password
@@ -1480,6 +1389,10 @@ class MOSScreen(Screen):
             global verifcode, result, curuserid, polic, names, surename, male, age, idus, authtoken
             if result == None:
                 None
+            elif result == 22:
+                self.Twofactordialog()
+                self.manager.current = 'mos'
+                result = None
             elif result == 0:
                 self.error_dialog()
                 self.manager.current = "mos"
@@ -1520,6 +1433,8 @@ class MOSScreen(Screen):
                 self.mosfunc(login, password)
                 self.manager.current = "load"
                 vclocks = Clock.schedule_interval(checkglobal, 2)
+                if self.timeclock == None:
+                    self.timeclock = Clock.schedule_interval(self.manager.get_screen('mosloged').update, 2)
             else:
                 self.password.helper_text = "Пароль слишком короткий "
                 self.password.helper_text_color_normal = "red"
@@ -1535,6 +1450,33 @@ class MOSScreen(Screen):
 
 # Страница после авторизации
 class MOSLoged(Screen):
+    def update(self, *args):
+        today = datetime.datetime.now()
+        dt = datetime.datetime.today()
+        days = str(datetime.datetime.strftime(today, '%d'))
+        months =  str(datetime.datetime.strftime(today, '%B'))
+        years = str(datetime.datetime.strftime(today, '%Y'))
+        time = str(datetime.datetime.now().strftime("%H:%M"))
+        week = datetime.datetime.weekday(today)
+        if week == 0:
+            week = 'ПН'
+        elif week == 1:
+            week = 'ВТ'
+        elif week == 2:
+            week = 'СР'
+        elif week == 3:
+            week = 'ЧТ'
+        elif week == 4:
+            week = 'ПТ'
+        elif week == 5:
+            week = 'СБ'
+        elif week == 6:
+            week = 'ВС'
+        self.ids.days.text = days
+        self.ids.months.text = months
+        self.ids.years.text = years
+        self.ids.time.text = time
+        self.ids.week.text = week
     def exits(self):
         self.manager.current = "enter"
         global day, year, month, verifcode, login, password, result, polic
@@ -1551,6 +1493,29 @@ class MOSLoged(Screen):
 
 
 class OMSLoged(Screen):
+    dialog = None
+    def full_dialog(self):
+        def enterfull(*args):
+            self.manager.current = "mos"
+        if not self.dialog:
+            self.dialog = MDDialog(
+                type='custom',
+                content_cls=Full(),
+                buttons=[
+                    MDFillRoundFlatButton(
+                        text="Принять",
+                        md_bg_color="0000ff",
+                        on_press=lambda _: self.dialog.dismiss(),
+                        on_release=enterfull
+                    ),
+                    MDFillRoundFlatButton(
+                        text="Отмена",
+                        md_bg_color="ff0000",
+                        on_release=lambda _: self.dialog.dismiss(),
+                    )
+                ],
+            )
+        self.dialog.open()
     def update(self, *args):
         today = datetime.datetime.now()
         dt = datetime.datetime.today()
@@ -1603,7 +1568,7 @@ class OMSLoged(Screen):
             result = 0
         else:
             result = 1
-        print(result)
+        sys.exit()
     def showdate(self, instance):
         def checkglobal(*args):
             global result, timechooses
@@ -1691,6 +1656,7 @@ class OMSLoged(Screen):
                     if 'room' in jszapis["result"][i]['complexResource'][j]:
                         vrachchoose.append(jszapis['result'][i]["name"])
             result = 1
+        sys.exit()
     def exits(self):
         self.manager.current = "enter"
         global day, year, month, verifcode, login, password, result, polic
@@ -1736,7 +1702,7 @@ class OMSLoged(Screen):
         for i in range(len(jsspec["result"])):
             doclist.append(jsspec['result'][i]["name"])
         result = 1
-        
+        sys.exit()
 class Loading(Screen):
     pass
 
@@ -1749,10 +1715,11 @@ class TimeScreen(Screen):
     pass
 class AlterApp(MDApp):
     def build(self):
-        global day, year, month, verifcode, login, docid, password, result, curuserid, polic, names, sure, male, age, idus, authtoken, counts, oms, bdates, ref, ass, spec, doclist,vrachchoose, speclist, datespec, create, cancel, shift, info, timechooses
+        global day, year, month, verifcode, login, docid, Twofactorverifcode, password, result, curuserid, polic, names, sure, male, age, idus, authtoken, counts, oms, bdates, ref, ass, spec, doclist,vrachchoose, speclist, datespec, create, cancel, shift, info, timechooses
         day = None
         counts = 59
         year = None
+        Twofactorverifcode = None
         month = None
         verifcode = None
         login = None
