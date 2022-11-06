@@ -643,6 +643,3 @@ else:
         mosloginemias(login, password)
     else:
         moslogin(login, password)
-
-# 5494499745000410
-# 1088989771000020
