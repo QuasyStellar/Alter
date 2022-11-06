@@ -311,18 +311,17 @@ ScreenManager:
                     mode: "fill"
                     icon_left: "key-variant"
                 MDTextButton:
-                    size_hint: 1, .45
+                    size_hint: 1, .2
                     halign: 'center'
-                    pos_hint: {'center_x': .5, 'center_y': .2}
+                    pos_hint: {'center_x': .499, 'center_y': .2}
                     font_size: dp(25)
-                    #on_release: root.check()
-                    on_release: root.manager.current = 'mosloged'
+                    on_release: root.check()
                     Image:
-                        source: 'assets/firstscreen/mos.png'
+                        source: 'assets/mosscreen/mosbutton.png'
                         center_x: self.parent.center_x
                         center_y: self.parent.center_y
                         allow_stretch: True
-                        size: 450, 100
+                        size: self.parent.size
 <OMSLoged>:
     name: 'loged'
     Image:
@@ -366,14 +365,51 @@ ScreenManager:
         pos_hint: {'center_x': .5, 'center_y': .7}
         size_hint: .339, .3
         radius: [30]
-        ripple_behavior: True
-        ripple_color: 0,0,1,1
         on_release: root.exits()
-        Image:
-            source: 'assets/omsloged/emiasmainbutton.png'
-            center_x: self.parent.center_x
-            center_y: self.parent.center_y
-            allow_stretch: True
+        RelativeLayout:
+            Image:
+                source: 'assets/omsloged/emiasmainbutton.png'
+                allow_stretch: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Мои записи[/color]'
+                markup: True
+                pos_hint: {'center_x': .25, 'center_y': .5}
+                font_name: 'roboto'
+                font_size: dp(32)
+                size_hint: .45,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.exits()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Новая запись[/color]'
+                markup: True
+                pos_hint: {'center_x': .25, 'center_y': .2}
+                font_name: 'roboto'
+                font_size: dp(32)
+                size_hint: .45,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.exits()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Направления[/color]'
+                markup: True
+                pos_hint: {'center_x': .72, 'center_y': .5}
+                font_name: 'roboto'
+                font_size: dp(32)
+                size_hint: .45,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.exits()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Прикрепления[/color]'
+                markup: True
+                pos_hint: {'center_x': .72, 'center_y': .2}
+                font_name: 'roboto'
+                font_size: dp(32)
+                size_hint: .45,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.exits()
+                bold: True
     MDCard:
         orientation: "vertical"
         pos_hint: {'center_x': .5, 'center_y': .3}
@@ -443,9 +479,9 @@ ScreenManager:
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
-        size_hint: .2, .15
+        size_hint: .18, .15
         halign: 'center'
-        pos_hint: {'center_x': .89, 'center_y': .1}
+        pos_hint: {'center_x': .911, 'center_y': .1}
         font_size: dp(25)
         on_release: root.exits()
         Image:
@@ -456,38 +492,121 @@ ScreenManager:
             size: 300, 350
     MDLabel:
         id: authname
-        text:'[color=#ffffff]7700 0000 0000 0000[/color]'
+        text:''
+        markup: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        size_hint: .2, .15
+        halign: 'center'
+        pos_hint: {'center_x': .909, 'center_y': .78}
+        font_size: dp(35) 
+        font_name: 'roboto'
+    MDLabel:
+        id: sures
+        text:''
+        markup: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        size_hint: .2, .15
+        halign: 'center'
+        pos_hint: {'center_x': .909, 'center_y': .74}
+        font_size: dp(35) 
+        font_name: 'roboto'
+    MDLabel:
+        id: ages
+        text:''
         markup: True
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .89, 'center_y': .8}
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        pos_hint: {'center_x': .909, 'center_y': .70}
         font_size: dp(35) 
+        font_name: 'roboto'
     MDCard:
         orientation: "vertical"
-        pos_hint: {'center_x': .5, 'center_y': .7}
-        size_hint: .339, .3
+        pos_hint: {'center_x': .5, 'center_y': .8}
+        size_hint: .27, .26
         radius: [30]
-        ripple_behavior: True
-        ripple_color: 0,0,1,1
+        md_bg_color: 0,0,0,0
+        RelativeLayout:
+            Image:
+                source: 'assets/mosloged/emiasbutton.png'
+                size: self.parent.size
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Мои записи[/color]'
+                markup: True
+                pos_hint: {'center_x': .27, 'center_y': .5}
+                font_name: 'roboto'
+                font_size: dp(25)
+                size_hint: .37,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.exits()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Новая запись[/color]'
+                markup: True
+                pos_hint: {'center_x': .27, 'center_y': .2}
+                font_name: 'roboto'
+                font_size: dp(25)
+                size_hint: .37,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.exits()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Направления[/color]'
+                markup: True
+                pos_hint: {'center_x': .72, 'center_y': .5}
+                font_name: 'roboto'
+                font_size: dp(25)
+                size_hint: .37,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.exits()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Прикрепления[/color]'
+                markup: True
+                pos_hint: {'center_x': .72, 'center_y': .2}
+                font_name: 'roboto'
+                font_size: dp(25)
+                size_hint: .37,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.exits()
+                bold: True
+
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        size_hint: .27, .26
+        radius: [30]
         on_release: root.exits()
         Image:
-            source: 'assets/omsloged/emiasmainbutton.png'
+            source: 'assets/mosloged/lkcardbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
-            allow_stretch: True
-    MDCard:
+            size: self.parent.size
+    MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .5, 'center_y': .3}
-        size_hint: .331, .3
+        pos_hint: {'center_x': .5, 'center_y': .2}
+        size_hint: .27, .26
         radius: [30]
-        ripple_behavior: True
-        ripple_color: 1,0,1,1
+        on_release: root.exits()
         Image:
-            source: 'assets/omsloged/priemmainbutton.png'
+            source: 'assets/mosloged/priemmosbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
-            allow_stretch: True
-            size:  1000, 700
+            size: self.parent.size
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .715, 'center_y': .5}
+        size_hint: .12, .25
+        radius: [30]
+        on_release: root.exits()
+        Image:
+            source: 'assets/mosloged/cardanalizbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
     MDLabel:
         id: time
         bold: True
@@ -1257,6 +1376,7 @@ class MOSScreen(Screen):
     def open_moslogin(self, login, password):
         global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken, Twofactorverifcode
         def emias(*args):
+            global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken, Twofactorverifcode
             c = 0
             flag = False
             elements = WebDriverWait(driver, 20).until(
@@ -1296,7 +1416,7 @@ class MOSScreen(Screen):
                 else:
                     refferals()
         def refferals(*args):
-            global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken
+            global verifcode, result, curuserid, polic, names, sure, age, idus, authtoken
             userid = WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located(
                     (
@@ -1309,7 +1429,6 @@ class MOSScreen(Screen):
                 By.XPATH,
                 "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[1]",
             ).text
-            male = driver.find_element(By.ID, "profile_select_gender").text
             sure = driver.find_element(
                 By.XPATH,
                 "/html/body/div[1]/div[1]/div[3]/div[2]/div/div[1]/div/div[1]/div[2]/span[2]",
@@ -1336,7 +1455,7 @@ class MOSScreen(Screen):
 
         try:
             firefox_options = Options()
-            #firefox_options.add_argument("--headless")
+            firefox_options.add_argument("--headless")
             driver = webdriver.Firefox(
                 executable_path="C:\\Users\\PCWORK\Desktop\\alter\AlterGUI\\geckodriver.exe",
                 options=firefox_options,
@@ -1372,7 +1491,13 @@ class MOSScreen(Screen):
                             Twofactor.send_keys(Twofactorverifcode)
                             verif_button = driver.find_element(By.ID, "verifyBtn").click()
                             time.sleep(5)
+                            try:
+                                agree = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "agree")))
+                                login_button = driver.find_element(By.ID, "agree").click()
+                            except:
+                                None
                             Twofactorverifcode = None
+                            time.sleep(5)
                     else:
                         emias()
                 except:
@@ -1386,7 +1511,7 @@ class MOSScreen(Screen):
         global login, password
 
         def checkglobal(*args):
-            global verifcode, result, curuserid, polic, names, surename, male, age, idus, authtoken
+            global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken
             if result == None:
                 None
             elif result == 22:
@@ -1402,8 +1527,7 @@ class MOSScreen(Screen):
                 self.manager.current = "mosloged"
                 result = None
                 self.manager.get_screen("mosloged").ids.authname.text = names
-                self.manager.get_screen("mosloged").ids.curuser.text = " "
-                self.manager.get_screen("mosloged").ids.males.text = male
+                self.manager.get_screen("mosloged").ids.sures.text = sure
                 self.manager.get_screen("mosloged").ids.ages.text = age
                 Clock.unschedule(vclocks)
             elif result == 2:
@@ -1477,6 +1601,7 @@ class MOSLoged(Screen):
         self.ids.years.text = years
         self.ids.time.text = time
         self.ids.week.text = week
+
     def exits(self):
         self.manager.current = "enter"
         global day, year, month, verifcode, login, password, result, polic
