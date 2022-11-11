@@ -1883,7 +1883,7 @@ class OMSLoged(Screen):
                         text_color= 'white',
                         halign = 'center'
                         )
-                label.font_size = 60
+                label.font_size = 40
                 label.pos_hint = {'center_x':.5, 'center_y':.5}
                 layout.add_widget(label)
                 card.add_widget(layout)
@@ -1894,15 +1894,23 @@ class OMSLoged(Screen):
                             if 'room' in jsvrachi["result"][i]['complexResource'][j]:
                                 card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
                                 layout = RelativeLayout()
-                                label = MDLabel(
+                                name= MDLabel(
                                     text = jsvrachi["result"][i]['name'],
                                     theme_text_color= 'Custom',
-                                    text_color= 'white',
-                                    halign = 'center'
+                                    text_color= 'white'
                                 )
-                                label.font_size = 60
-                                label.pos_hint = {'center_x':.5, 'center_y':.5}
-                                layout.add_widget(label)
+                                name.font_size = 45
+                                name.pos_hint = {'center_x': .55, 'center_y': .8}
+                                layout.add_widget(name)
+                                time = datetime.datetime.fromisoformat(jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                                avail = MDLabel(
+                                    text=f'{time.strftime("С %d %b, %a")}',
+                                    theme_text_color='Custom',
+                                    text_color='white',
+                                )
+                                avail.font_size = 30
+                                avail.pos_hint = {'center_x':.55, 'center_y':.6}
+                                layout.add_widget(avail)
                                 card.add_widget(layout)
                                 self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
         else:
@@ -1923,15 +1931,15 @@ class OMSLoged(Screen):
                             print(f"({i})",jsvrachi["result"][i]['name'])
                             card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
                             layout = RelativeLayout()
-                            label = MDLabel(
+                            name = MDLabel(
                                 text = jsvrachi["result"][i]['name'],
                                 theme_text_color= 'Custom',
                                 text_color= 'white',
                                 halign = 'center'
                             )
-                            label.font_size = 60
-                            label.pos_hint = {'center_x':.5, 'center_y':.5}
-                            layout.add_widget(label)
+                            name.font_size = 60
+                            name.pos_hint = {'center_x':.5, 'center_y':.5}
+                            layout.add_widget(name)
                             card.add_widget(layout)
                             self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
         self.manager.current = 'perenos'
