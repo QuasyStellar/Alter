@@ -20,7 +20,7 @@ from kivy.uix.scrollview import ScrollView
 from kivymd.uix.tab import MDTabsBase, MDTabs
 from kivy.uix.screenmanager import Screen, ScreenManager, FadeTransition
 from kivy.uix.behaviors import ButtonBehavior
-from kivymd.uix.button import MDFillRoundFlatButton, MDIconButton, MDRaisedButton
+from kivymd.uix.button import MDFillRoundFlatButton, MDIconButton, MDRaisedButton, MDRectangleFlatButton
 from kivymd.uix.behaviors.toggle_behavior import MDToggleButton
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.dialog import MDDialog
@@ -409,20 +409,17 @@ Builder.load_string("""
                 md_bg_color: 1,1,1,1
                 on_release: root.prikreplenia()
                 bold: True
-    MDCard:
+    MDTextButton:
         orientation: "vertical"
         pos_hint: {'center_x': .5, 'center_y': .3}
-        size_hint: .331, .3
-        md_bg_color: 1,1,1,0
+        size_hint: .339, .3
         radius: [30]
-        ripple_behavior: True
-        ripple_color: 1,0,1,1
+        on_release: root.exits()
         Image:
             source: 'assets/omsloged/priemmainbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
-            allow_stretch: True
-            size:  1000, 700
+            size: self.parent.size
     MDLabel:
         id: time
         bold: True
@@ -1750,10 +1747,10 @@ class OMSLoged(Screen):
                 ],
             )
         self.dialogsucc.open()
-    def errod(self):
+    def errord(self):
         if not self.error:
             self.error = MDDialog(
-                titlet="Произошла непредвиденная ошибка повторите еще раз",
+                title="Произошла непредвиденная ошибка повторите еще раз",
                 buttons=[
                     MDFillRoundFlatButton(
                         text="ОК",
@@ -2233,7 +2230,6 @@ class OMSLoged(Screen):
                 layout = StackLayout()
                 layout.size_hint_y = None
                 layout.spacing  = 40
-                layout.height = 1000
                 for j in range(len(jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'])):
                     timeF = datetime.datetime.fromisoformat(jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime'])
                     times = MyToggleButton(
@@ -2244,10 +2240,12 @@ class OMSLoged(Screen):
                             group = "x"
                             )
                     times.font_size = 35
-                    times.size_hint=(.15, .15)
+                    times.height = 100
+                    times.width = 100
                     times.endTime = jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['endTime']
                     times.startTime = jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime']
                     layout.add_widget(times)
+                layout.height = layout.minimum_height
                 scrolllayout.add_widget(layout)
                 tab.add_widget(scrolllayout)
                 tabs.add_widget(tab)
@@ -2255,7 +2253,7 @@ class OMSLoged(Screen):
         else:  
             appID = jsspisok["result"][zapisvibor]['id']
             recpID = jsspisok["result"][zapisvibor]["toLdp"]['ldpTypeId']
-            spisokvrachei = requests.post(speclist, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdate,"appointmentId":appID}})
+            spisokvrachei = requests.post(speclist, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdates,"appointmentId":appID}})
             jsvrachi = spisokvrachei.json()
             resID = jsvrachi["result"][vrachchoose]["id"]
             for j in range(len(jsvrachi["result"][vrachchoose]['complexResource'])):
@@ -2282,7 +2280,6 @@ class OMSLoged(Screen):
                 layout = StackLayout()
                 layout.size_hint_y = None
                 layout.spacing  = 40
-                layout.height = 1500
                 for j in range(len(jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'])):
                     timeF = datetime.datetime.fromisoformat(jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime'])
                     times = MyToggleButton(
@@ -2293,10 +2290,12 @@ class OMSLoged(Screen):
                             group = "x"
                             )
                     times.font_size = 35
-                    times.size_hint=(.15, .15)
+                    times.height = 100
+                    times.width = 100
                     times.endTime = jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['endTime']
                     times.startTime = jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime']
                     layout.add_widget(times)
+                layout.height = layout.minimum_height
                 scrolllayout.add_widget(layout)
                 tab.add_widget(scrolllayout)
                 tabs.add_widget(tab)
@@ -2458,7 +2457,7 @@ class OMSLoged(Screen):
                               md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
             layout = RelativeLayout()
             label = MDLabel(
-                text='Записей нет',
+                text='Запись не доступна',
                 halign='center',
                 theme_text_color= 'Custom',
                 text_color= 'white',
@@ -2549,7 +2548,6 @@ class OMSLoged(Screen):
             layout = StackLayout()
             layout.size_hint_y = None
             layout.spacing  = 40
-            layout.height = 1500      
             for j in range(len(jsproczapis["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'])):
                 timeF = datetime.datetime.fromisoformat(jsproczapis["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime'])
                 times = MyToggleButtonNew(
@@ -2559,11 +2557,12 @@ class OMSLoged(Screen):
                         md_bg_color='grey',
                         group = "x"
                         )
-                times.font_size = 35
-                times.size_hint=(.15, .15)
+                times.font_size = 60
+                times.size_hint_y= None
                 times.endTime = jsproczapis["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['endTime']
                 times.startTime = jsproczapis["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime']
                 layout.add_widget(times)
+            layout.height = layout.minimum_height
             scrolllayout.add_widget(layout)
             tab.add_widget(scrolllayout)
             tabs.add_widget(tab)
@@ -2714,4 +2713,4 @@ class AlterApp(MDApp):
 
 if __name__ == '__main__':
     AlterApp().run()
-#5494499745000410 1088989771000020
+#5494499745000410 1088989771
