@@ -535,9 +535,9 @@ Builder.load_string("""
                 pos_hint: {'center_x': .27, 'center_y': .5}
                 font_name: 'roboto'
                 font_size: dp(25)
-                size_hint: .37,.23
+                size_hint: .4,.23
                 md_bg_color: 1,1,1,1
-                on_release: root.zapisi()
+                on_release: root.manager.get_screen('loged').zapisi()
                 bold: True
             MDFillRoundFlatButton:
                 text: '[color=#1959d1]Новая запись[/color]'
@@ -545,9 +545,9 @@ Builder.load_string("""
                 pos_hint: {'center_x': .27, 'center_y': .2}
                 font_name: 'roboto'
                 font_size: dp(25)
-                size_hint: .37,.23
+                size_hint: .4,.23
                 md_bg_color: 1,1,1,1
-                on_release: root.newzapis()
+                on_release: root.manager.get_screen('loged').newzapis()
                 bold: True
             MDFillRoundFlatButton:
                 text: '[color=#1959d1]Направления[/color]'
@@ -555,9 +555,9 @@ Builder.load_string("""
                 pos_hint: {'center_x': .72, 'center_y': .5}
                 font_name: 'roboto'
                 font_size: dp(25)
-                size_hint: .37,.23
+                size_hint: .4,.23
                 md_bg_color: 1,1,1,1
-                on_release: root.prosmotrnapr()
+                on_release: root.manager.get_screen('loged').prosmotrnapr()
                 bold: True
             MDFillRoundFlatButton:
                 text: '[color=#1959d1]Прикрепления[/color]'
@@ -565,9 +565,9 @@ Builder.load_string("""
                 pos_hint: {'center_x': .72, 'center_y': .2}
                 font_name: 'roboto'
                 font_size: dp(25)
-                size_hint: .37,.23
+                size_hint: .4,.23
                 md_bg_color: 1,1,1,1
-                on_release: root.prikreplenia()
+                on_release: root.manager.get_screen('loged').prikreplenia()
                 bold: True
     MDTextButton:
         orientation: "vertical"
@@ -881,7 +881,7 @@ Builder.load_string("""
         pos_hint: {'center_x': .911, 'center_y': .1}
         font_size: dp(25)
         on_release:
-            root.manager.current = 'loged'
+            root.manager.get_screen('loged').screenback()
             root.ids.scrollid.clear_widgets()
         Image:
             source: 'assets/exitbutton.png'
@@ -972,7 +972,7 @@ Builder.load_string("""
         pos_hint: {'center_x': .911, 'center_y': .1}
         font_size: dp(25)
         on_release:
-            root.manager.current = 'loged'
+            root.manager.get_screen('loged').screenback()
             root.ids.lay.clear_widgets()
         Image:
             source: 'assets/exitbutton.png'
@@ -995,7 +995,7 @@ Builder.load_string("""
         pos_hint: {'center_x': .911, 'center_y': .1}
         font_size: dp(25)
         on_release:
-            root.manager.current = 'loged'
+            root.manager.get_screen('loged').screenback()
             root.ids.scrollid.clear_widgets()
         Image:
             source: 'assets/exitbutton.png'
@@ -1141,7 +1141,7 @@ class OMSScreen(Screen):
     def omslogin(self):
         global oms
         def checkglobal(*args):
-            global result, bdates
+            global result, bdates, types
             if result == None:
                 None
             elif result == 0:
@@ -1161,6 +1161,7 @@ class OMSScreen(Screen):
                 bdates = year + "-" + month + "-" + day
                 Clock.unschedule(clocks)
                 result = None
+                types = 'oms'
 
         if len(self.policy.text) < 16 or len(self.policy.text) > 16:
             self.policy.helper_text = "Некорректный полис"
@@ -1555,7 +1556,7 @@ class MOSScreen(Screen):
             firefox_options = Options()
             firefox_options.add_argument("--headless")
             driver = webdriver.Firefox(
-                executable_path="C:\\Users\\PCWORK\Desktop\\alter\AlterGUI\\geckodriver.exe",
+                executable_path="/home/user/Рабочий стол/Alter-main/geckodriver",
                 options=firefox_options,
             )
             driver.get(
@@ -1609,7 +1610,7 @@ class MOSScreen(Screen):
         global login, password
 
         def checkglobal(*args):
-            global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken
+            global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken, types
             if result == None:
                 None
             elif result == 22:
@@ -1627,6 +1628,7 @@ class MOSScreen(Screen):
                 self.manager.get_screen("mosloged").ids.authname.text = names
                 self.manager.get_screen("mosloged").ids.sures.text = sure
                 self.manager.get_screen("mosloged").ids.ages.text = age
+                types = 'mos'
                 Clock.unschedule(vclocks)
             elif result == 2:
                 self.mobile()
@@ -1735,6 +1737,12 @@ class OMSLoged(Screen):
     dialogsuccper = None
     error = None
     news = None
+    def screenback(self):
+        global types
+        if types == 'oms':
+            self.manager.current = 'loged'
+        else:
+            self.manager.current = 'mosloged'
     def succ(self):
         if not self.dialogsucc:
             self.dialogsucc = MDDialog(
@@ -2649,7 +2657,7 @@ class Prikreplenia(Screen):
     pass
 class AlterApp(MDApp):
     def build(self):
-        global day, sm,  year, month, verifcode,userid, login,appID, specID, recpID, resID, complID, perenosEnd, perenosStart, docid, Twofactorverifcode, password, result, curuserid, polic, names, sure, male, age, idus, authtoken, counts, oms, bdates, ref, ass, spec, doclist,vrachchoose, speclist, datespec, create, cancel, shift, info
+        global day, sm, types,  year, month, verifcode,userid, login,appID, specID, recpID, resID, complID, perenosEnd, perenosStart, docid, Twofactorverifcode, password, result, curuserid, polic, names, sure, male, age, idus, authtoken, counts, oms, bdates, ref, ass, spec, doclist,vrachchoose, speclist, datespec, create, cancel, shift, info
         
         #omsscreen
 
@@ -2685,6 +2693,7 @@ class AlterApp(MDApp):
         cancel = "https://emias.info/api/emc/appointment-eip/v1/?cancelAppointment"
         shift = "https://emias.info/api/emc/appointment-eip/v1/?shiftAppointment"
         info = "https://emias.info/api/emc/appointment-eip/v1/?getPatientInfo3"
+        types = None
         zapisvibor = None
         
         #mosscreen
