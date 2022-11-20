@@ -136,7 +136,6 @@ Builder.load_string("""
                     pos_hint: {'center_x': .5, 'center_y': .70}
                     font_size: dp(25)
                     on_release: root.oms()
-                    #on_release: root.manager.current = 'loged'
                     Image:
                         source: 'assets/firstscreen/oms.png'
                         center_x: self.parent.center_x
@@ -574,7 +573,7 @@ Builder.load_string("""
         pos_hint: {'center_x': .5, 'center_y': .5}
         size_hint: .27, .26
         radius: [30]
-        on_release: root.exits()
+        on_release: root.manager.current = "lkcard"
         Image:
             source: 'assets/mosloged/lkcardbutton.png'
             center_x: self.parent.center_x
@@ -996,6 +995,111 @@ Builder.load_string("""
         font_size: dp(25)
         on_release:
             root.manager.get_screen('loged').screenback()
+            root.ids.scrollid.clear_widgets()
+        Image:
+            source: 'assets/exitbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 300, 350
+    ScrollView:
+        size_hint: .6, .9
+        md_bg_color: 1,1,1,0
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        GridLayout:
+            scroll_distance: 30
+            cols:1
+            spacing:10 
+            size_hint_y: None
+            height: self.minimum_height
+            id: scrollid
+<LKCard>:
+    name: 'lkcard'
+    MDCard:
+        size_hint: .8, .8
+        md_bg_color: 170/255,170/255,170/255,1
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        radius: [30]
+        RelativeLayout:
+            MDFillRoundFlatButton:
+                id: 1
+                text: "мои тесты на covid-19"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .35, 'center_y': .8}
+                font_size: dp(30)
+                on_release: root.view(1)
+            MDFillRoundFlatButton:
+                id: 2
+                text: "мои прививки"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .70, 'center_y': .8}
+                font_size: dp(30)
+                on_release: root.view(2)
+            MDFillRoundFlatButton:
+                id: 3
+                text: "мои приемы в поликлинике"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .35, 'center_y': .65}
+                font_size: dp(30)
+                on_release: root.view(3)
+            MDFillRoundFlatButton:
+                id: 4
+                text: "мои анализы"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .70, 'center_y': .65}
+                font_size: dp(30)
+                on_release: root.view(4)
+            MDFillRoundFlatButton:
+                id: 5
+                text: "мои исследования"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .35, 'center_y': .5}
+                font_size: dp(30)
+                on_release: root.view(5)
+            MDFillRoundFlatButton:
+                id: 6
+                text: "мои больничные"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .70, 'center_y': .5}
+                font_size: dp(30)
+                on_release: root.view(6)
+            MDFillRoundFlatButton:
+                id: 7
+                text: "мои справки и мед. заключения"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .35, 'center_y': .35}
+                font_size: dp(30)
+                on_release: root.view(7)
+            MDFillRoundFlatButton:
+                id: 8
+                text: "мои выписки из стационара"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .70, 'center_y': .35}
+                font_size: dp(30)
+                on_release: root.view(8)
+            MDFillRoundFlatButton:
+                id: 9
+                text: "мои рецепты"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .35, 'center_y': .2}
+                font_size: dp(30)
+                on_release: root.view(9)
+            MDFillRoundFlatButton:
+                id: 10
+                text: "скорая помощь"
+                size_hint: .35, .13
+                pos_hint: {'center_x': .70, 'center_y': .2}
+                font_size: dp(30)
+                on_release: root.view(10)
+<History>:
+    name: 'history'
+    MDTextButton:
+        size_hint: .18, .15
+        halign: 'center'
+        pos_hint: {'center_x': .911, 'center_y': .1}
+        font_size: dp(25)
+        on_release:
+            root.manager.current = 'mosloged'
             root.ids.scrollid.clear_widgets()
         Image:
             source: 'assets/exitbutton.png'
@@ -1515,7 +1619,7 @@ class MOSScreen(Screen):
                 else:
                     refferals()
         def refferals(*args):
-            global verifcode, result, curuserid, polic, names, sure, age, idus, authtoken, oms, bdates
+            global verifcode, result, curuserid, polic, names, sure, age, idus, authtoken, oms, bdates, s
             userid = WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located(
                     (
@@ -1556,7 +1660,7 @@ class MOSScreen(Screen):
             firefox_options = Options()
             firefox_options.add_argument("--headless")
             driver = webdriver.Firefox(
-                executable_path="/home/user/Рабочий стол/Alter-main/geckodriver",
+                executable_path="C:\\Users\\PCWORK\\Desktop\\alter\\AlterGUI\\geckodriver.exe",
                 options=firefox_options,
             )
             driver.get(
@@ -2655,9 +2759,207 @@ class Napravlenia(Screen):
     pass
 class Prikreplenia(Screen):
     pass
+class LKCard(Screen):
+    global idus, authtoken, s
+    def historyanamnes(self, instance):
+        anamnes = s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+        jsanam = anamnes.json()
+        for i in range(len(jsanam['documents'])):
+            if 'appointmentDate' in jsanam['documents'][i]:
+                date = jsanam['documents'][i]['appointmentDate']
+                if date[0:4] == instance.year:
+                    flag = False
+                    try:
+                        print(f'({i})',jsanam['documents'][i]['doctorSpecialization'])
+                    except:
+                        print(f'({i})',jsanam['documents'][i]['title'])
+                        flag = True
+                    if flag == False:
+                        print(jsanam['documents'][i]['title'])
+                    if 'doctorName' in jsanam['documents'][i]:
+                        print(jsanam['documents'][i]['doctorName'])
+                    if 'appointmentDate' in jsanam['documents'][i]:
+                        print(jsanam['documents'][i]['appointmentDate'])
+                    if 'organisation' in jsanam['documents'][i]:
+                        print(jsanam['documents'][i]['organisation'])
+    def view(self, id):
+        def covidtest(*args):
+            covid = s.get(f"https://lk.emias.mos.ru/api/1/documents/covid-analyzes?ehrId={idus}&shortDateFilter=all_time", headers = {'X-Access-JWT': authtoken})
+            jscov = covid.json()
+            for i in range(len(jscov['documents'])):
+                card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                layout = RelativeLayout()
+                title = MDLabel(
+                    text=f"{jscov['documents'][i]['title']}",
+                    theme_text_color= 'Custom',
+                    text_color= 'white', 
+                    )
+                title.font_size  =  45
+                title.pos_hint = {'center_x': .55, 'center_y':.8}
+                layout.add_widget(title)
+                time = datetime.datetime.fromisoformat(jscov['documents'][i]['date'])
+                timelab = MDLabel(
+                    text = f'{time.strftime("%a, %d %b в %H:%M")}',
+                    theme_text_color= 'Custom',
+                    text_color= 'white', 
+                    )
+                timelab.font_size  =  35
+                timelab.pos_hint = {'center_x': 1.2, 'center_y':.65}
+                layout.add_widget(timelab)
+                card.add_widget(layout)
+                self.manager.get_screen("history").ids.scrollid.add_widget(card)
+            self.manager.current = 'history'
+
+        def myvacine(*args):
+            vacin = s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={idus}", headers = {'X-Access-JWT': authtoken})
+            jsvac = vacin.json()
+            vacinchoose = int(input('(0) Профилактические прививки\n(1) Иммунодиагностические тесты\n'))
+            if vacinchoose == 0:
+                for i in range(len(jsvac['doneList'])):
+                    print(f"({i})",jsvac['doneList'][i]['infectionList'][0]['infectionName'])
+                    print(jsvac['doneList'][i]['dateVaccination'])
+                    print('Возраст: ',jsvac['doneList'][i]['age'])
+
+            else:
+                for i in range(len(jsvac['tubList'])):
+                    print(f"({i})",jsvac['tubList'][i]['infectionList'][0]['infectionName'])
+                    print(jsvac['tubList'][i]['dateVaccination'])
+                    print(jsvac['tubList'][i]['tubResultList'][0]['reactionKind'])
+                    print('Возраст: ',jsvac['tubList'][i]['age'])
+        def myanamnes(*args):
+            anamnes = s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            jsanam = anamnes.json()
+            filt = []
+            for i in range(len(jsanam['documents'])):
+                if 'appointmentDate' in jsanam['documents'][i]:
+                    date = jsanam['documents'][i]['appointmentDate']
+                    if date[0:4] not in filt:
+                        filt.append(date[0:4])
+            for i in filt:
+                card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                layout = RelativeLayout()
+                timelab = MDLabel(
+                    text = f'Записи за {i[0:4]} год.',
+                    theme_text_color= 'Custom',
+                    text_color= 'white', 
+                    halign='center'
+                    )
+                timelab.font_size  =  60
+                timelab.pos_hint = {'center_x': .5, 'center_y':.5}
+                layout.add_widget(timelab)
+                card.add_widget(layout)
+                card.bind(on_release=self.historyanamnes)
+                card.year = i[0:4]
+                self.manager.get_screen("history").ids.scrollid.add_widget(card)
+            self.manager.current = 'history'
+
+        def myanaliz(*args):
+            analiz = s.get(f'https://lk.emias.mos.ru/api/1/documents/analyzes?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            jsanaliz = analiz.json()
+            for i in range(len(jsanaliz['documents'])):
+                print(f'({i})',jsanaliz['documents'][i]['title'])
+                print(jsanaliz['documents'][i]['date'])
+            prosmotrchoose = int(input('Выберите анализ для просмотра\n'))
+            docID = jsanaliz['documents'][prosmotrchoose]['documentId']
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            jspros = prosmotr.json()
+            print(jspros['documentHtml'])
+        def myldp():
+            ldp = s.get(f'https://lk.emias.mos.ru/api/1/documents/research?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            jsldp = ldp.json()
+            for i in range(len(jsldp['documents'])):
+                print(f'({i})',jsldp['documents'][i]['title'])
+                print(jsldp['documents'][i]['date'])
+                print(jsldp['documents'][i]['muName'])
+            prosmotrchoose = int(input('Выберите анализ для просмотра\n'))
+            docID = jsldp['documents'][prosmotrchoose]['documentId']
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            jspros = prosmotr.json()
+            print(jspros['documentHtml'])
+        def myboln():
+            print("Не доступно")
+        def myspravki():
+            spravki = s.get(f'https://lk.emias.mos.ru/api/1/documents/medical-certificates?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            jssp = spravki.json()
+            print(jssp)
+            for i in range(len(jssp['certificates095'])):
+                print(f"({i})Справка № 095/у")
+                print(jssp['certificates095'][i]['educationalName'])
+                print(jssp['certificates095'][i]['muName'])
+                print(jssp['certificates095'][i]['medicalEmployeeSpeciality'])
+                print(jssp['certificates095'][i]['medicalEmployeeName'])
+                print(jssp['certificates095'][i]['dateCreated'])
+            prosmotrchoose = int(input("Выберите справку для просмотра\n"))
+            docID = jssp['certificates095'][prosmotrchoose]['documentId']
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            jspros = prosmotr.json()
+            hti = Html2Image()
+            html = jspros['documentHtml']
+            hti.screenshot(html_str=html, save_as='page.png')
+        def mystacionar():
+            stacionar = s.get(f'https://lk.emias.mos.ru/api/1/documents/epicrisis?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            jsstac = stacionar.json()
+            for i in range(len(jsstac['documents'])):
+                print(f'({i})',jsstac['documents'][i]['organisation'])
+                print(jsstac['documents'][i]['dischargeDate'])
+            prosmotrchoose = int(input('Выберите выписку для просмотра\n'))
+            docID = jsstac['documents'][prosmotrchoose]['documentId']
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            jspros = prosmotr.json()
+            print(jspros['documentHtml'])
+        def myrecepies():
+            recepies = s.get(f'https://lk.emias.mos.ru/api/2/receipt?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            jsrec = recepies.json()
+            for i in range(len(jsrec['receipts'])):
+                print(f'({i})',jsrec['receipts'][i]['medicineName'])
+                print('Выписан',jsrec['receipts'][i]['prescriptionDate'])
+                print('Просрочен',jsrec['receipts'][i]['expirationDate'])
+                if jsrec['receipts'][i]['prescriptionStatus'] == 'expired':
+                    print("Просрочен")
+                else:
+                    print('Действует')
+            prosmotrchoose = int(input('Выберите рецепт для просмотра\n'))
+            docID = jsrec['receipts'][prosmotrchoose]['prescriptionNumber']
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            jspros = prosmotr.json()
+            print(jspros['documentHtml'])
+                
+        def myemergency():
+            emergency = s.get(f'https://lk.emias.mos.ru/api/1/documents/ambulance?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            jsemg = emergency.json()
+            for i in range(len(jsemg['documents'])):
+                print(f'({i})',jsemg['documents'][i]['diagnosis'])
+                print(jsemg['documents'][i]['callDate'])
+            prosmotrchoose = int(input('Выберите рецепт для просмотра\n'))
+            docID = jsemg['documents'][prosmotrchoose]['documentId']
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            jspros = prosmotr.json()
+            print(jspros['documentHtml'])
+        if id == 1:
+            covidtest()
+        elif id == 2:
+            myvacine()
+        elif id == 3:
+            myanamnes()
+        elif id == 4:
+            myanaliz()
+        elif id == 5:
+            myboln()
+        elif id == 6:
+            myldp()
+        elif id == 7:
+            myspravki()
+        elif id == 8:
+            mystacionar()
+        elif id == 9:
+            myrecepies()
+        elif id == 10:
+            myemergency()
+class History(Screen):
+    pass
 class AlterApp(MDApp):
     def build(self):
-        global day, sm, types,  year, month, verifcode,userid, login,appID, specID, recpID, resID, complID, perenosEnd, perenosStart, docid, Twofactorverifcode, password, result, curuserid, polic, names, sure, male, age, idus, authtoken, counts, oms, bdates, ref, ass, spec, doclist,vrachchoose, speclist, datespec, create, cancel, shift, info
+        global day, sm, types,  year, s,  month, verifcode,userid, login,appID, specID, recpID, resID, complID, perenosEnd, perenosStart, docid, Twofactorverifcode, password, result, curuserid, polic, names, sure, male, age, idus, authtoken, counts, oms, bdates, ref, ass, spec, doclist,vrachchoose, speclist, datespec, create, cancel, shift, info
         
         #omsscreen
 
@@ -2674,6 +2976,7 @@ class AlterApp(MDApp):
         password = None
         
         #universal
+        s = None
         perenosEnd = None
         perenosStart = None
         bdates = None
@@ -2716,10 +3019,12 @@ class AlterApp(MDApp):
         sm.add_widget(Showdate(name=('timetable')))
         sm.add_widget(Prikreplenia(name='prik'))
         sm.add_widget(Napravlenia(name='napr'))
+        sm.add_widget(LKCard(name="lkcard"))
+        sm.add_widget(History(name='history'))
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
         return sm
 
 if __name__ == '__main__':
     AlterApp().run()
-#5494499745000410 1088989771
+#5494499745000410 1088989771000020
