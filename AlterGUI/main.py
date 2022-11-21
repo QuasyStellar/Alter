@@ -1015,6 +1015,20 @@ Builder.load_string("""
             id: scrollid
 <LKCard>:
     name: 'lkcard'
+    MDTextButton:
+        size_hint: .18, .15
+        halign: 'center'
+        pos_hint: {'center_x': .911, 'center_y': .1}
+        font_size: dp(25)
+        on_release:
+            root.manager.current = 'mosloged'
+            root.ids.scrollid.clear_widgets()
+        Image:
+            source: 'assets/exitbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 300, 350
     MDCard:
         size_hint: .8, .8
         md_bg_color: 170/255,170/255,170/255,1
@@ -1034,7 +1048,7 @@ Builder.load_string("""
                 size_hint: .35, .13
                 pos_hint: {'center_x': .70, 'center_y': .8}
                 font_size: dp(30)
-                on_release: root.view(2)
+                on_release: root.manager.current = 'priv'
             MDFillRoundFlatButton:
                 id: 3
                 text: "мои приемы в поликлинике"
@@ -1099,7 +1113,96 @@ Builder.load_string("""
         pos_hint: {'center_x': .911, 'center_y': .1}
         font_size: dp(25)
         on_release:
-            root.manager.current = 'mosloged'
+            root.manager.current = 'lkcard'
+            root.ids.scrollid.clear_widgets()
+        Image:
+            source: 'assets/exitbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 300, 350
+    ScrollView:
+        size_hint: .6, .9
+        md_bg_color: 1,1,1,0
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        GridLayout:
+            scroll_distance: 30
+            cols:1
+            spacing:10 
+            size_hint_y: None
+            height: self.minimum_height
+            id: scrollid
+<AnamnesView>
+    name: 'anamn'
+    MDTextButton:
+        size_hint: .18, .15
+        halign: 'center'
+        pos_hint: {'center_x': .911, 'center_y': .1}
+        font_size: dp(25)
+        on_release:
+            root.manager.current = 'history'
+            root.ids.scrollid.clear_widgets()
+        Image:
+            source: 'assets/exitbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 300, 350
+    ScrollView:
+        size_hint: .6, .9
+        md_bg_color: 1,1,1,0
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        GridLayout:
+            scroll_distance: 30
+            cols:1
+            spacing:10 
+            size_hint_y: None
+            height: self.minimum_height
+            id: scrollid
+<Privivki>:
+    name: 'priv'
+    MDTextButton:
+        size_hint: .18, .15
+        halign: 'center'
+        pos_hint: {'center_x': .911, 'center_y': .1}
+        font_size: dp(25)
+        on_release:
+            root.manager.current = 'lkcard'
+        Image:
+            source: 'assets/exitbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 300, 350
+    MDCard:
+        size_hint: .8, .8
+        md_bg_color: 170/255,170/255,170/255,1
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        radius: [30]
+        RelativeLayout:
+            MDFillRoundFlatButton:
+                id: 2
+                text: "Профилактические прививки"
+                size_hint: .8, .3
+                pos_hint: {'center_x': .5, 'center_y': .75}
+                font_size: dp(30)
+                on_release: root.prof()
+            MDFillRoundFlatButton:
+                id: 2
+                text: "Иммунодиагностические прививки"
+                size_hint: .8, .3
+                pos_hint: {'center_x': .5, 'center_y': .25}
+                font_size: dp(30)
+                on_release: root.immuno()
+<PrivivkiView>
+    name: 'privview'
+    MDTextButton:
+        size_hint: .18, .15
+        halign: 'center'
+        pos_hint: {'center_x': .911, 'center_y': .1}
+        font_size: dp(25)
+        on_release:
+            root.manager.current = 'priv'
             root.ids.scrollid.clear_widgets()
         Image:
             source: 'assets/exitbutton.png'
@@ -1660,7 +1763,7 @@ class MOSScreen(Screen):
             firefox_options = Options()
             firefox_options.add_argument("--headless")
             driver = webdriver.Firefox(
-                executable_path="C:\\Users\\PCWORK\\Desktop\\alter\\AlterGUI\\geckodriver.exe",
+                executable_path="/home/user/Рабочий стол/Alter-main/geckodriver",
                 options=firefox_options,
             )
             driver.get(
@@ -2765,23 +2868,73 @@ class LKCard(Screen):
         anamnes = s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
         jsanam = anamnes.json()
         for i in range(len(jsanam['documents'])):
+            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+            layout = RelativeLayout()
             if 'appointmentDate' in jsanam['documents'][i]:
                 date = jsanam['documents'][i]['appointmentDate']
                 if date[0:4] == instance.year:
                     flag = False
                     try:
-                        print(f'({i})',jsanam['documents'][i]['doctorSpecialization'])
+                        doctorspec = MDLabel(
+                            text=f"{jsanam['documents'][i]['doctorSpecialization']}",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                        doctorspec.font_size = 45
+                        doctorspec.pos_hint = {'center_x': .55, 'center_y': .8}
+                        layout.add_widget(doctorspec)
                     except:
-                        print(f'({i})',jsanam['documents'][i]['title'])
+                        title = MDLabel(
+                            text=f"{jsanam['documents'][i]['title']}",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                        title.font_size = 45
+                        title.pos_hint = {'center_x': .55, 'center_y': .8}
+                        layout.add_widget(title)
                         flag = True
                     if flag == False:
-                        print(jsanam['documents'][i]['title'])
+                        title = MDLabel(
+                            text=f"{jsanam['documents'][i]['title']}",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                        title.font_size = 45
+                        title.pos_hint = {'center_x': .55, 'center_y': .6}
+                        layout.add_widget(title)
                     if 'doctorName' in jsanam['documents'][i]:
-                        print(jsanam['documents'][i]['doctorName'])
+                        doctorname = MDLabel(
+                            text=f"{jsanam['documents'][i]['doctorName']}",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                        doctorname.font_size = 45
+                        doctorname.pos_hint = {'center_x': .55, 'center_y': .4}
+                        layout.add_widget(doctorname)
                     if 'appointmentDate' in jsanam['documents'][i]:
-                        print(jsanam['documents'][i]['appointmentDate'])
+                        time = datetime.datetime.fromisoformat(jsanam['documents'][i]['appointmentDate'])
+                        timelab = MDLabel(
+                            text=f'{time.strftime("%a, %d %b")}',
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                        timelab.font_size = 35
+                        timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                        layout.add_widget(timelab)
                     if 'organisation' in jsanam['documents'][i]:
-                        print(jsanam['documents'][i]['organisation'])
+                        address = MDLabel(
+                            text=jsanam['documents'][i]['organisation'],
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                        address.font_size = 30
+                        address.pos_hint = {'center_x': .55, 'center_y': .2}
+                        layout.add_widget(address)
+                    card.add_widget(layout)
+                    self.manager.get_screen("anamn").ids.scrollid.add_widget(card)
+                self.manager.current = 'anamn'
+
     def view(self, id):
         def covidtest(*args):
             covid = s.get(f"https://lk.emias.mos.ru/api/1/documents/covid-analyzes?ehrId={idus}&shortDateFilter=all_time", headers = {'X-Access-JWT': authtoken})
@@ -2810,22 +2963,6 @@ class LKCard(Screen):
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
 
-        def myvacine(*args):
-            vacin = s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={idus}", headers = {'X-Access-JWT': authtoken})
-            jsvac = vacin.json()
-            vacinchoose = int(input('(0) Профилактические прививки\n(1) Иммунодиагностические тесты\n'))
-            if vacinchoose == 0:
-                for i in range(len(jsvac['doneList'])):
-                    print(f"({i})",jsvac['doneList'][i]['infectionList'][0]['infectionName'])
-                    print(jsvac['doneList'][i]['dateVaccination'])
-                    print('Возраст: ',jsvac['doneList'][i]['age'])
-
-            else:
-                for i in range(len(jsvac['tubList'])):
-                    print(f"({i})",jsvac['tubList'][i]['infectionList'][0]['infectionName'])
-                    print(jsvac['tubList'][i]['dateVaccination'])
-                    print(jsvac['tubList'][i]['tubResultList'][0]['reactionKind'])
-                    print('Возраст: ',jsvac['tubList'][i]['age'])
         def myanamnes(*args):
             anamnes = s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
             jsanam = anamnes.json()
@@ -2839,7 +2976,7 @@ class LKCard(Screen):
                 card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
                 layout = RelativeLayout()
                 timelab = MDLabel(
-                    text = f'Записи за {i[0:4]} год.',
+                    text = f'Приемы за {i[0:4]} год.',
                     theme_text_color= 'Custom',
                     text_color= 'white', 
                     halign='center'
@@ -2893,9 +3030,6 @@ class LKCard(Screen):
             docID = jssp['certificates095'][prosmotrchoose]['documentId']
             prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
             jspros = prosmotr.json()
-            hti = Html2Image()
-            html = jspros['documentHtml']
-            hti.screenshot(html_str=html, save_as='page.png')
         def mystacionar():
             stacionar = s.get(f'https://lk.emias.mos.ru/api/1/documents/epicrisis?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
             jsstac = stacionar.json()
@@ -2937,8 +3071,6 @@ class LKCard(Screen):
             print(jspros['documentHtml'])
         if id == 1:
             covidtest()
-        elif id == 2:
-            myvacine()
         elif id == 3:
             myanamnes()
         elif id == 4:
@@ -2956,6 +3088,93 @@ class LKCard(Screen):
         elif id == 10:
             myemergency()
 class History(Screen):
+    pass
+class AnamnesView(Screen):
+    pass
+class Privivki(Screen):
+    global idus, authtoken, s
+    def prof(self):
+        vacin = s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={idus}", headers={'X-Access-JWT': authtoken})
+        jsvac = vacin.json()
+        for i in range(len(jsvac['doneList'])):
+            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+            layout = RelativeLayout()
+            title = MDLabel(
+                text=f"{jsvac['doneList'][i]['infectionList'][0]['infectionName']}",
+                theme_text_color='Custom',
+                text_color='white',
+            )
+            title.font_size = 45
+            title.pos_hint = {'center_x': .55, 'center_y': .8}
+            layout.add_widget(title)
+            time = datetime.datetime.fromisoformat(jsvac['doneList'][i]['dateVaccination'])
+            timelab = MDLabel(
+                text=f'{time.strftime("%a, %d %b %Y")}',
+                theme_text_color='Custom',
+                text_color='white',
+            )
+            timelab.font_size = 35
+            timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+            age = MDLabel(
+                text=f"{jsvac['doneList'][i]['age']}",
+                theme_text_color='Custom',
+                text_color='white',
+            )
+            age.font_size = 45
+            age.pos_hint = {'center_x': 1.2, 'center_y': .3}
+            layout.add_widget(age)
+            layout.add_widget(timelab)
+            card.add_widget(layout)
+            self.manager.get_screen("privview").ids.scrollid.add_widget(card)
+        self.manager.current = 'privview'
+
+    def immuno(self):
+        vacin = s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={idus}", headers={'X-Access-JWT': authtoken})
+        jsvac = vacin.json()
+        for i in range(len(jsvac['doneList'])):
+            print(jsvac['tubList'][i]['tubResultList'][0]['reactionKind'])
+            print(jsvac['tubList'][i]['age'])
+            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+            layout = RelativeLayout()
+            title = MDLabel(
+                text=f"{jsvac['tubList'][i]['infectionList'][0]['infectionName']}",
+                theme_text_color='Custom',
+                text_color='white',
+            )
+            title.font_size = 45
+            title.pos_hint = {'center_x': .55, 'center_y': .8}
+            layout.add_widget(title)
+            time = datetime.datetime.fromisoformat(jsvac['tubList'][i]['dateVaccination'])
+            timelab = MDLabel(
+                text=f'{time.strftime("%a, %d %b %Y")}',
+                theme_text_color='Custom',
+                text_color='white',
+            )
+            timelab.font_size = 35
+            timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+            age = MDLabel(
+                text=f"{jsvac['tubList'][i]['age']}",
+                theme_text_color='Custom',
+                text_color='white',
+            )
+            age.font_size = 45
+            age.pos_hint = {'center_x': 1.2, 'center_y': .3}
+            layout.add_widget(age)
+            result = MDLabel(
+                text=f"{jsvac['tubList'][i]['infectionList'][0]['infectionName']}",
+                theme_text_color='Custom',
+                text_color='white',
+            )
+            result.font_size = 45
+            result.pos_hint = {'center_x': .55, 'center_y': .4}
+            layout.add_widget(result)
+            layout.add_widget(timelab)
+            card.add_widget(layout)
+            self.manager.get_screen("privview").ids.scrollid.add_widget(card)
+        self.manager.current = 'privview'
+class PrivivkiView(Screen):
     pass
 class AlterApp(MDApp):
     def build(self):
@@ -3021,6 +3240,9 @@ class AlterApp(MDApp):
         sm.add_widget(Napravlenia(name='napr'))
         sm.add_widget(LKCard(name="lkcard"))
         sm.add_widget(History(name='history'))
+        sm.add_widget(AnamnesView(name='anamn'))
+        sm.add_widget(Privivki(name='priv'))
+        sm.add_widget((PrivivkiView(name='privview')))
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
         return sm
