@@ -8,6 +8,7 @@ from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
 from kivymd.uix.label import MDLabel
 import threading
+from html2image import Html2Image
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
@@ -1022,7 +1023,6 @@ Builder.load_string("""
         font_size: dp(25)
         on_release:
             root.manager.current = 'mosloged'
-            root.ids.scrollid.clear_widgets()
         Image:
             source: 'assets/exitbutton.png'
             center_x: self.parent.center_x
@@ -1763,7 +1763,7 @@ class MOSScreen(Screen):
             firefox_options = Options()
             firefox_options.add_argument("--headless")
             driver = webdriver.Firefox(
-                executable_path="/home/user/Рабочий стол/Alter-main/geckodriver",
+                executable_path="C:\\Users\\PCWORK\\Desktop\\alter\\AlterGUI\\geckodriver.exe",
                 options=firefox_options,
             )
             driver.get(
@@ -2961,6 +2961,12 @@ class LKCard(Screen):
                 layout.add_widget(timelab)
                 card.add_widget(layout)
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
+
+                prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={jscov["documents"][i]["documentId"]}', headers = {'X-Access-JWT': authtoken})
+                jspros = prosmotr.json()
+                hti = Html2Image()
+                html = jspros['documentHtml']
+                hti.screenshot(html_str=html, save_as='red_page.png')
             self.manager.current = 'history'
 
         def myanamnes(*args):
@@ -3132,9 +3138,7 @@ class Privivki(Screen):
     def immuno(self):
         vacin = s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={idus}", headers={'X-Access-JWT': authtoken})
         jsvac = vacin.json()
-        for i in range(len(jsvac['doneList'])):
-            print(jsvac['tubList'][i]['tubResultList'][0]['reactionKind'])
-            print(jsvac['tubList'][i]['age'])
+        for i in range(len(jsvac['tubList'])):
             card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
                           md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
             layout = RelativeLayout()
@@ -3163,7 +3167,7 @@ class Privivki(Screen):
             age.pos_hint = {'center_x': 1.2, 'center_y': .3}
             layout.add_widget(age)
             result = MDLabel(
-                text=f"{jsvac['tubList'][i]['infectionList'][0]['infectionName']}",
+                text=f"{jsvac['tubList'][i]['tubResultList'][0]['reactionKind']}",
                 theme_text_color='Custom',
                 text_color='white',
             )
