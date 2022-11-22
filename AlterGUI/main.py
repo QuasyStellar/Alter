@@ -146,10 +146,6 @@ Builder.load_string("""
                         center_y: self.parent.center_y
                         allow_stretch: True
                         size: 450, 100
-
-
-
-
 <OMSScreen>:
     bdate: bdate
     policy: policy
@@ -259,7 +255,6 @@ Builder.load_string("""
                     theme_icon_color: "Custom"
                     icon_color: 1,1,1,1
                     on_release: root.show_alert_dialog_info()
-
 <MOSScreen>:
     name: 'mos'
     email: email_input
@@ -469,8 +464,6 @@ Builder.load_string("""
         pos_hint: {'center_x': .6, 'center_y': .6}
         font_size: dp(90)
         font_name: 'roboto'
-
-
 <MOSLoged>:
     name: 'mosloged'
     Image:
@@ -1776,7 +1769,7 @@ class MOSScreen(Screen):
             firefox_options = Options()
             firefox_options.add_argument("--headless")
             driver = webdriver.Firefox(
-                executable_path="/home/user/Рабочий стол/Alter-main/geckodriver",
+                executable_path="C:\\Users\\PCWORK\\Desktop\\alter\\AlterGUI\\geckodriver.exe",
                 options=firefox_options,
             )
             driver.get(
@@ -2964,27 +2957,37 @@ class LKCard(Screen):
     global idus, authtoken, s
     def show_document(self):
         dialog = None
+        box = BoxLayout()
         lay = RelativeLayout()
+        scrollview = ScrollView(size_hint=(1, None))
+        scrollview.height = 1000
         lay.size_hint_y = None
-        lay.height = 740
         ima = Image(
             source='document.png',
-            size = (1000, 1000),
             pos_hint = {'center_x': .5, 'center_y': .5},
         )
+        ima.size_hint_y = None
+        ima.height = 2000
         ima.reload()
+        lay.height = 2000
+        but = MDRaisedButton(
+                    text="Выйти",
+                    on_release=lambda _: self.dialog.dismiss(),
+                    size_hint=(None, None)
+                )
+        but.height = 150
+        but.width = 200
+        but.font_size = 30
         lay.add_widget(ima)
+        scrollview.add_widget(lay)
         self.dialog = MDDialog(
             type='custom',
-            content_cls=lay,
+            content_cls=scrollview,
             size_hint_x= .5,
             elevation = 0,
             buttons=[
-                MDFillRoundFlatButton(
-                    text="Отмена",
-                    on_release=lambda _: self.dialog.dismiss(),
-                )
-            ],
+                but,
+                ]
         )
         self.dialog.open()
     def documentview(self, instance):
@@ -2994,9 +2997,16 @@ class LKCard(Screen):
         jspros = prosmotr.json()
         hti = Html2Image()
         html = jspros['documentHtml']
-        hti.screenshot(html_str=html, save_as=f"document.png", size=(1000, 1000))
+        hti.screenshot(html_str=html, save_as=f"document.png", size=(1000, 2000))
         self.show_document()
-
+    def recepiesview(self, instance):
+        prosmotr = s.get(f'https://lk.emias.mos.ru/api/3/receipt/details?ehrId={idus}&prescriptionNumber={instance.docid}',
+            headers={'X-Access-JWT': authtoken})
+        jspros = prosmotr.json()
+        hti = Html2Image()
+        html = jspros['documentHtml']
+        hti.screenshot(html_str=html, save_as=f"document.png", size=(1000, 2000))
+        self.show_document()
 
     def historyanamnes(self, instance):
         anamnes = s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time',
@@ -3092,7 +3102,7 @@ class LKCard(Screen):
                 layout.add_widget(title)
                 time = datetime.datetime.fromisoformat(jscov['documents'][i]['date'])
                 timelab = MDLabel(
-                    text=f'{time.strftime("%a, %d %b в %H:%M")}',
+                    text=f'{time.strftime("%a, %d %b")}',
                     theme_text_color='Custom',
                     text_color='white',
                 )
@@ -3140,120 +3150,266 @@ class LKCard(Screen):
                            headers={'X-Access-JWT': authtoken})
             jsanaliz = analiz.json()
             for i in range(len(jsanaliz['documents'])):
-                print(f'({i})', jsanaliz['documents'][i]['title'])
-                print(jsanaliz['documents'][i]['date'])
-            prosmotrchoose = int(input('Выберите анализ для просмотра\n'))
-            docID = jsanaliz['documents'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
-                             headers={'X-Access-JWT': authtoken})
-            jspros = prosmotr.json()
-            print(jspros['documentHtml'])
+                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                layout = RelativeLayout()
+                title = MDLabel(
+                    text=f"{jsanaliz['documents'][i]['title']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                title.font_size = 45
+                title.pos_hint = {'center_x': .55, 'center_y': .8}
+                layout.add_widget(title)
+                time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
+                timelab = MDLabel(
+                    text=f'{time.strftime("%a, %d %b")}',
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                timelab.font_size = 35
+                timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                layout.add_widget(timelab)
+                card.add_widget(layout)
+                card.docid = jsanaliz['documents'][i]['documentId']
+                card.bind(on_release=self.documentview)
+                self.manager.get_screen("history").ids.scrollid.add_widget(card)
+            self.manager.current = 'history'
 
-        def myldp():
+
+        def myldp(*args):
             ldp = s.get(f'https://lk.emias.mos.ru/api/1/documents/research?ehrId={idus}&shortDateFilter=all_time',
                         headers={'X-Access-JWT': authtoken})
             jsldp = ldp.json()
             for i in range(len(jsldp['documents'])):
-                print(f'({i})', jsldp['documents'][i]['title'])
-                print(jsldp['documents'][i]['date'])
-                print(jsldp['documents'][i]['muName'])
-            prosmotrchoose = int(input('Выберите анализ для просмотра\n'))
-            docID = jsldp['documents'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
-                             headers={'X-Access-JWT': authtoken})
-            jspros = prosmotr.json()
-            print(jspros['documentHtml'])
+                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                layout = RelativeLayout()
+                title = MDLabel(
+                    text=f"{jsldp['documents'][i]['title']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                title.font_size = 45
+                title.pos_hint = {'center_x': .55, 'center_y': .8}
+                layout.add_widget(title)
+                time = datetime.datetime.fromisoformat(jsldp['documents'][i]['date'])
+                timelab = MDLabel(
+                    text=f'{time.strftime("%a, %d %b")}',
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                timelab.font_size = 35
+                timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                layout.add_widget(timelab)
+                doctorname = MDLabel(
+                            text=f"{jsldp['documents'][i]['muName']}",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                doctorname.font_size = 45
+                doctorname.pos_hint = {'center_x': .55, 'center_y': .4}
+                layout.add_widget(doctorname)
+                card.add_widget(layout)
+                card.docid = jsldp['documents'][i]['documentId']
+                card.bind(on_release=self.documentview)
+                self.manager.get_screen("history").ids.scrollid.add_widget(card)
+            self.manager.current = 'history'
+        def myboln(*args):
+            None
 
-        def myboln():
-            print("Не доступно")
-
-        def myspravki():
+        def myspravki(*args):
             spravki = s.get(
                 f'https://lk.emias.mos.ru/api/1/documents/medical-certificates?ehrId={idus}&shortDateFilter=all_time',
                 headers={'X-Access-JWT': authtoken})
             jssp = spravki.json()
-            print(jssp)
             for i in range(len(jssp['certificates095'])):
-                print(f"({i})Справка № 095/у")
-                print(jssp['certificates095'][i]['educationalName'])
-                print(jssp['certificates095'][i]['muName'])
-                print(jssp['certificates095'][i]['medicalEmployeeSpeciality'])
-                print(jssp['certificates095'][i]['medicalEmployeeName'])
-                print(jssp['certificates095'][i]['dateCreated'])
-            prosmotrchoose = int(input("Выберите справку для просмотра\n"))
-            docID = jssp['certificates095'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
-                             headers={'X-Access-JWT': authtoken})
-            jspros = prosmotr.json()
+                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                layout = RelativeLayout()
+                title = MDLabel(
+                    text=f"{jssp['certificates095'][i]['educationalName']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                title.font_size = 45
+                title.pos_hint = {'center_x': .55, 'center_y': .8}
+                layout.add_widget(title)
+                
 
-        def mystacionar():
+                doctorname = MDLabel(
+                            text=f"{jssp['certificates095'][i]['medicalEmployeeName']}",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                doctorname.font_size = 45
+                doctorname.pos_hint = {'center_x': .55, 'center_y': .4}
+                layout.add_widget(doctorname)
+                doctorspec = MDLabel(
+                            text=f"{jssp['certificates095'][i]['medicalEmployeeSpeciality']}",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                doctorspec.font_size = 45
+                doctorspec.pos_hint = {'center_x': .55, 'center_y': .6}
+                layout.add_widget(doctorspec)
+                mu = MDLabel(
+                            text=f"{jssp['certificates095'][i]['muName']}",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                mu.font_size = 45
+                mu.pos_hint = {'center_x': .55, 'center_y': .6}
+                layout.add_widget(mu)
+                card.docid = jssp['certificates095'][i]['documentId']
+                card.bind(on_release = self.documentview)
+                card.add_widget(layout)
+                self.manager.get_screen("history").ids.scrollid.add_widget(card)
+            self.manager.current = 'history'
+
+        def mystacionar(*args):
             stacionar = s.get(
                 f'https://lk.emias.mos.ru/api/1/documents/epicrisis?ehrId={idus}&shortDateFilter=all_time',
                 headers={'X-Access-JWT': authtoken})
             jsstac = stacionar.json()
             for i in range(len(jsstac['documents'])):
-                print(f'({i})', jsstac['documents'][i]['organisation'])
-                print(jsstac['documents'][i]['dischargeDate'])
-            prosmotrchoose = int(input('Выберите выписку для просмотра\n'))
-            docID = jsstac['documents'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
-                             headers={'X-Access-JWT': authtoken})
-            jspros = prosmotr.json()
-            print(jspros['documentHtml'])
+                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                layout = RelativeLayout()
+                title = MDLabel(
+                    text=f"{jsstac['documents'][i]['organisation']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                title.font_size = 45
+                title.pos_hint = {'center_x': .55, 'center_y': .8}
+                layout.add_widget(title)
+                time = datetime.datetime.strptime(jsstac['documents'][i]['dischargeDate'], "%Y-%m-%dT%H:%M:%S%z") 
+                timelab = MDLabel(
+                    text=f'{time.strftime("%a, %d %b")}',
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                timelab.font_size = 35
+                timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                layout.add_widget(timelab)
+                card.add_widget(layout)
+                card.docid = jsstac['documents'][i]['documentId']
+                card.bind(on_release=self.documentview)
+                self.manager.get_screen("history").ids.scrollid.add_widget(card)
+            self.manager.current = 'history'
+            
 
-        def myrecepies():
+        def myrecepies(*args):
             recepies = s.get(f'https://lk.emias.mos.ru/api/2/receipt?ehrId={idus}&shortDateFilter=all_time',
                              headers={'X-Access-JWT': authtoken})
             jsrec = recepies.json()
             for i in range(len(jsrec['receipts'])):
-                print(f'({i})', jsrec['receipts'][i]['medicineName'])
-                print('Выписан', jsrec['receipts'][i]['prescriptionDate'])
-                print('Просрочен', jsrec['receipts'][i]['expirationDate'])
+                layout = RelativeLayout()
                 if jsrec['receipts'][i]['prescriptionStatus'] == 'expired':
-                    print("Просрочен")
+                    doctorspec = MDLabel(
+                            text=f"Просрочен",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                    doctorspec.font_size = 45
+                    doctorspec.pos_hint = {'center_x': .55, 'center_y': .6}
+                    layout.add_widget(doctorspec)
                 else:
-                    print('Действует')
-            prosmotrchoose = int(input('Выберите рецепт для просмотра\n'))
-            docID = jsrec['receipts'][prosmotrchoose]['prescriptionNumber']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
-                             headers={'X-Access-JWT': authtoken})
-            jspros = prosmotr.json()
-            print(jspros['documentHtml'])
+                    doctorspec = MDLabel(
+                            text=f"Действует",
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
+                    doctorspec.font_size = 45
+                    doctorspec.pos_hint = {'center_x': .55, 'center_y': .6}
+                    layout.add_widget(doctorspec)
+                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                title = MDLabel(
+                    text=f"{jsrec['receipts'][i]['medicineName']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                title.font_size = 45
+                title.pos_hint = {'center_x': .55, 'center_y': .8}
+                layout.add_widget(title)
+                time = datetime.datetime.fromisoformat(jsrec['receipts'][i]['prescriptionDate'])
+                timelab = MDLabel(
+                    text=f'{time.strftime("%a, %d %b")}',
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                timelab.font_size = 35
+                timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                layout.add_widget(timelab)
+                times = datetime.datetime.fromisoformat(jsrec['receipts'][i]['expirationDate'])
+                timelabs = MDLabel(
+                    text=f'{time.strftime("%a, %d %b")}',
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                timelabs.font_size = 35
+                timelabs.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                layout.add_widget(timelabs)
+                card.add_widget(layout)
+                card.docid = jsrec['receipts'][i]['prescriptionNumber']
+                card.bind(on_release=self.recepiesview)
+                self.manager.get_screen("history").ids.scrollid.add_widget(card)
+            self.manager.current = 'history'
 
-        def myemergency():
+
+        def myemergency(*args):
             emergency = s.get(
                 f'https://lk.emias.mos.ru/api/1/documents/ambulance?ehrId={idus}&shortDateFilter=all_time',
                 headers={'X-Access-JWT': authtoken})
             jsemg = emergency.json()
             for i in range(len(jsemg['documents'])):
-                print(f'({i})', jsemg['documents'][i]['diagnosis'])
-                print(jsemg['documents'][i]['callDate'])
-            prosmotrchoose = int(input('Выберите рецепт для просмотра\n'))
-            docID = jsemg['documents'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
-                             headers={'X-Access-JWT': authtoken})
-            jspros = prosmotr.json()
-            print(jspros['documentHtml'])
+                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                layout = RelativeLayout()
+                title = MDLabel(
+                    text=f"{jsemg['documents'][i]['diagnosis']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                title.font_size = 45
+                title.pos_hint = {'center_x': .55, 'center_y': .8}
+                layout.add_widget(title)
+                time = datetime.datetime.fromisoformat(jsemg['documents'][i]['callDate'])
+                timelab = MDLabel(
+                    text=f'{time.strftime("%a, %d %b")}',
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                timelab.font_size = 35
+                timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                layout.add_widget(timelab)
+                card.add_widget(layout)
+                card.docid = docID = jsemg['documents'][i]['documentId']
+                card.bind(on_release=self.documentview)
+                self.manager.get_screen("history").ids.scrollid.add_widget(card)
+            self.manager.current = 'history'
+
 
         if id == 1:
-            covidtest()
+            Clock.schedule_once(covidtest)
         elif id == 3:
-            myanamnes()
+            Clock.schedule_once(myanamnes)
         elif id == 4:
-            myanaliz()
+            Clock.schedule_once(myanaliz)
         elif id == 5:
-            myboln()
+            Clock.schedule_once(myldp)
         elif id == 6:
-            myldp()
+            Clock.schedule_once(myboln)
         elif id == 7:
-            myspravki()
+            Clock.schedule_once(myspravki)
         elif id == 8:
-            mystacionar()
+            Clock.schedule_once(mystacionar)
         elif id == 9:
-            myrecepies()
+            Clock.schedule_once(myrecepies)
         elif id == 10:
-            myemergency()
-
+            Clock.schedule_once(myemergency)
 
 class History(Screen):
     pass
