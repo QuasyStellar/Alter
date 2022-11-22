@@ -4,6 +4,8 @@ import time
 import datetime
 import locale
 
+from kivy.uix.image import Image
+
 locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
@@ -677,18 +679,6 @@ Builder.load_string("""
         color: 1,1,1,1
         pos_hint: {'center_x': .5, 'center_y': .5}
         active: True 
-<DocumentViewer>
-    id: mobiledialog
-    size_hint_y: None
-    height: 742
-    Image:
-        source: 'document.png'
-        center_x: self.parent.center_x
-        center_y: self.parent.center_y
-        size: 742, 420
-        pos_hint: {'center_x': .5, 'center_y': .9}
-    
-    
     
 <Item>
     id: mobiledialog
@@ -1248,9 +1238,6 @@ class Item(RelativeLayout):
 
 
 class Full(RelativeLayout):
-    pass
-
-class DocumentViewer(RelativeLayout):
     pass
 
 class Itemwait(RelativeLayout):
@@ -2975,19 +2962,30 @@ class Prikreplenia(Screen):
 
 class LKCard(Screen):
     global idus, authtoken, s
-    dialog = None
     def show_document(self):
-        if not self.dialog:
-            self.dialog = MDDialog(
-                type='custom',
-                content_cls=DocumentViewer(),
-                buttons=[
-                    MDFillRoundFlatButton(
-                        text="Отмена",
-                        on_release=lambda _: self.dialog.dismiss(),
-                    )
-                ],
-            )
+        dialog = None
+        lay = RelativeLayout()
+        lay.size_hint_y = None
+        lay.height = 740
+        ima = Image(
+            source='document.png',
+            size = (1000, 1000),
+            pos_hint = {'center_x': .5, 'center_y': .5},
+        )
+        ima.reload()
+        lay.add_widget(ima)
+        self.dialog = MDDialog(
+            type='custom',
+            content_cls=lay,
+            size_hint_x= .5,
+            elevation = 0,
+            buttons=[
+                MDFillRoundFlatButton(
+                    text="Отмена",
+                    on_release=lambda _: self.dialog.dismiss(),
+                )
+            ],
+        )
         self.dialog.open()
     def documentview(self, instance):
         prosmotr = s.get(
@@ -2996,7 +2994,7 @@ class LKCard(Screen):
         jspros = prosmotr.json()
         hti = Html2Image()
         html = jspros['documentHtml']
-        hti.screenshot(html_str=html, save_as=f"document.png", size=(752, 420))
+        hti.screenshot(html_str=html, save_as=f"document.png", size=(1000, 1000))
         self.show_document()
 
 
