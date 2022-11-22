@@ -3,6 +3,7 @@ import sys
 import time
 import datetime
 import locale
+
 locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
@@ -143,10 +144,10 @@ Builder.load_string("""
                         center_y: self.parent.center_y
                         allow_stretch: True
                         size: 450, 100
-                    
-                
-                    
-    
+
+
+
+
 <OMSScreen>:
     bdate: bdate
     policy: policy
@@ -256,7 +257,7 @@ Builder.load_string("""
                     theme_icon_color: "Custom"
                     icon_color: 1,1,1,1
                     on_release: root.show_alert_dialog_info()
-        
+
 <MOSScreen>:
     name: 'mos'
     email: email_input
@@ -466,8 +467,8 @@ Builder.load_string("""
         pos_hint: {'center_x': .6, 'center_y': .6}
         font_size: dp(90)
         font_name: 'roboto'
-            
-        
+
+
 <MOSLoged>:
     name: 'mosloged'
     Image:
@@ -676,6 +677,19 @@ Builder.load_string("""
         color: 1,1,1,1
         pos_hint: {'center_x': .5, 'center_y': .5}
         active: True 
+<DocumentViewer>
+    id: mobiledialog
+    size_hint_y: None
+    height: 742
+    Image:
+        source: 'document.png'
+        center_x: self.parent.center_x
+        center_y: self.parent.center_y
+        size: 742, 420
+        pos_hint: {'center_x': .5, 'center_y': .9}
+    
+    
+    
 <Item>
     id: mobiledialog
     orientation: "horizontal"
@@ -1222,14 +1236,22 @@ Builder.load_string("""
             height: self.minimum_height
             id: scrollid
 """
-)
+                    )
+
+
 class Itemfactor(RelativeLayout):
     pass
+
+
 class Item(RelativeLayout):
     pass
+
+
 class Full(RelativeLayout):
     pass
 
+class DocumentViewer(RelativeLayout):
+    pass
 
 class Itemwait(RelativeLayout):
     pass
@@ -1240,7 +1262,7 @@ class Itemerrors(RelativeLayout):
 
 
 # ГЛАВНЫЙ ЭКРАН
-class ENTERScreen(Screen):     
+class ENTERScreen(Screen):
     def check(self):
         pattern = r"^[-\w\.]+@([-\w]+\.)+[-\w]{2,4}$"
         if self.email.text != "" and re.match(pattern, self.email.text) is not None:
@@ -1344,9 +1366,9 @@ class OMSScreen(Screen):
             result = 666
         sys.exit()
 
-
     def omslogin(self):
         global oms
+
         def checkglobal(*args):
             global result, bdates, types
             if result == None:
@@ -1363,7 +1385,7 @@ class OMSScreen(Screen):
                 Clock.unschedule(clocks)
             else:
                 self.manager.current = "loged"
-                policnum = f"[color=#ffffff]{result[0:4]+' **** **** '+ result[12:16]}[/color]"
+                policnum = f"[color=#ffffff]{result[0:4] + ' **** **** ' + result[12:16]}[/color]"
                 self.manager.get_screen("loged").ids.authname.text = policnum
                 bdates = year + "-" + month + "-" + day
                 Clock.unschedule(clocks)
@@ -1445,6 +1467,7 @@ class OMSScreen(Screen):
 
     pass
 
+
 class MOSScreen(Screen):
     dialogerror = None
     mobiles = None
@@ -1477,35 +1500,36 @@ class MOSScreen(Screen):
                 ],
             )
         self.dialogerror.open()
+
     def Twofactordialog(self):
         def use_input(obj):
             global Twofactorverifcode
             if (
-                self.factor.content_cls.ids.verif1.text == ""
-                or self.factor.content_cls.ids.verif2.text == ""
-                or self.factor.content_cls.ids.verif3.text == ""
-                or self.factor.content_cls.ids.verif4.text == ""
-                or self.factor.content_cls.ids.verif5.text == ""
-                or self.factor.content_cls.ids.verif6.text == ""
-                or len(
-                    self.factor.content_cls.ids.verif1.text
-                    + self.factor.content_cls.ids.verif2.text
-                    + self.factor.content_cls.ids.verif3.text
-                    + self.factor.content_cls.ids.verif4.text
-                    + self.factor.content_cls.ids.verif5.text
-                    + self.factor.content_cls.ids.verif6.text
-                )
-                > 6
+                    self.factor.content_cls.ids.verif1.text == ""
+                    or self.factor.content_cls.ids.verif2.text == ""
+                    or self.factor.content_cls.ids.verif3.text == ""
+                    or self.factor.content_cls.ids.verif4.text == ""
+                    or self.factor.content_cls.ids.verif5.text == ""
+                    or self.factor.content_cls.ids.verif6.text == ""
+                    or len(
+                self.factor.content_cls.ids.verif1.text
+                + self.factor.content_cls.ids.verif2.text
+                + self.factor.content_cls.ids.verif3.text
+                + self.factor.content_cls.ids.verif4.text
+                + self.factor.content_cls.ids.verif5.text
+                + self.factor.content_cls.ids.verif6.text
+            )
+                    > 6
             ):
                 None
             else:
                 Twofactorverifcode = (
-                    self.factor.content_cls.ids.verif1.text
-                    + self.factor.content_cls.ids.verif2.text
-                    + self.factor.content_cls.ids.verif3.text
-                    + self.factor.content_cls.ids.verif4.text
-                    + self.factor.content_cls.ids.verif5.text
-                    + self.factor.content_cls.ids.verif6.text
+                        self.factor.content_cls.ids.verif1.text
+                        + self.factor.content_cls.ids.verif2.text
+                        + self.factor.content_cls.ids.verif3.text
+                        + self.factor.content_cls.ids.verif4.text
+                        + self.factor.content_cls.ids.verif5.text
+                        + self.factor.content_cls.ids.verif6.text
                 )
                 self.factor.content_cls.ids.verif1.text = ""
                 self.factor.content_cls.ids.verif2.text = ""
@@ -1529,33 +1553,33 @@ class MOSScreen(Screen):
                 ],
             )
         self.factor.open()
-    
+
     def mobile(self):
         def use_input(obj):
             global verifcode
             if (
-                self.mobiles.content_cls.ids.verif1.text == ""
-                or self.mobiles.content_cls.ids.verif2.text == ""
-                or self.mobiles.content_cls.ids.verif3.text == ""
-                or self.mobiles.content_cls.ids.verif4.text == ""
-                or self.mobiles.content_cls.ids.verif5.text == ""
-                or len(
-                    self.mobiles.content_cls.ids.verif1.text
-                    + self.mobiles.content_cls.ids.verif2.text
-                    + self.mobiles.content_cls.ids.verif3.text
-                    + self.mobiles.content_cls.ids.verif4.text
-                    + self.mobiles.content_cls.ids.verif5.text
-                )
-                > 5
+                    self.mobiles.content_cls.ids.verif1.text == ""
+                    or self.mobiles.content_cls.ids.verif2.text == ""
+                    or self.mobiles.content_cls.ids.verif3.text == ""
+                    or self.mobiles.content_cls.ids.verif4.text == ""
+                    or self.mobiles.content_cls.ids.verif5.text == ""
+                    or len(
+                self.mobiles.content_cls.ids.verif1.text
+                + self.mobiles.content_cls.ids.verif2.text
+                + self.mobiles.content_cls.ids.verif3.text
+                + self.mobiles.content_cls.ids.verif4.text
+                + self.mobiles.content_cls.ids.verif5.text
+            )
+                    > 5
             ):
                 None
             else:
                 verifcode = (
-                    self.mobiles.content_cls.ids.verif1.text
-                    + self.mobiles.content_cls.ids.verif2.text
-                    + self.mobiles.content_cls.ids.verif3.text
-                    + self.mobiles.content_cls.ids.verif4.text
-                    + self.mobiles.content_cls.ids.verif5.text
+                        self.mobiles.content_cls.ids.verif1.text
+                        + self.mobiles.content_cls.ids.verif2.text
+                        + self.mobiles.content_cls.ids.verif3.text
+                        + self.mobiles.content_cls.ids.verif4.text
+                        + self.mobiles.content_cls.ids.verif5.text
                 )
                 self.mobiles.content_cls.ids.verif1.text = ""
                 self.mobiles.content_cls.ids.verif2.text = ""
@@ -1583,28 +1607,28 @@ class MOSScreen(Screen):
         def use_input(obj):
             global verifcode
             if (
-                self.mobileerror.content_cls.ids.verif1.text == ""
-                or self.mobileerror.content_cls.ids.verif2.text == ""
-                or self.mobileerror.content_cls.ids.verif3.text == ""
-                or self.mobileerror.content_cls.ids.verif4.text == ""
-                or self.mobileerror.content_cls.ids.verif5.text == ""
-                or len(
-                    self.mobileerror.content_cls.ids.verif1.text
-                    + self.mobileerror.content_cls.ids.verif2.text
-                    + self.mobileerror.content_cls.ids.verif3.text
-                    + self.mobileerror.content_cls.ids.verif4.text
-                    + self.mobileerror.content_cls.ids.verif5.text
-                )
-                > 5
+                    self.mobileerror.content_cls.ids.verif1.text == ""
+                    or self.mobileerror.content_cls.ids.verif2.text == ""
+                    or self.mobileerror.content_cls.ids.verif3.text == ""
+                    or self.mobileerror.content_cls.ids.verif4.text == ""
+                    or self.mobileerror.content_cls.ids.verif5.text == ""
+                    or len(
+                self.mobileerror.content_cls.ids.verif1.text
+                + self.mobileerror.content_cls.ids.verif2.text
+                + self.mobileerror.content_cls.ids.verif3.text
+                + self.mobileerror.content_cls.ids.verif4.text
+                + self.mobileerror.content_cls.ids.verif5.text
+            )
+                    > 5
             ):
                 None
             else:
                 verifcode = (
-                    self.mobileerror.content_cls.ids.verif1.text
-                    + self.mobileerror.content_cls.ids.verif2.text
-                    + self.mobileerror.content_cls.ids.verif3.text
-                    + self.mobileerror.content_cls.ids.verif4.text
-                    + self.mobileerror.content_cls.ids.verif5.text
+                        self.mobileerror.content_cls.ids.verif1.text
+                        + self.mobileerror.content_cls.ids.verif2.text
+                        + self.mobileerror.content_cls.ids.verif3.text
+                        + self.mobileerror.content_cls.ids.verif4.text
+                        + self.mobileerror.content_cls.ids.verif5.text
                 )
                 self.mobileerror.content_cls.ids.verif1.text = ""
                 self.mobileerror.content_cls.ids.verif2.text = ""
@@ -1681,6 +1705,7 @@ class MOSScreen(Screen):
 
     def open_moslogin(self, login, password):
         global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken, Twofactorverifcode
+
         def emias(*args):
             global verifcode, result, curuserid, polic, names, sure, male, age, idus, authtoken, Twofactorverifcode
             c = 0
@@ -1721,6 +1746,7 @@ class MOSScreen(Screen):
                             refferals()
                 else:
                     refferals()
+
         def refferals(*args):
             global verifcode, result, curuserid, polic, names, sure, age, idus, authtoken, oms, bdates, s
             userid = WebDriverWait(driver, 20).until(
@@ -1763,7 +1789,7 @@ class MOSScreen(Screen):
             firefox_options = Options()
             firefox_options.add_argument("--headless")
             driver = webdriver.Firefox(
-                executable_path="C:\\Users\\PCWORK\\Desktop\\alter\\AlterGUI\\geckodriver.exe",
+                executable_path="/home/user/Рабочий стол/Alter-main/geckodriver",
                 options=firefox_options,
             )
             driver.get(
@@ -1881,34 +1907,13 @@ class MOSScreen(Screen):
             self.email.helper_text_color_focus = "red"
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Страница после авторизации
 class MOSLoged(Screen):
     def update(self, *args):
         today = datetime.datetime.now()
         dt = datetime.datetime.today()
         days = str(datetime.datetime.strftime(today, '%d'))
-        months =  str(datetime.datetime.strftime(today, '%B'))
+        months = str(datetime.datetime.strftime(today, '%B'))
         years = str(datetime.datetime.strftime(today, '%Y'))
         time = str(datetime.datetime.now().strftime("%H:%M"))
         week = datetime.datetime.weekday(today)
@@ -1944,12 +1949,14 @@ class OMSLoged(Screen):
     dialogsuccper = None
     error = None
     news = None
+
     def screenback(self):
         global types
         if types == 'oms':
             self.manager.current = 'loged'
         else:
             self.manager.current = 'mosloged'
+
     def succ(self):
         if not self.dialogsucc:
             self.dialogsucc = MDDialog(
@@ -1962,6 +1969,7 @@ class OMSLoged(Screen):
                 ],
             )
         self.dialogsucc.open()
+
     def errord(self):
         if not self.error:
             self.error = MDDialog(
@@ -1974,6 +1982,7 @@ class OMSLoged(Screen):
                 ],
             )
         self.error.open()
+
     def succper(self):
         if not self.dialogsuccper:
             self.dialogsuccper = MDDialog(
@@ -1986,6 +1995,7 @@ class OMSLoged(Screen):
                 ],
             )
         self.dialogsuccper.open()
+
     def newd(self):
         if not self.news:
             self.news = MDDialog(
@@ -1998,9 +2008,11 @@ class OMSLoged(Screen):
                 ],
             )
         self.news.open()
+
     def full_dialog(self):
         def enterfull(*args):
             self.manager.current = "mos"
+
         if not self.dialog:
             self.dialog = MDDialog(
                 type='custom',
@@ -2020,11 +2032,12 @@ class OMSLoged(Screen):
                 ],
             )
         self.dialog.open()
+
     def update(self, *args):
         today = datetime.datetime.now()
         dt = datetime.datetime.today()
         days = str(datetime.datetime.strftime(today, '%d'))
-        months =  str(datetime.datetime.strftime(today, '%B'))
+        months = str(datetime.datetime.strftime(today, '%B'))
         years = str(datetime.datetime.strftime(today, '%Y'))
         time = str(datetime.datetime.now().strftime("%H:%M"))
         week = datetime.datetime.weekday(today)
@@ -2047,197 +2060,204 @@ class OMSLoged(Screen):
         self.ids.years.text = years
         self.ids.time.text = time
         self.ids.week.text = week
+
     def exits(self):
         self.manager.current = 'enter'
+
     def prikreplenia(self):
         global oms, bdates, result, doclist
-        inf = requests.post(info, json = {"jsonrpc":"2.0","id":"RUi98VgEkYYc8PPKR-OdE","method":"getPatientInfo3","params":{"omsNumber":oms,"birthDate":bdates,"typeAttach":[0,1,2], "onlyMoscowPolicy":False}})
+        inf = requests.post(info, json={"jsonrpc": "2.0", "id": "RUi98VgEkYYc8PPKR-OdE", "method": "getPatientInfo3",
+                                        "params": {"omsNumber": oms, "birthDate": bdates, "typeAttach": [0, 1, 2],
+                                                   "onlyMoscowPolicy": False}})
         jsinf = inf.json()
         layout = RelativeLayout()
         for i in range(len(jsinf['result']['attachments']['attachment'])):
             name = MDLabel(
-                        text=jsinf['result']['attachments']['attachment'][i]['lpu']['name']
-                        )
-            name.font_size  =  45
-            name.pos_hint = {'center_x': .55, 'center_y':.8}
+                text=jsinf['result']['attachments']['attachment'][i]['lpu']['name']
+            )
+            name.font_size = 45
+            name.pos_hint = {'center_x': .55, 'center_y': .8}
             layout.add_widget(name)
             address = MDLabel(
-                text = jsinf['result']['attachments']['attachment'][i]['lpu']['address']
-                )
-            address.font_size  =  35
-            address.pos_hint = {'center_x': .55, 'center_y':.6}
+                text=jsinf['result']['attachments']['attachment'][i]['lpu']['address']
+            )
+            address.font_size = 35
+            address.pos_hint = {'center_x': .55, 'center_y': .6}
             layout.add_widget(address)
-            time = datetime.datetime.fromisoformat( jsinf['result']['attachments']['attachment'][i]['createDate'])
+            time = datetime.datetime.fromisoformat(jsinf['result']['attachments']['attachment'][i]['createDate'])
             create = MDLabel(
-                text = f'{time.strftime("Прикреплено от %d %B %Y")}',
-                )
-            create.font_size  = 35
-            create.pos_hint = {'center_x': .55, 'center_y':.4}
+                text=f'{time.strftime("Прикреплено от %d %B %Y")}',
+            )
+            create.font_size = 35
+            create.pos_hint = {'center_x': .55, 'center_y': .4}
             layout.add_widget(create)
             self.manager.get_screen('prik').ids.lay.add_widget(layout)
         self.manager.current = 'prik'
 
-
-    
     def zapisi(self):
         global oms, bdates, result, doclist
-        prosmotr = requests.post(doclist, json = {"jsonrpc":"2.0","id":"tnSZKjovHE_X2b-JYQ0PB","method":"getAppointmentReceptionsByPatient","params":{"omsNumber":oms,"birthDate":bdates}})
+        prosmotr = requests.post(doclist, json={"jsonrpc": "2.0", "id": "tnSZKjovHE_X2b-JYQ0PB",
+                                                "method": "getAppointmentReceptionsByPatient",
+                                                "params": {"omsNumber": oms, "birthDate": bdates}})
         jsps = prosmotr.json()
         if len(jsps["result"]) == 0:
-            card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
             layout = RelativeLayout()
             label = MDLabel(
-                        text = 'Записей нет',
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        halign = 'center'
-                        )
+                text='Записей нет',
+                theme_text_color='Custom',
+                text_color='white',
+                halign='center'
+            )
             label.font_size = 60
-            label.pos_hint = {'center_x':.5, 'center_y':.5}
+            label.pos_hint = {'center_x': .5, 'center_y': .5}
             layout.add_widget(label)
             card.add_widget(layout)
             self.manager.get_screen("zapisi").ids.scrollid.add_widget(card)
         else:
             for i in range(len(jsps['result'])):
                 if 'toDoctor' in jsps["result"][i]:
-                    card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                    card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                                  md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                     layout = RelativeLayout()
                     specname = MDLabel(
                         text=f'{jsps["result"][i]["toDoctor"]["specialityName"]}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white', 
-                        )
-                    specname.font_size  =  45
-                    specname.pos_hint = {'center_x': .55, 'center_y':.8}
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    specname.font_size = 45
+                    specname.pos_hint = {'center_x': .55, 'center_y': .8}
                     layout.add_widget(specname)
                     time = datetime.datetime.fromisoformat(jsps["result"][i]["startTime"])
                     timelab = MDLabel(
-                        text = f'{time.strftime("%a, %d %b в %H:%M")}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white', 
-                        )
-                    timelab.font_size  =  35
-                    timelab.pos_hint = {'center_x': 1.2, 'center_y':.65}
+                        text=f'{time.strftime("%a, %d %b в %H:%M")}',
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    timelab.font_size = 35
+                    timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
                     layout.add_widget(timelab)
                     address = MDLabel(
-                        text = f'{jsps["result"][i]["nameLpu"]}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        )
-                    address.font_size  =  35
-                    address.pos_hint = {'center_x': .55, 'center_y':.27}
+                        text=f'{jsps["result"][i]["nameLpu"]}',
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    address.font_size = 35
+                    address.pos_hint = {'center_x': .55, 'center_y': .27}
                     layout.add_widget(address)
                     addressbol = MDLabel(
-                        text = f'{jsps["result"][i]["lpuAddress"]}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        )
-                    addressbol.font_size  =  35
-                    addressbol.pos_hint = {'center_x': .55, 'center_y':.15}
+                        text=f'{jsps["result"][i]["lpuAddress"]}',
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    addressbol.font_size = 35
+                    addressbol.pos_hint = {'center_x': .55, 'center_y': .15}
                     layout.add_widget(addressbol)
                     room = MDLabel(
-                        text = f'Каб. {jsps["result"][i]["roomNumber"]}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        )
-                    room.font_size  = 40
-                    room.pos_hint = {'center_x': 1.2, 'center_y':.5}
+                        text=f'Каб. {jsps["result"][i]["roomNumber"]}',
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    room.font_size = 40
+                    room.pos_hint = {'center_x': 1.2, 'center_y': .5}
                     layout.add_widget(room)
                     fio = MDLabel(
-                        text = f'{jsps["result"][i]["toDoctor"]["doctorFio"]}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        )
-                    fio.font_size  = 30
-                    fio.pos_hint = {'center_x': .55, 'center_y':.66}
+                        text=f'{jsps["result"][i]["toDoctor"]["doctorFio"]}',
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    fio.font_size = 30
+                    fio.pos_hint = {'center_x': .55, 'center_y': .66}
                     layout.add_widget(fio)
                     otmena = MDIconButton(
-                        theme_text_color= 'Custom',
-                        text_color= 'red',
+                        theme_text_color='Custom',
+                        text_color='red',
                         icon='delete'
-                        )
+                    )
                     otmena.zapisid = jsps["result"][i]["id"]
                     otmena.bind(on_release=self.otmenas)
-                    otmena.pos_hint = {'center_x': .95, 'center_y':.2}
+                    otmena.pos_hint = {'center_x': .95, 'center_y': .2}
                     otmena.icon_size = '60dp'
                     layout.add_widget(otmena)
 
                     perenos = MDFillRoundFlatButton(
                         text="Перенести",
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        )
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
                     perenos.zapisid = jsps["result"][i]["id"]
                     perenos.bind(on_release=self.perenoss)
-                    perenos.pos_hint = {'center_x': .8, 'center_y':.2}
-                    perenos.font_size  = 40
+                    perenos.pos_hint = {'center_x': .8, 'center_y': .2}
+                    perenos.font_size = 40
                     perenos.zapisid = i
                     layout.add_widget(perenos)
                     card.add_widget(layout)
                     self.manager.get_screen("zapisi").ids.scrollid.add_widget(card)
                 else:
-                    card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                    card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                                  md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                     layout = RelativeLayout()
                     specname = MDLabel(
                         text=jsps["result"][i]["toLdp"]["ldpTypeName"],
-                        theme_text_color= 'Custom',
-                        text_color= 'white', 
-                        )
-                    specname.font_size  =  45
-                    specname.pos_hint = {'center_x': .55, 'center_y':.8}
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    specname.font_size = 45
+                    specname.pos_hint = {'center_x': .55, 'center_y': .8}
                     layout.add_widget(specname)
                     time = datetime.datetime.fromisoformat(jsps["result"][i]["startTime"])
                     timelab = MDLabel(
-                        text = f'{time.strftime("%a, %d %b в %H:%M")}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white', 
-                        )
-                    timelab.font_size  =  35
-                    timelab.pos_hint = {'center_x': 1.2, 'center_y':.65}
+                        text=f'{time.strftime("%a, %d %b в %H:%M")}',
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    timelab.font_size = 35
+                    timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
                     layout.add_widget(timelab)
                     address = MDLabel(
-                        text = f'{jsps["result"][i]["nameLpu"]}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        )
-                    address.font_size  =  35
-                    address.pos_hint = {'center_x': .55, 'center_y':.27}
+                        text=f'{jsps["result"][i]["nameLpu"]}',
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    address.font_size = 35
+                    address.pos_hint = {'center_x': .55, 'center_y': .27}
                     layout.add_widget(address)
                     addressbol = MDLabel(
-                        text = f'{jsps["result"][i]["lpuAddress"]}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        )
-                    addressbol.font_size  =  35
-                    addressbol.pos_hint = {'center_x': .55, 'center_y':.15}
+                        text=f'{jsps["result"][i]["lpuAddress"]}',
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    addressbol.font_size = 35
+                    addressbol.pos_hint = {'center_x': .55, 'center_y': .15}
                     layout.add_widget(addressbol)
                     room = MDLabel(
-                        text = f'Каб. {jsps["result"][i]["roomNumber"]}',
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        )
-                    room.font_size  = 40
-                    room.pos_hint = {'center_x': 1.2, 'center_y':.5}
+                        text=f'Каб. {jsps["result"][i]["roomNumber"]}',
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
+                    room.font_size = 40
+                    room.pos_hint = {'center_x': 1.2, 'center_y': .5}
                     layout.add_widget(room)
                     otmena = MDIconButton(
-                        theme_text_color= 'Custom',
-                        text_color= 'red',
+                        theme_text_color='Custom',
+                        text_color='red',
                         icon='delete'
-                        )
+                    )
                     otmena.zapisid = jsps["result"][i]["id"]
                     otmena.bind(on_release=self.otmenas)
-                    otmena.pos_hint = {'center_x': .95, 'center_y':.2}
+                    otmena.pos_hint = {'center_x': .95, 'center_y': .2}
                     otmena.icon_size = '60dp'
                     layout.add_widget(otmena)
 
                     perenos = MDFillRoundFlatButton(
                         text="Перенести",
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        )
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
                     perenos.bind(on_release=self.perenoss)
-                    perenos.pos_hint = {'center_x': .8, 'center_y':.2}
-                    perenos.font_size  = 40
+                    perenos.pos_hint = {'center_x': .8, 'center_y': .2}
+                    perenos.font_size = 40
                     perenos.zapisid = i
                     layout.add_widget(perenos)
                     card.add_widget(layout)
@@ -2246,7 +2266,10 @@ class OMSLoged(Screen):
 
     def otmenas(self, instance):
         global oms, bdates
-        otmenas = requests.post(cancel, json = {"jsonrpc":"2.0","id":"lXe4h6pwr3IF-xCqBnESK","method":"cancelAppointment","params":{"omsNumber":oms,"birthDate":bdates,"appointmentId":instance.zapisid}})
+        otmenas = requests.post(cancel,
+                                json={"jsonrpc": "2.0", "id": "lXe4h6pwr3IF-xCqBnESK", "method": "cancelAppointment",
+                                      "params": {"omsNumber": oms, "birthDate": bdates,
+                                                 "appointmentId": instance.zapisid}})
         self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
         self.succ()
         self.manager.get_screen('loged').zapisi()
@@ -2254,93 +2277,24 @@ class OMSLoged(Screen):
     def perenoss(self, instance):
         global oms, bdates, doclist, zapisvibor
         c = 0
-        spisokzapisei = requests.post(doclist, json = {"jsonrpc":"2.0","id":"H0XYtGjt9CtPQqfGt7NYp","method":"getAppointmentReceptionsByPatient","params":{"omsNumber":oms,"birthDate":bdates}})
+        spisokzapisei = requests.post(doclist, json={"jsonrpc": "2.0", "id": "H0XYtGjt9CtPQqfGt7NYp",
+                                                     "method": "getAppointmentReceptionsByPatient",
+                                                     "params": {"omsNumber": oms, "birthDate": bdates}})
         jsspisok = spisokzapisei.json()
         zapisvibor = instance.zapisid
         if 'toDoctor' in jsspisok['result'][zapisvibor]:
             appID = jsspisok["result"][zapisvibor]['id']
             specID = jsspisok["result"][zapisvibor]["toDoctor"]['specialityId']
             recpID = jsspisok["result"][zapisvibor]["toDoctor"]['receptionTypeId']
-            spisokvrachei = requests.post(speclist, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdates,"appointmentId":appID,"specialityId":specID}})
-            jsvrachi = spisokvrachei.json()
-            for i in range(len(jsvrachi["result"])):
-                for j in range(len(jsvrachi["result"][i]['complexResource'])):
-                        if 'room' in jsvrachi["result"][i]['complexResource'][j]:
-                            c+=1
-            if c == 0:
-                card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
-                layout = RelativeLayout()
-                label = MDLabel(
-                        text = 'Перенос не доступен',
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        halign = 'center'
-                        )
-                label.font_size = 40
-                label.pos_hint = {'center_x':.5, 'center_y':.5}
-                layout.add_widget(label)
-                card.add_widget(layout)
-                self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
-            else:
-                for i in range(len(jsvrachi["result"])):
-                    for j in range(len(jsvrachi["result"][i]['complexResource'])):
-                            if 'room' in jsvrachi["result"][i]['complexResource'][j]:
-                                card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
-                                layout = RelativeLayout()
-                                name= MDLabel(
-                                    text = jsvrachi["result"][i]['name'].replace("_", " "),
-                                    theme_text_color= 'Custom',
-                                    text_color= 'white'
-                                )
-                                name.font_size = 45
-                                name.pos_hint = {'center_x': .55, 'center_y': .8}
-                                layout.add_widget(name)
-                                time = datetime.datetime.fromisoformat(jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
-                                avail = MDLabel(
-                                    text=f'{time.strftime("С %d %b, %a")}',
-                                    theme_text_color='Custom',
-                                    text_color='white',
-                                )
-                                avail.font_size = 35
-                                avail.pos_hint = {'center_x':.55, 'center_y':.6}
-                                layout.add_widget(avail)
-                                address = MDLabel(
-                                    text= jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
-                                    theme_text_color='Custom',
-                                    text_color='white',
-                                )
-                                address.font_size = 30
-                                address.pos_hint = {'center_x': .55, 'center_y': .4}
-                                fulladdress = MDLabel(
-                                    text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
-                                    theme_text_color='Custom',
-                                    text_color='white',
-                                )
-                                fulladdress.font_size = 30
-                                fulladdress.pos_hint = {'center_x': .55, 'center_y': .2}
-                                layout.add_widget(fulladdress)
-                                layout.add_widget(address)
-                                perenos = MDFillRoundFlatButton(
-                                    text="Выбрать",
-                                    theme_text_color= 'Custom',
-                                    text_color= 'white',
-                                    )
-                                perenos.vrachnum = i
-                                perenos.bind(on_release=self.showdateandtime)
-                                perenos.pos_hint = {'center_x': .85, 'center_y':.2}
-                                perenos.font_size  = 40
-                                layout.add_widget(perenos)
-                                card.add_widget(layout)
-                                self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
-        else:
-            appID = jsspisok["result"][zapisvibor]['id']
-            recpID = jsspisok["result"][zapisvibor]["toLdp"]['ldpTypeId']
-            spisokvrachei = requests.post(speclist, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdates,"appointmentId":appID}})
+            spisokvrachei = requests.post(speclist, json={"jsonrpc": "2.0", "id": "7LIqTOs9j1zSf-c7ohSzB",
+                                                          "method": "getDoctorsInfo",
+                                                          "params": {"omsNumber": oms, "birthDate": bdates,
+                                                                     "appointmentId": appID, "specialityId": specID}})
             jsvrachi = spisokvrachei.json()
             for i in range(len(jsvrachi["result"])):
                 for j in range(len(jsvrachi["result"][i]['complexResource'])):
                     if 'room' in jsvrachi["result"][i]['complexResource'][j]:
-                        c+=1
+                        c += 1
             if c == 0:
                 card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
                               md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
@@ -2360,27 +2314,29 @@ class OMSLoged(Screen):
                 for i in range(len(jsvrachi["result"])):
                     for j in range(len(jsvrachi["result"][i]['complexResource'])):
                         if 'room' in jsvrachi["result"][i]['complexResource'][j]:
-                            card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                             layout = RelativeLayout()
-                            name= MDLabel(
-                                text = jsvrachi["result"][i]['name'].replace("_", " "),
-                                theme_text_color= 'Custom',
-                                text_color= 'white'
+                            name = MDLabel(
+                                text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                theme_text_color='Custom',
+                                text_color='white'
                             )
                             name.font_size = 45
                             name.pos_hint = {'center_x': .55, 'center_y': .8}
                             layout.add_widget(name)
-                            time = datetime.datetime.fromisoformat(jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                            time = datetime.datetime.fromisoformat(
+                                jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
                             avail = MDLabel(
                                 text=f'{time.strftime("С %d %b, %a")}',
                                 theme_text_color='Custom',
                                 text_color='white',
                             )
                             avail.font_size = 35
-                            avail.pos_hint = {'center_x':.55, 'center_y':.6}
+                            avail.pos_hint = {'center_x': .55, 'center_y': .6}
                             layout.add_widget(avail)
                             address = MDLabel(
-                                text= jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
                                 theme_text_color='Custom',
                                 text_color='white',
                             )
@@ -2397,13 +2353,93 @@ class OMSLoged(Screen):
                             layout.add_widget(address)
                             perenos = MDFillRoundFlatButton(
                                 text="Выбрать",
-                                theme_text_color= 'Custom',
-                                text_color= 'white',
-                                )
+                                theme_text_color='Custom',
+                                text_color='white',
+                            )
                             perenos.vrachnum = i
                             perenos.bind(on_release=self.showdateandtime)
-                            perenos.pos_hint = {'center_x': .85, 'center_y':.2}
-                            perenos.font_size  = 40
+                            perenos.pos_hint = {'center_x': .85, 'center_y': .2}
+                            perenos.font_size = 40
+                            layout.add_widget(perenos)
+                            card.add_widget(layout)
+                            self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+        else:
+            appID = jsspisok["result"][zapisvibor]['id']
+            recpID = jsspisok["result"][zapisvibor]["toLdp"]['ldpTypeId']
+            spisokvrachei = requests.post(speclist, json={"jsonrpc": "2.0", "id": "7LIqTOs9j1zSf-c7ohSzB",
+                                                          "method": "getDoctorsInfo",
+                                                          "params": {"omsNumber": oms, "birthDate": bdates,
+                                                                     "appointmentId": appID}})
+            jsvrachi = spisokvrachei.json()
+            for i in range(len(jsvrachi["result"])):
+                for j in range(len(jsvrachi["result"][i]['complexResource'])):
+                    if 'room' in jsvrachi["result"][i]['complexResource'][j]:
+                        c += 1
+            if c == 0:
+                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                layout = RelativeLayout()
+                label = MDLabel(
+                    text='Перенос не доступен',
+                    theme_text_color='Custom',
+                    text_color='white',
+                    halign='center'
+                )
+                label.font_size = 40
+                label.pos_hint = {'center_x': .5, 'center_y': .5}
+                layout.add_widget(label)
+                card.add_widget(layout)
+                self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+            else:
+                for i in range(len(jsvrachi["result"])):
+                    for j in range(len(jsvrachi["result"][i]['complexResource'])):
+                        if 'room' in jsvrachi["result"][i]['complexResource'][j]:
+                            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                            layout = RelativeLayout()
+                            name = MDLabel(
+                                text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                theme_text_color='Custom',
+                                text_color='white'
+                            )
+                            name.font_size = 45
+                            name.pos_hint = {'center_x': .55, 'center_y': .8}
+                            layout.add_widget(name)
+                            time = datetime.datetime.fromisoformat(
+                                jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                            avail = MDLabel(
+                                text=f'{time.strftime("С %d %b, %a")}',
+                                theme_text_color='Custom',
+                                text_color='white',
+                            )
+                            avail.font_size = 35
+                            avail.pos_hint = {'center_x': .55, 'center_y': .6}
+                            layout.add_widget(avail)
+                            address = MDLabel(
+                                text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                theme_text_color='Custom',
+                                text_color='white',
+                            )
+                            address.font_size = 30
+                            address.pos_hint = {'center_x': .55, 'center_y': .4}
+                            fulladdress = MDLabel(
+                                text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
+                                theme_text_color='Custom',
+                                text_color='white',
+                            )
+                            fulladdress.font_size = 30
+                            fulladdress.pos_hint = {'center_x': .55, 'center_y': .2}
+                            layout.add_widget(fulladdress)
+                            layout.add_widget(address)
+                            perenos = MDFillRoundFlatButton(
+                                text="Выбрать",
+                                theme_text_color='Custom',
+                                text_color='white',
+                            )
+                            perenos.vrachnum = i
+                            perenos.bind(on_release=self.showdateandtime)
+                            perenos.pos_hint = {'center_x': .85, 'center_y': .2}
+                            perenos.font_size = 40
                             layout.add_widget(perenos)
                             card.add_widget(layout)
                             self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
@@ -2412,26 +2448,35 @@ class OMSLoged(Screen):
     def showdateandtime(self, instance):
         global oms, bdates, zapisvibor, appID, specID, recpID, resID, complID
         vrachchoose = instance.vrachnum
-        spisokzapisei = requests.post(doclist, json = {"jsonrpc":"2.0","id":"H0XYtGjt9CtPQqfGt7NYp","method":"getAppointmentReceptionsByPatient","params":{"omsNumber":oms,"birthDate":bdates}})
+        spisokzapisei = requests.post(doclist, json={"jsonrpc": "2.0", "id": "H0XYtGjt9CtPQqfGt7NYp",
+                                                     "method": "getAppointmentReceptionsByPatient",
+                                                     "params": {"omsNumber": oms, "birthDate": bdates}})
         jsspisok = spisokzapisei.json()
         if 'toDoctor' in jsspisok["result"][zapisvibor]:
             appID = jsspisok["result"][zapisvibor]['id']
             specID = jsspisok["result"][zapisvibor]["toDoctor"]['specialityId']
             recpID = jsspisok["result"][zapisvibor]["toDoctor"]['receptionTypeId']
-            spisokvrachei = requests.post(speclist, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdates,"appointmentId":appID,"specialityId":specID}})
+            spisokvrachei = requests.post(speclist, json={"jsonrpc": "2.0", "id": "7LIqTOs9j1zSf-c7ohSzB",
+                                                          "method": "getDoctorsInfo",
+                                                          "params": {"omsNumber": oms, "birthDate": bdates,
+                                                                     "appointmentId": appID, "specialityId": specID}})
             jsvrachi = spisokvrachei.json()
             resID = jsvrachi["result"][vrachchoose]["id"]
             for j in range(len(jsvrachi["result"][vrachchoose]['complexResource'])):
-                    if 'room' in jsvrachi["result"][vrachchoose]['complexResource'][j]:
-                        complID = jsvrachi["result"][vrachchoose]['complexResource'][j]['id']
-            dati = requests.post(datespec, json = {"jsonrpc":"2.0","id":"RUi98VgEkYYc8PPKR-OdE","method":"getAvailableResourceScheduleInfo","params":{"omsNumber":oms,"birthDate":bdates,"availableResourceId":resID,"complexResourceId":complID,"appointmentId":appID,"specialityId":specID}})
+                if 'room' in jsvrachi["result"][vrachchoose]['complexResource'][j]:
+                    complID = jsvrachi["result"][vrachchoose]['complexResource'][j]['id']
+            dati = requests.post(datespec, json={"jsonrpc": "2.0", "id": "RUi98VgEkYYc8PPKR-OdE",
+                                                 "method": "getAvailableResourceScheduleInfo",
+                                                 "params": {"omsNumber": oms, "birthDate": bdates,
+                                                            "availableResourceId": resID, "complexResourceId": complID,
+                                                            "appointmentId": appID, "specialityId": specID}})
             jsdati = dati.json()
-            tabs =MDTabs(
-                radius= [30, 30, 0,0],
-                allow_stretch= True,
-                tab_hint_x= True,
-                tab_bar_height= '150'
-                ) 
+            tabs = MDTabs(
+                radius=[30, 30, 0, 0],
+                allow_stretch=True,
+                tab_hint_x=True,
+                tab_bar_height='150'
+            )
             for i in range(len(jsdati["result"]['scheduleOfDay'])):
                 time = datetime.datetime.fromisoformat(jsdati["result"]['scheduleOfDay'][i]['date'])
                 tab = Tab(
@@ -2439,21 +2484,22 @@ class OMSLoged(Screen):
                 )
                 tab.tab_label.font_size = '50sp'
                 scrolllayout = ScrollView(
-                    size_hint= (1, .9),
-                    md_bg_color=(1,1,1,0)
-                    )
+                    size_hint=(1, .9),
+                    md_bg_color=(1, 1, 1, 0)
+                )
                 layout = StackLayout()
                 layout.size_hint_y = None
-                layout.spacing  = 40
+                layout.spacing = 40
                 for j in range(len(jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'])):
-                    timeF = datetime.datetime.fromisoformat(jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime'])
+                    timeF = datetime.datetime.fromisoformat(
+                        jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime'])
                     times = MyToggleButton(
-                            text=timeF.strftime("%H:%M"),
-                            theme_text_color= 'Custom',
-                            text_color= 'white',
-                            md_bg_color='grey',
-                            group = "x"
-                            )
+                        text=timeF.strftime("%H:%M"),
+                        theme_text_color='Custom',
+                        text_color='white',
+                        md_bg_color='grey',
+                        group="x"
+                    )
                     times.font_size = 35
                     times.height = 100
                     times.width = 100
@@ -2465,23 +2511,30 @@ class OMSLoged(Screen):
                 tab.add_widget(scrolllayout)
                 tabs.add_widget(tab)
             self.manager.get_screen('timetable').ids.lay.add_widget(tabs)
-        else:  
+        else:
             appID = jsspisok["result"][zapisvibor]['id']
             recpID = jsspisok["result"][zapisvibor]["toLdp"]['ldpTypeId']
-            spisokvrachei = requests.post(speclist, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdates,"appointmentId":appID}})
+            spisokvrachei = requests.post(speclist, json={"jsonrpc": "2.0", "id": "7LIqTOs9j1zSf-c7ohSzB",
+                                                          "method": "getDoctorsInfo",
+                                                          "params": {"omsNumber": oms, "birthDate": bdates,
+                                                                     "appointmentId": appID}})
             jsvrachi = spisokvrachei.json()
             resID = jsvrachi["result"][vrachchoose]["id"]
             for j in range(len(jsvrachi["result"][vrachchoose]['complexResource'])):
-                    if 'room' in jsvrachi["result"][vrachchoose]['complexResource'][j]:
-                        complID = jsvrachi["result"][vrachchoose]['complexResource'][j]['id']
-            dati = requests.post(datespec, json = {"jsonrpc":"2.0","id":"RUi98VgEkYYc8PPKR-OdE","method":"getAvailableResourceScheduleInfo","params":{"omsNumber":oms,"birthDate":bdates,"availableResourceId":resID,"complexResourceId":complID,"appointmentId":appID,"specialityId":specID}})
+                if 'room' in jsvrachi["result"][vrachchoose]['complexResource'][j]:
+                    complID = jsvrachi["result"][vrachchoose]['complexResource'][j]['id']
+            dati = requests.post(datespec, json={"jsonrpc": "2.0", "id": "RUi98VgEkYYc8PPKR-OdE",
+                                                 "method": "getAvailableResourceScheduleInfo",
+                                                 "params": {"omsNumber": oms, "birthDate": bdates,
+                                                            "availableResourceId": resID, "complexResourceId": complID,
+                                                            "appointmentId": appID, "specialityId": specID}})
             jsdati = dati.json()
-            tabs =MDTabs(
-                radius= [30, 30, 0,0],
-                allow_stretch= True,
-                tab_hint_x= True,
-                tab_bar_height= '150'
-                ) 
+            tabs = MDTabs(
+                radius=[30, 30, 0, 0],
+                allow_stretch=True,
+                tab_hint_x=True,
+                tab_bar_height='150'
+            )
             for i in range(len(jsdati["result"]['scheduleOfDay'])):
                 time = datetime.datetime.fromisoformat(jsdati["result"]['scheduleOfDay'][i]['date'])
                 tab = Tab(
@@ -2489,21 +2542,22 @@ class OMSLoged(Screen):
                 )
                 tab.tab_label.font_size = '50sp'
                 scrolllayout = ScrollView(
-                    size_hint= (1, .9),
-                    md_bg_color=(1,1,1,0)
-                    )
+                    size_hint=(1, .9),
+                    md_bg_color=(1, 1, 1, 0)
+                )
                 layout = StackLayout()
                 layout.size_hint_y = None
-                layout.spacing  = 40
+                layout.spacing = 40
                 for j in range(len(jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'])):
-                    timeF = datetime.datetime.fromisoformat(jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime'])
+                    timeF = datetime.datetime.fromisoformat(
+                        jsdati["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime'])
                     times = MyToggleButton(
-                            text=timeF.strftime("%H:%M"),
-                            theme_text_color= 'Custom',
-                            text_color= 'white',
-                            md_bg_color='grey',
-                            group = "x"
-                            )
+                        text=timeF.strftime("%H:%M"),
+                        theme_text_color='Custom',
+                        text_color='white',
+                        md_bg_color='grey',
+                        group="x"
+                    )
                     times.font_size = 35
                     times.height = 100
                     times.width = 100
@@ -2516,9 +2570,14 @@ class OMSLoged(Screen):
                 tabs.add_widget(tab)
             self.manager.get_screen('timetable').ids.lay.add_widget(tabs)
         self.manager.current = 'timetable'
+
     def appointment(self):
         global oms, bdates, perenosEnd, perenosStart, appID, specID, recpID, resID, complID
-        appocreate = requests.post(create, json ={"jsonrpc":"2.0","id":"AvyJzHk1dm8eNqyg5uzLx","method":"createAppointment","params":{"omsNumber":oms,"birthDate":bdates,"availableResourceId":resID,"complexResourceId":complID,"receptionTypeId":recpID,"startTime":perenosStart,"endTime":perenosEnd}})
+        appocreate = requests.post(create,
+                                   json={"jsonrpc": "2.0", "id": "AvyJzHk1dm8eNqyg5uzLx", "method": "createAppointment",
+                                         "params": {"omsNumber": oms, "birthDate": bdates, "availableResourceId": resID,
+                                                    "complexResourceId": complID, "receptionTypeId": recpID,
+                                                    "startTime": perenosStart, "endTime": perenosEnd}})
         jscheck = appocreate.json()
         if "error" not in jscheck:
             self.newd()
@@ -2528,9 +2587,15 @@ class OMSLoged(Screen):
             self.manager.get_screen('loged').zapisi()
         else:
             self.errord()
+
     def perenesti(self):
         global oms, bdates, perenosEnd, perenosStart, appID, recpID, resID, complID
-        perenes = requests.post(shift, json = {"jsonrpc":"2.0","id":"7LIqTOs9j1zSf-c7ohSzB","method":"shiftAppointment","params":{"omsNumber":oms,"birthDate":bdates,"appointmentId":appID,"availableResourceId":resID,"complexResourceId":complID,"receptionTypeId":recpID,"startTime":perenosStart,"endTime":perenosEnd}})
+        perenes = requests.post(shift,
+                                json={"jsonrpc": "2.0", "id": "7LIqTOs9j1zSf-c7ohSzB", "method": "shiftAppointment",
+                                      "params": {"omsNumber": oms, "birthDate": bdates, "appointmentId": appID,
+                                                 "availableResourceId": resID, "complexResourceId": complID,
+                                                 "receptionTypeId": recpID, "startTime": perenosStart,
+                                                 "endTime": perenosEnd}})
         jscheck = perenes.json()
         if "error" not in jscheck:
             self.succper()
@@ -2540,34 +2605,38 @@ class OMSLoged(Screen):
             self.manager.get_screen('loged').zapisi()
         else:
             self.errord()
+
     def prosmotrnapr(self):
         global oms, bdates
-        prosmotrnaprs = requests.post(ref, json ={"jsonrpc":"2.0","id":"6Ov41JqE7a1bQ3i98ofeF","method":"getReferralsInfo","params":{"omsNumber":oms,"birthDate":bdates}})
+        prosmotrnaprs = requests.post(ref, json={"jsonrpc": "2.0", "id": "6Ov41JqE7a1bQ3i98ofeF",
+                                                 "method": "getReferralsInfo",
+                                                 "params": {"omsNumber": oms, "birthDate": bdates}})
         jsnp = prosmotrnaprs.json()
         if len(jsnp["result"]) == 0:
-                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
-                layout = RelativeLayout()
-                label = MDLabel(
-                    text='Направлений нет',
-                    halign='center',
-                    theme_text_color= 'Custom',
-                    text_color= 'white',
-                )
-                label.font_size = 40
-                label.pos_hint = {'center_x': .5, 'center_y': .5}
-                layout.add_widget(label)
-                card.add_widget(layout)
-                self.manager.get_screen("napr").ids.scrollid.add_widget(card)
+            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+            layout = RelativeLayout()
+            label = MDLabel(
+                text='Направлений нет',
+                halign='center',
+                theme_text_color='Custom',
+                text_color='white',
+            )
+            label.font_size = 40
+            label.pos_hint = {'center_x': .5, 'center_y': .5}
+            layout.add_widget(label)
+            card.add_widget(layout)
+            self.manager.get_screen("napr").ids.scrollid.add_widget(card)
         else:
             for i in range(len(jsnp["result"])):
                 if 'toDoctor' in jsnp['result'][i]:
-                    card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                    card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                                  md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                     layout = RelativeLayout()
-                    name= MDLabel(
-                        text = jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " "),
-                        theme_text_color= 'Custom',
-                        text_color= 'white'
+                    name = MDLabel(
+                        text=jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " "),
+                        theme_text_color='Custom',
+                        text_color='white'
                     )
                     name.font_size = 35
                     name.pos_hint = {'center_x': .55, 'center_y': .8}
@@ -2579,10 +2648,10 @@ class OMSLoged(Screen):
                         text_color='white',
                     )
                     avail.font_size = 35
-                    avail.pos_hint = {'center_x':.55, 'center_y':.6}
+                    avail.pos_hint = {'center_x': .55, 'center_y': .6}
                     layout.add_widget(avail)
                     end = MDLabel(
-                        text= jsnp["result"][i]["endTime"],
+                        text=jsnp["result"][i]["endTime"],
                         theme_text_color='Custom',
                         text_color='white',
                     )
@@ -2592,12 +2661,13 @@ class OMSLoged(Screen):
                     card.add_widget(layout)
                     self.manager.get_screen("napr").ids.scrollid.add_widget(card)
                 else:
-                    card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                    card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                                  md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                     layout = RelativeLayout()
-                    name= MDLabel(
-                        text = jsnp["result"][i]["toLdp"]["ldpTypeName"].replace("_", " "),
-                        theme_text_color= 'Custom',
-                        text_color= 'white'
+                    name = MDLabel(
+                        text=jsnp["result"][i]["toLdp"]["ldpTypeName"].replace("_", " "),
+                        theme_text_color='Custom',
+                        text_color='white'
                     )
                     name.font_size = 35
                     name.pos_hint = {'center_x': .55, 'center_y': .8}
@@ -2609,10 +2679,10 @@ class OMSLoged(Screen):
                         text_color='white',
                     )
                     avail.font_size = 35
-                    avail.pos_hint = {'center_x':.55, 'center_y':.6}
+                    avail.pos_hint = {'center_x': .55, 'center_y': .6}
                     layout.add_widget(avail)
                     end = MDLabel(
-                        text= jsnp["result"][i]["endTime"],
+                        text=jsnp["result"][i]["endTime"],
                         theme_text_color='Custom',
                         text_color='white',
                     )
@@ -2622,60 +2692,71 @@ class OMSLoged(Screen):
                     card.add_widget(layout)
                     self.manager.get_screen("napr").ids.scrollid.add_widget(card)
         self.manager.current = 'napr'
+
     def newzapis(self):
         global oms, bdates
-        specialities = requests.post(ass, json = {"jsonrpc":"2.0","id":"ULHOof43sz6OfDTK4KRf1","method":"getSpecialitiesInfo","params":{"omsNumber":oms,"birthDate":bdates}})
+        specialities = requests.post(ass, json={"jsonrpc": "2.0", "id": "ULHOof43sz6OfDTK4KRf1",
+                                                "method": "getSpecialitiesInfo",
+                                                "params": {"omsNumber": oms, "birthDate": bdates}})
         jsspec = specialities.json()
         for i in range(len(jsspec["result"])):
-            card = MDCard(orientation='vertical', size_hint=(1, None), height = 150, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+            card = MDCard(orientation='vertical', size_hint=(1, None), height=150,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
             layout = RelativeLayout()
-            name= MDLabel(
-                text = jsspec['result'][i]["name"].replace("_", " "),
-                theme_text_color= 'Custom',
-                text_color= 'white'
+            name = MDLabel(
+                text=jsspec['result'][i]["name"].replace("_", " "),
+                theme_text_color='Custom',
+                text_color='white'
             )
             name.font_size = 35
             name.pos_hint = {'center_x': .55, 'center_y': .8}
             choose = MDFillRoundFlatButton(
-                                text="Выбрать",
-                                theme_text_color= 'Custom',
-                                text_color= 'white',
-                                )
+                text="Выбрать",
+                theme_text_color='Custom',
+                text_color='white',
+            )
             choose.bind(on_release=self.new)
             choose.zapisid = i
-            choose.pos_hint = {'center_x': .85, 'center_y':.5}
-            choose.font_size  = 40
+            choose.pos_hint = {'center_x': .85, 'center_y': .5}
+            choose.font_size = 40
             layout.add_widget(choose)
             layout.add_widget(name)
             card.add_widget(layout)
             self.manager.get_screen("zapisi").ids.scrollid.add_widget(card)
         self.manager.current = 'zapisi'
+
     def new(self, instance):
         global oms, bdates, zapisvibor, userid, specID, recpID
         count = 0
         resid = None
-        assignment = requests.post(ass, json = {"jsonrpc":"2.0","id":"ULHOof43sz6OfDTK4KRf1","method":"getAssignmentsInfo","params":{"omsNumber":oms,"birthDate":bdates}})
+        assignment = requests.post(ass, json={"jsonrpc": "2.0", "id": "ULHOof43sz6OfDTK4KRf1",
+                                              "method": "getAssignmentsInfo",
+                                              "params": {"omsNumber": oms, "birthDate": bdates}})
         jsass = assignment.json()
         userid = jsass["id"]
-        specialities = requests.post(ass, json = {"jsonrpc":"2.0","id":"ULHOof43sz6OfDTK4KRf1","method":"getSpecialitiesInfo","params":{"omsNumber":oms,"birthDate":bdates}})
+        specialities = requests.post(ass, json={"jsonrpc": "2.0", "id": "ULHOof43sz6OfDTK4KRf1",
+                                                "method": "getSpecialitiesInfo",
+                                                "params": {"omsNumber": oms, "birthDate": bdates}})
         jsspec = specialities.json()
         specID = jsspec['result'][instance.zapisid]["code"]
-        zapis = requests.post(speclist, json = {"jsonrpc":"2.0","id":userid,"method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdates,"specialityId": specID}})
+        zapis = requests.post(speclist, json={"jsonrpc": "2.0", "id": userid, "method": "getDoctorsInfo",
+                                              "params": {"omsNumber": oms, "birthDate": bdates,
+                                                         "specialityId": specID}})
         jszapis = zapis.json()
         for i in range(len(jszapis["result"])):
             for j in range(len(jszapis["result"][i]['complexResource'])):
                 if 'room' in jszapis["result"][i]['complexResource'][j]:
                     recpID = jszapis["result"][i]['receptionType'][0]['code']
-                    count+=1
+                    count += 1
         if count == 0:
             card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
             layout = RelativeLayout()
             label = MDLabel(
                 text='Запись не доступна',
                 halign='center',
-                theme_text_color= 'Custom',
-                text_color= 'white',
+                theme_text_color='Custom',
+                text_color='white',
             )
             label.font_size = 40
             label.pos_hint = {'center_x': .5, 'center_y': .5}
@@ -2686,27 +2767,29 @@ class OMSLoged(Screen):
             for i in range(len(jszapis["result"])):
                 for j in range(len(jszapis["result"][i]['complexResource'])):
                     if 'room' in jszapis["result"][i]['complexResource'][j]:
-                        card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                        card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                                      md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                         layout = RelativeLayout()
-                        name= MDLabel(
-                            text = jszapis['result'][i]["name"].replace('_', " "),
-                            theme_text_color= 'Custom',
-                            text_color= 'white'
+                        name = MDLabel(
+                            text=jszapis['result'][i]["name"].replace('_', " "),
+                            theme_text_color='Custom',
+                            text_color='white'
                         )
                         name.font_size = 45
                         name.pos_hint = {'center_x': .55, 'center_y': .8}
                         layout.add_widget(name)
-                        time = datetime.datetime.fromisoformat(jszapis["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                        time = datetime.datetime.fromisoformat(
+                            jszapis["result"][i]['complexResource'][j]['room']['availabilityDate'])
                         avail = MDLabel(
                             text=f'{time.strftime("С %d %b, %a")}',
                             theme_text_color='Custom',
                             text_color='white',
                         )
                         avail.font_size = 35
-                        avail.pos_hint = {'center_x':.55, 'center_y':.6}
+                        avail.pos_hint = {'center_x': .55, 'center_y': .6}
                         layout.add_widget(avail)
                         address = MDLabel(
-                            text= jszapis["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                            text=jszapis["result"][i]['complexResource'][j]['room']['lpuShortName'],
                             theme_text_color='Custom',
                             text_color='white',
                         )
@@ -2723,14 +2806,14 @@ class OMSLoged(Screen):
                         layout.add_widget(address)
                         perenos = MDFillRoundFlatButton(
                             text="Выбрать",
-                            theme_text_color= 'Custom',
-                            text_color= 'white',
-                            )
+                            theme_text_color='Custom',
+                            text_color='white',
+                        )
                         perenos.resID = jszapis["result"][i]['complexResource'][j]['id']
                         perenos.availRES = jszapis["result"][i]['id']
                         perenos.bind(on_release=self.showdateandtimenew)
-                        perenos.pos_hint = {'center_x': .85, 'center_y':.2}
-                        perenos.font_size  = 40
+                        perenos.pos_hint = {'center_x': .85, 'center_y': .2}
+                        perenos.font_size = 40
                         layout.add_widget(perenos)
                         card.add_widget(layout)
                         self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
@@ -2740,16 +2823,23 @@ class OMSLoged(Screen):
         global oms, bdates, userid, specID, resID, complID, resID, complID
         resID = instance.availRES
         complID = instance.resID
-        zapis = requests.post(speclist, json = {"jsonrpc":"2.0","id":userid,"method":"getDoctorsInfo","params":{"omsNumber":oms,"birthDate":bdates,"specialityId": specID}})
+        zapis = requests.post(speclist, json={"jsonrpc": "2.0", "id": userid, "method": "getDoctorsInfo",
+                                              "params": {"omsNumber": oms, "birthDate": bdates,
+                                                         "specialityId": specID}})
         jszapis = zapis.json()
-        proczapis = requests.post(datespec, json = {"jsonrpc":"2.0","id":"7g9bgvEa8VkCd6A2XHJ7p","method":"getAvailableResourceScheduleInfo","params":{"omsNumber":oms,"birthDate":bdates,"availableResourceId":instance.availRES,"complexResourceId":instance.resID,"specialityId":specID}})
+        proczapis = requests.post(datespec, json={"jsonrpc": "2.0", "id": "7g9bgvEa8VkCd6A2XHJ7p",
+                                                  "method": "getAvailableResourceScheduleInfo",
+                                                  "params": {"omsNumber": oms, "birthDate": bdates,
+                                                             "availableResourceId": instance.availRES,
+                                                             "complexResourceId": instance.resID,
+                                                             "specialityId": specID}})
         jsproczapis = proczapis.json()
-        tabs =MDTabs(
-                radius= [30, 30, 0,0],
-                allow_stretch= True,
-                tab_hint_x= True,
-                tab_bar_height= '80'
-                )
+        tabs = MDTabs(
+            radius=[30, 30, 0, 0],
+            allow_stretch=True,
+            tab_hint_x=True,
+            tab_bar_height='80'
+        )
         for i in range(len(jsproczapis["result"]['scheduleOfDay'])):
             time = datetime.datetime.fromisoformat(jsproczapis["result"]['scheduleOfDay'][i]["date"])
             tab = Tab(
@@ -2757,23 +2847,24 @@ class OMSLoged(Screen):
             )
             tab.tab_label.font_size = '50sp'
             scrolllayout = ScrollView(
-                size_hint= (1, .9),
-                md_bg_color=(1,1,1,0)
-                )
+                size_hint=(1, .9),
+                md_bg_color=(1, 1, 1, 0)
+            )
             layout = StackLayout()
             layout.size_hint_y = None
-            layout.spacing  = 40
+            layout.spacing = 40
             for j in range(len(jsproczapis["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'])):
-                timeF = datetime.datetime.fromisoformat(jsproczapis["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime'])
+                timeF = datetime.datetime.fromisoformat(
+                    jsproczapis["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime'])
                 times = MyToggleButtonNew(
-                        text=timeF.strftime("%H:%M"),
-                        theme_text_color= 'Custom',
-                        text_color= 'white',
-                        md_bg_color='grey',
-                        group = "x"
-                        )
+                    text=timeF.strftime("%H:%M"),
+                    theme_text_color='Custom',
+                    text_color='white',
+                    md_bg_color='grey',
+                    group="x"
+                )
                 times.font_size = 60
-                times.size_hint_y= None
+                times.size_hint_y = None
                 times.endTime = jsproczapis["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['endTime']
                 times.startTime = jsproczapis["result"]['scheduleOfDay'][i]['scheduleBySlot'][0]['slot'][j]['startTime']
                 layout.add_widget(times)
@@ -2785,27 +2876,26 @@ class OMSLoged(Screen):
         self.manager.current = 'timetable'
 
 
-
-
-
-
-
-
 class Tab(MDFloatLayout, MDTabsBase):
     pass
+
+
 class MyToggleButton(MDRaisedButton, MDToggleButton):
     global sm
+
     def perenesti(self, *args):
         sm.get_screen('loged').perenesti()
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.background_down = (29 / 255, 89 / 255, 242 / 255, 1)
         self.background_normal = "grey"
+
     def on_state(self, widget, value):
         global perenosEnd, perenosStart
         self.btn = MDRaisedButton(text='Записать')
         self.btn.font_size = 30
-        self.btn.pos_hint = {'center_x': .65, 'center_y':.1}
+        self.btn.pos_hint = {'center_x': .65, 'center_y': .1}
         self.btn.size_hint = (.28, .13)
         self.btn.bind(on_release=self.perenesti)
         if value == 'down':
@@ -2816,19 +2906,24 @@ class MyToggleButton(MDRaisedButton, MDToggleButton):
             sm.get_screen('timetable').remove_widget(sm.get_screen('timetable').children[0])
             perenosEnd = None
             perenosStart = None
+
+
 class MyToggleButtonNew(MDRaisedButton, MDToggleButton):
     global oms, bdates, perenosEnd, perenosStart, appID, recpID, resID, complID, sm
+
     def appointment(self, *args):
         sm.get_screen('loged').appointment()
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.background_down = (29 / 255, 89 / 255, 242 / 255, 1)
         self.background_normal = "grey"
+
     def on_state(self, widget, value):
         global perenosEnd, perenosStart
         self.btn = MDRaisedButton(text='Записать')
         self.btn.font_size = 30
-        self.btn.pos_hint = {'center_x': .65, 'center_y':.1}
+        self.btn.pos_hint = {'center_x': .65, 'center_y': .1}
         self.btn.size_hint = (.28, .13)
         self.btn.bind(on_release=self.appointment)
         if value == 'down':
@@ -2839,12 +2934,20 @@ class MyToggleButtonNew(MDRaisedButton, MDToggleButton):
             sm.get_screen('timetable').remove_widget(sm.get_screen('timetable').children[0])
             perenosEnd = None
             perenosStart = None
+
+
 class Loading(Screen):
     pass
+
+
 class Loadingoms(Screen):
     pass
+
+
 class Zapisi(Screen):
     pass
+
+
 class Showdate(Screen):
     def back(self):
         self.manager.current = 'perenos'
@@ -2853,19 +2956,53 @@ class Showdate(Screen):
             if self.children[0].text == 'Записать':
                 self.remove_widget(self.children[0])
             else:
-                None 
+                None
         except:
             None
+
+
 class Perenos(Screen):
     pass
+
+
 class Napravlenia(Screen):
     pass
+
+
 class Prikreplenia(Screen):
     pass
+
+
 class LKCard(Screen):
     global idus, authtoken, s
+    dialog = None
+    def show_document(self):
+        if not self.dialog:
+            self.dialog = MDDialog(
+                type='custom',
+                content_cls=DocumentViewer(),
+                buttons=[
+                    MDFillRoundFlatButton(
+                        text="Отмена",
+                        on_release=lambda _: self.dialog.dismiss(),
+                    )
+                ],
+            )
+        self.dialog.open()
+    def documentview(self, instance):
+        prosmotr = s.get(
+            f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={instance.docid}',
+            headers={'X-Access-JWT': authtoken})
+        jspros = prosmotr.json()
+        hti = Html2Image()
+        html = jspros['documentHtml']
+        hti.screenshot(html_str=html, save_as=f"document.png", size=(752, 420))
+        self.show_document()
+
+
     def historyanamnes(self, instance):
-        anamnes = s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+        anamnes = s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time',
+                        headers={'X-Access-JWT': authtoken})
         jsanam = anamnes.json()
         for i in range(len(jsanam['documents'])):
             card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
@@ -2932,45 +3069,48 @@ class LKCard(Screen):
                         address.pos_hint = {'center_x': .55, 'center_y': .2}
                         layout.add_widget(address)
                     card.add_widget(layout)
+                    card.docid = jsanam["documents"][i]["documentId"]
+                    card.bind(on_release=self.documentview)
                     self.manager.get_screen("anamn").ids.scrollid.add_widget(card)
                 self.manager.current = 'anamn'
 
     def view(self, id):
         def covidtest(*args):
-            covid = s.get(f"https://lk.emias.mos.ru/api/1/documents/covid-analyzes?ehrId={idus}&shortDateFilter=all_time", headers = {'X-Access-JWT': authtoken})
+            covid = s.get(
+                f"https://lk.emias.mos.ru/api/1/documents/covid-analyzes?ehrId={idus}&shortDateFilter=all_time",
+                headers={'X-Access-JWT': authtoken})
             jscov = covid.json()
             for i in range(len(jscov['documents'])):
-                card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                 layout = RelativeLayout()
                 title = MDLabel(
                     text=f"{jscov['documents'][i]['title']}",
-                    theme_text_color= 'Custom',
-                    text_color= 'white', 
-                    )
-                title.font_size  =  45
-                title.pos_hint = {'center_x': .55, 'center_y':.8}
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                title.font_size = 45
+                title.pos_hint = {'center_x': .55, 'center_y': .8}
                 layout.add_widget(title)
                 time = datetime.datetime.fromisoformat(jscov['documents'][i]['date'])
                 timelab = MDLabel(
-                    text = f'{time.strftime("%a, %d %b в %H:%M")}',
-                    theme_text_color= 'Custom',
-                    text_color= 'white', 
-                    )
-                timelab.font_size  =  35
-                timelab.pos_hint = {'center_x': 1.2, 'center_y':.65}
+                    text=f'{time.strftime("%a, %d %b в %H:%M")}',
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
+                timelab.font_size = 35
+                timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
                 layout.add_widget(timelab)
+                card.docid = jscov["documents"][i]["documentId"]
+                card.bind(on_release = self.documentview)
                 card.add_widget(layout)
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
-
-                prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={jscov["documents"][i]["documentId"]}', headers = {'X-Access-JWT': authtoken})
-                jspros = prosmotr.json()
-                hti = Html2Image()
-                html = jspros['documentHtml']
-                hti.screenshot(html_str=html, save_as='red_page.png')
             self.manager.current = 'history'
 
         def myanamnes(*args):
-            anamnes = s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            anamnes = s.get(
+                f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time',
+                headers={'X-Access-JWT': authtoken})
             jsanam = anamnes.json()
             filt = []
             for i in range(len(jsanam['documents'])):
@@ -2979,16 +3119,17 @@ class LKCard(Screen):
                     if date[0:4] not in filt:
                         filt.append(date[0:4])
             for i in filt:
-                card = MDCard(orientation='vertical', size_hint=(1, None), height = 300, md_bg_color=(29/255, 89/255, 242/255, 1), radius= [30])
+                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                 layout = RelativeLayout()
                 timelab = MDLabel(
-                    text = f'Приемы за {i[0:4]} год.',
-                    theme_text_color= 'Custom',
-                    text_color= 'white', 
+                    text=f'Приемы за {i[0:4]} год.',
+                    theme_text_color='Custom',
+                    text_color='white',
                     halign='center'
-                    )
-                timelab.font_size  =  60
-                timelab.pos_hint = {'center_x': .5, 'center_y':.5}
+                )
+                timelab.font_size = 60
+                timelab.pos_hint = {'center_x': .5, 'center_y': .5}
                 layout.add_widget(timelab)
                 card.add_widget(layout)
                 card.bind(on_release=self.historyanamnes)
@@ -2997,32 +3138,41 @@ class LKCard(Screen):
             self.manager.current = 'history'
 
         def myanaliz(*args):
-            analiz = s.get(f'https://lk.emias.mos.ru/api/1/documents/analyzes?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            analiz = s.get(f'https://lk.emias.mos.ru/api/1/documents/analyzes?ehrId={idus}&shortDateFilter=all_time',
+                           headers={'X-Access-JWT': authtoken})
             jsanaliz = analiz.json()
             for i in range(len(jsanaliz['documents'])):
-                print(f'({i})',jsanaliz['documents'][i]['title'])
+                print(f'({i})', jsanaliz['documents'][i]['title'])
                 print(jsanaliz['documents'][i]['date'])
             prosmotrchoose = int(input('Выберите анализ для просмотра\n'))
             docID = jsanaliz['documents'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
+                             headers={'X-Access-JWT': authtoken})
             jspros = prosmotr.json()
             print(jspros['documentHtml'])
+
         def myldp():
-            ldp = s.get(f'https://lk.emias.mos.ru/api/1/documents/research?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            ldp = s.get(f'https://lk.emias.mos.ru/api/1/documents/research?ehrId={idus}&shortDateFilter=all_time',
+                        headers={'X-Access-JWT': authtoken})
             jsldp = ldp.json()
             for i in range(len(jsldp['documents'])):
-                print(f'({i})',jsldp['documents'][i]['title'])
+                print(f'({i})', jsldp['documents'][i]['title'])
                 print(jsldp['documents'][i]['date'])
                 print(jsldp['documents'][i]['muName'])
             prosmotrchoose = int(input('Выберите анализ для просмотра\n'))
             docID = jsldp['documents'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
+                             headers={'X-Access-JWT': authtoken})
             jspros = prosmotr.json()
             print(jspros['documentHtml'])
+
         def myboln():
             print("Не доступно")
+
         def myspravki():
-            spravki = s.get(f'https://lk.emias.mos.ru/api/1/documents/medical-certificates?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            spravki = s.get(
+                f'https://lk.emias.mos.ru/api/1/documents/medical-certificates?ehrId={idus}&shortDateFilter=all_time',
+                headers={'X-Access-JWT': authtoken})
             jssp = spravki.json()
             print(jssp)
             for i in range(len(jssp['certificates095'])):
@@ -3034,47 +3184,59 @@ class LKCard(Screen):
                 print(jssp['certificates095'][i]['dateCreated'])
             prosmotrchoose = int(input("Выберите справку для просмотра\n"))
             docID = jssp['certificates095'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
+                             headers={'X-Access-JWT': authtoken})
             jspros = prosmotr.json()
+
         def mystacionar():
-            stacionar = s.get(f'https://lk.emias.mos.ru/api/1/documents/epicrisis?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            stacionar = s.get(
+                f'https://lk.emias.mos.ru/api/1/documents/epicrisis?ehrId={idus}&shortDateFilter=all_time',
+                headers={'X-Access-JWT': authtoken})
             jsstac = stacionar.json()
             for i in range(len(jsstac['documents'])):
-                print(f'({i})',jsstac['documents'][i]['organisation'])
+                print(f'({i})', jsstac['documents'][i]['organisation'])
                 print(jsstac['documents'][i]['dischargeDate'])
             prosmotrchoose = int(input('Выберите выписку для просмотра\n'))
             docID = jsstac['documents'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
+                             headers={'X-Access-JWT': authtoken})
             jspros = prosmotr.json()
             print(jspros['documentHtml'])
+
         def myrecepies():
-            recepies = s.get(f'https://lk.emias.mos.ru/api/2/receipt?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            recepies = s.get(f'https://lk.emias.mos.ru/api/2/receipt?ehrId={idus}&shortDateFilter=all_time',
+                             headers={'X-Access-JWT': authtoken})
             jsrec = recepies.json()
             for i in range(len(jsrec['receipts'])):
-                print(f'({i})',jsrec['receipts'][i]['medicineName'])
-                print('Выписан',jsrec['receipts'][i]['prescriptionDate'])
-                print('Просрочен',jsrec['receipts'][i]['expirationDate'])
+                print(f'({i})', jsrec['receipts'][i]['medicineName'])
+                print('Выписан', jsrec['receipts'][i]['prescriptionDate'])
+                print('Просрочен', jsrec['receipts'][i]['expirationDate'])
                 if jsrec['receipts'][i]['prescriptionStatus'] == 'expired':
                     print("Просрочен")
                 else:
                     print('Действует')
             prosmotrchoose = int(input('Выберите рецепт для просмотра\n'))
             docID = jsrec['receipts'][prosmotrchoose]['prescriptionNumber']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
+                             headers={'X-Access-JWT': authtoken})
             jspros = prosmotr.json()
             print(jspros['documentHtml'])
-                
+
         def myemergency():
-            emergency = s.get(f'https://lk.emias.mos.ru/api/1/documents/ambulance?ehrId={idus}&shortDateFilter=all_time', headers = {'X-Access-JWT': authtoken})
+            emergency = s.get(
+                f'https://lk.emias.mos.ru/api/1/documents/ambulance?ehrId={idus}&shortDateFilter=all_time',
+                headers={'X-Access-JWT': authtoken})
             jsemg = emergency.json()
             for i in range(len(jsemg['documents'])):
-                print(f'({i})',jsemg['documents'][i]['diagnosis'])
+                print(f'({i})', jsemg['documents'][i]['diagnosis'])
                 print(jsemg['documents'][i]['callDate'])
             prosmotrchoose = int(input('Выберите рецепт для просмотра\n'))
             docID = jsemg['documents'][prosmotrchoose]['documentId']
-            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}', headers = {'X-Access-JWT': authtoken})
+            prosmotr = s.get(f'https://lk.emias.mos.ru/api/2/document?ehrId={idus}&documentId={docID}',
+                             headers={'X-Access-JWT': authtoken})
             jspros = prosmotr.json()
             print(jspros['documentHtml'])
+
         if id == 1:
             covidtest()
         elif id == 3:
@@ -3093,12 +3255,19 @@ class LKCard(Screen):
             myrecepies()
         elif id == 10:
             myemergency()
+
+
 class History(Screen):
     pass
+
+
 class AnamnesView(Screen):
     pass
+
+
 class Privivki(Screen):
     global idus, authtoken, s
+
     def prof(self):
         vacin = s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={idus}", headers={'X-Access-JWT': authtoken})
         jsvac = vacin.json()
@@ -3178,27 +3347,31 @@ class Privivki(Screen):
             card.add_widget(layout)
             self.manager.get_screen("privview").ids.scrollid.add_widget(card)
         self.manager.current = 'privview'
+
+
 class PrivivkiView(Screen):
     pass
+
+
 class AlterApp(MDApp):
     def build(self):
-        global day, sm, types,  year, s,  month, verifcode,userid, login,appID, specID, recpID, resID, complID, perenosEnd, perenosStart, docid, Twofactorverifcode, password, result, curuserid, polic, names, sure, male, age, idus, authtoken, counts, oms, bdates, ref, ass, spec, doclist,vrachchoose, speclist, datespec, create, cancel, shift, info
-        
-        #omsscreen
+        global day, sm, types, year, s, month, verifcode, userid, login, appID, specID, recpID, resID, complID, perenosEnd, perenosStart, docid, Twofactorverifcode, password, result, curuserid, polic, names, sure, male, age, idus, authtoken, counts, oms, bdates, ref, ass, spec, doclist, vrachchoose, speclist, datespec, create, cancel, shift, info
+
+        # omsscreen
 
         day = None
         year = None
         month = None
-        
-        #mosscreen
+
+        # mosscreen
 
         counts = 59
         Twofactorverifcode = None
         verifcode = None
         login = None
         password = None
-        
-        #universal
+
+        # universal
         s = None
         perenosEnd = None
         perenosStart = None
@@ -3221,8 +3394,8 @@ class AlterApp(MDApp):
         info = "https://emias.info/api/emc/appointment-eip/v1/?getPatientInfo3"
         types = None
         zapisvibor = None
-        
-        #mosscreen
+
+        # mosscreen
 
         names = None
         sure = None
@@ -3251,6 +3424,7 @@ class AlterApp(MDApp):
         self.theme_cls.theme_style = "Light"
         return sm
 
+
 if __name__ == '__main__':
     AlterApp().run()
-#5494499745000410 1088989771000020
+# 5494499745000410 1088989771000020
