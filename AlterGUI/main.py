@@ -11,7 +11,10 @@ from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
 from kivymd.uix.label import MDLabel
 import threading
+from kivy.clock import Clock, mainthread
+from fake_useragent import UserAgent
 from html2image import Html2Image
+from cairosvg import svg2png
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
@@ -79,7 +82,6 @@ Builder.load_string("""
                     pos_hint: {'center_x': .5, 'center_y': .8}
                     size_hint: 1, .20
                     helper_text_mode: "persistent"
-                    font_name: 'roboto'
                     helper_text: "mymail@mail.ru"
                     icon_left: "account-badge"
                 MDTextField:
@@ -89,7 +91,6 @@ Builder.load_string("""
                     font_size: dp(45)
                     helper_text_mode: "persistent"
                     size_hint: 1, .20
-                    font_name: 'roboto'
                     pos_hint: {'center_x': .5, 'center_y': .50}
                     mode: "fill"
                     icon_left: "key-variant"
@@ -292,8 +293,6 @@ Builder.load_string("""
                     pos_hint: {'center_x': .5, 'center_y': .8}
                     size_hint: 1, .22
                     helper_text_mode: "persistent"
-                    font_name: 'roboto'
-                    helper_text: "mymail@mail.ru"
                     icon_left: "account-badge"
                 MDTextField:
                     id: text_field
@@ -302,7 +301,6 @@ Builder.load_string("""
                     font_size: dp(40)
                     helper_text_mode: "persistent"
                     size_hint: 1, .22
-                    font_name: 'roboto'
                     pos_hint: {'center_x': .5, 'center_y': .50}
                     mode: "fill"
                     icon_left: "key-variant"
@@ -1027,7 +1025,7 @@ Builder.load_string("""
             allow_stretch: True
             size: 300, 350
     MDCard:
-        size_hint: .8, .8
+        size_hint: .6, .8
         md_bg_color: 170/255,170/255,170/255,1
         pos_hint: {'center_x': .5, 'center_y': .5}
         radius: [30]
@@ -1766,11 +1764,15 @@ class MOSScreen(Screen):
             driver.quit()
 
         try:
+            useragent = UserAgent()
+            profile = webdriver.FirefoxProfile()
+            profile.set_preference("general.useragent.override", useragent.random)
             firefox_options = Options()
             firefox_options.add_argument("--headless")
             driver = webdriver.Firefox(
                 executable_path="C:\\Users\\PCWORK\\Desktop\\alter\\AlterGUI\\geckodriver.exe",
                 options=firefox_options,
+                firefox_profile=profile
             )
             driver.get(
                 "https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth"
@@ -2959,8 +2961,8 @@ class LKCard(Screen):
         dialog = None
         box = BoxLayout()
         lay = RelativeLayout()
-        scrollview = ScrollView(size_hint=(1, None))
-        scrollview.height = 1000
+        scrollview = ScrollView(size_hint=(.8, None))
+        scrollview.height = 900
         lay.size_hint_y = None
         ima = Image(
             source='document.png',
@@ -2999,14 +3001,7 @@ class LKCard(Screen):
         html = jspros['documentHtml']
         hti.screenshot(html_str=html, save_as=f"document.png", size=(1000, 2000))
         self.show_document()
-    def recepiesview(self, instance):
-        prosmotr = s.get(f'https://lk.emias.mos.ru/api/3/receipt/details?ehrId={idus}&prescriptionNumber={instance.docid}',
-            headers={'X-Access-JWT': authtoken})
-        jspros = prosmotr.json()
-        hti = Html2Image()
-        html = jspros['documentHtml']
-        hti.screenshot(html_str=html, save_as=f"document.png", size=(1000, 2000))
-        self.show_document()
+
 
     def historyanamnes(self, instance):
         anamnes = s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={idus}&shortDateFilter=all_time',
@@ -3060,7 +3055,7 @@ class LKCard(Screen):
                     if 'appointmentDate' in jsanam['documents'][i]:
                         time = datetime.datetime.fromisoformat(jsanam['documents'][i]['appointmentDate'])
                         timelab = MDLabel(
-                            text=f'{time.strftime("%a, %d %b")}',
+                            text=f'{time.strftime("%a, %d %b %Y")}',
                             theme_text_color='Custom',
                             text_color='white',
                         )
@@ -3102,7 +3097,7 @@ class LKCard(Screen):
                 layout.add_widget(title)
                 time = datetime.datetime.fromisoformat(jscov['documents'][i]['date'])
                 timelab = MDLabel(
-                    text=f'{time.strftime("%a, %d %b")}',
+                    text=f'{time.strftime("%a, %d %b %Y")}',
                     theme_text_color='Custom',
                     text_color='white',
                 )
@@ -3163,7 +3158,7 @@ class LKCard(Screen):
                 layout.add_widget(title)
                 time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
                 timelab = MDLabel(
-                    text=f'{time.strftime("%a, %d %b")}',
+                    text=f'{time.strftime("%a, %d %b %Y")}',
                     theme_text_color='Custom',
                     text_color='white',
                 )
@@ -3195,7 +3190,7 @@ class LKCard(Screen):
                 layout.add_widget(title)
                 time = datetime.datetime.fromisoformat(jsldp['documents'][i]['date'])
                 timelab = MDLabel(
-                    text=f'{time.strftime("%a, %d %b")}',
+                    text=f'{time.strftime("%a, %d %b %Y")}',
                     theme_text_color='Custom',
                     text_color='white',
                 )
@@ -3286,7 +3281,7 @@ class LKCard(Screen):
                 layout.add_widget(title)
                 time = datetime.datetime.strptime(jsstac['documents'][i]['dischargeDate'], "%Y-%m-%dT%H:%M:%S%z") 
                 timelab = MDLabel(
-                    text=f'{time.strftime("%a, %d %b")}',
+                    text=f'{time.strftime("%a, %d %b %Y")}',
                     theme_text_color='Custom',
                     text_color='white',
                 )
@@ -3308,7 +3303,7 @@ class LKCard(Screen):
                 layout = RelativeLayout()
                 if jsrec['receipts'][i]['prescriptionStatus'] == 'expired':
                     doctorspec = MDLabel(
-                            text=f"Просрочен",
+                            text=f"Cтатус: Просрочен",
                             theme_text_color='Custom',
                             text_color='white',
                         )
@@ -3317,7 +3312,7 @@ class LKCard(Screen):
                     layout.add_widget(doctorspec)
                 else:
                     doctorspec = MDLabel(
-                            text=f"Действует",
+                            text=f"Cтатус: Действует",
                             theme_text_color='Custom',
                             text_color='white',
                         )
@@ -3336,25 +3331,37 @@ class LKCard(Screen):
                 layout.add_widget(title)
                 time = datetime.datetime.fromisoformat(jsrec['receipts'][i]['prescriptionDate'])
                 timelab = MDLabel(
-                    text=f'{time.strftime("%a, %d %b")}',
+                    text=f'{time.strftime("Выписан %d %b %Y")}',
                     theme_text_color='Custom',
                     text_color='white',
                 )
                 timelab.font_size = 35
-                timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                timelab.pos_hint = {'center_x': .55, 'center_y': .4}
                 layout.add_widget(timelab)
                 times = datetime.datetime.fromisoformat(jsrec['receipts'][i]['expirationDate'])
                 timelabs = MDLabel(
-                    text=f'{time.strftime("%a, %d %b")}',
+                    text=f'{times.strftime("Истечет %d %b %Y")}',
                     theme_text_color='Custom',
                     text_color='white',
                 )
                 timelabs.font_size = 35
-                timelabs.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                timelabs.pos_hint = {'center_x': .55, 'center_y': .2}
+                prosmotr = s.get(f"https://lk.emias.mos.ru/api/3/receipt/details?ehrId={idus}&prescriptionNumber={jsrec['receipts'][i]['prescriptionNumber']}",
+                    headers={'X-Access-JWT': authtoken})
+                jspros = prosmotr.json()
+                svg_code =  jspros['qrCode']
+                svg2png(bytestring=svg_code,output_width=350, output_height=350, write_to='document.png', negate_colors= (1,1,1,1))
+                ima = Image(
+                    source='document.png',
+                    size_hint = (None, None)
+                )
+                ima.height = 300
+                ima.width = 300
+                ima.pos_hint = {'center_x': .85, 'center_y': .5}
+                ima.reload()
+                layout.add_widget(ima)
                 layout.add_widget(timelabs)
                 card.add_widget(layout)
-                card.docid = jsrec['receipts'][i]['prescriptionNumber']
-                card.bind(on_release=self.recepiesview)
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
 
@@ -3364,6 +3371,7 @@ class LKCard(Screen):
                 f'https://lk.emias.mos.ru/api/1/documents/ambulance?ehrId={idus}&shortDateFilter=all_time',
                 headers={'X-Access-JWT': authtoken})
             jsemg = emergency.json()
+            print(jsemg)
             for i in range(len(jsemg['documents'])):
                 card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
                           md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
@@ -3376,9 +3384,10 @@ class LKCard(Screen):
                 title.font_size = 45
                 title.pos_hint = {'center_x': .55, 'center_y': .8}
                 layout.add_widget(title)
-                time = datetime.datetime.fromisoformat(jsemg['documents'][i]['callDate'])
+                timeclean = jsemg['documents'][i]['callDate']
+                time = datetime.datetime.strptime(timeclean[0:16], "%Y-%m-%dT%H:%M") 
                 timelab = MDLabel(
-                    text=f'{time.strftime("%a, %d %b")}',
+                    text=f'{time.strftime("%a, %d %b %Y")}',
                     theme_text_color='Custom',
                     text_color='white',
                 )
@@ -3386,7 +3395,7 @@ class LKCard(Screen):
                 timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
                 layout.add_widget(timelab)
                 card.add_widget(layout)
-                card.docid = docID = jsemg['documents'][i]['documentId']
+                card.docid = jsemg['documents'][i]['documentId']
                 card.bind(on_release=self.documentview)
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
@@ -3582,3 +3591,4 @@ class AlterApp(MDApp):
 if __name__ == '__main__':
     AlterApp().run()
 # 5494499745000410 1088989771000020
+#НЕ ПОКАЗЫВАТЬ И НЕ ДЕЛИТЬСЯ С НИМИ
