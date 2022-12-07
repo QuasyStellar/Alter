@@ -1,0 +1,146 @@
+<OMSLoged>:
+    name: 'loged'
+    Image:
+        source: 'Assets/omsloged/mainmenubgoms.png'
+        allow_stretch: True
+        keep_ratio: False
+    MDTextButton:
+        size_hint: .2, .15
+        halign: 'center'
+        pos_hint: {'center_x': .89, 'center_y': .1}
+        font_size: dp(25)
+        on_release: root.exits()
+        Image:
+            source: 'Assets/exitbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 300, 350
+    MDTextButton:
+        size_hint: .2, .2
+        halign: 'center'
+        pos_hint: {'center_x': .89, 'center_y': .65}
+        font_size: dp(25)
+        on_release: root.full_dialog()
+        Image:
+            source: 'Assets/omsloged/enterfull.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 400, 200
+    MDLabel:
+        id: authname
+        text:'[color=#ffffff]7700 0000 0000 0000[/color]'
+        markup: True
+        size_hint: .2, .15
+        halign: 'center'
+        pos_hint: {'center_x': .89, 'center_y': .8}
+        font_size: dp(35) 
+    MDCard:
+        orientation: "vertical"
+        pos_hint: {'center_x': .5, 'center_y': .7}
+        size_hint: .339, .3
+        md_bg_color: 1,1,1,0
+        radius: [30]
+        RelativeLayout:
+            Image:
+                source: 'Assets/omsloged/emiasmainbutton.png'
+                allow_stretch: True
+                size: self.parent.size
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Мои записи[/color]'
+                markup: True
+                pos_hint: {'center_x': .25, 'center_y': .5}
+                font_name: 'roboto'
+                font_size: dp(32)
+                size_hint: .45,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.zapisi()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Новая запись[/color]'
+                markup: True
+                pos_hint: {'center_x': .25, 'center_y': .2}
+                font_name: 'roboto'
+                font_size: dp(32)
+                size_hint: .45,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.newzapis()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Направления[/color]'
+                markup: True
+                pos_hint: {'center_x': .72, 'center_y': .5}
+                font_name: 'roboto'
+                font_size: dp(32)
+                size_hint: .45,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.prosmotrnapr()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Прикрепления[/color]'
+                markup: True
+                pos_hint: {'center_x': .72, 'center_y': .2}
+                font_name: 'roboto'
+                font_size: dp(32)
+                size_hint: .45,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.prikreplenia()
+                bold: True
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .5, 'center_y': .3}
+        size_hint: .339, .3
+        radius: [30]
+        on_release: root.exits()
+        Image:
+            source: 'Assets/omsloged/priemmainbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+    MDLabel:
+        id: time
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .7}
+        font_size: dp(90)
+        font_name: 'roboto'
+    MDLabel:
+        id: days
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .2, 'center_y': .6}
+        font_size: dp(90)
+        font_name: 'roboto'
+        halign: 'center'
+    MDLabel:
+        id: months
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .5}
+        font_size: dp(90)
+        font_name: 'roboto'
+    MDLabel:
+        id: years
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .4}
+        font_size: dp(90)
+        font_name: 'roboto'
+    MDLabel:
+        id: week
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .6}
+        font_size: dp(90)
+        font_name: 'roboto'

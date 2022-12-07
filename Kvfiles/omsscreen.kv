@@ -1,0 +1,109 @@
+<OMSScreen>:
+    bdate: bdate
+    policy: policy
+    name: 'oms'
+    Image:
+        source: 'Assets/omsscreen/omsbg.png'
+        allow_stretch: True
+        keep_ratio: False
+    MDFillRoundFlatButton:
+        text: '< Назад'
+        markup: True
+        pos_hint: {'center_x': .626, 'center_y': .2}
+        font_name: 'roboto'
+        font_size: dp(40)
+        size_hint: .25,.1
+        md_bg_color: 0/255, 106/255, 240/255, .4
+        on_press: root.back()
+        ripple_color: 1, 0, 0, 0.1
+        bold: True
+    RelativeLayout:
+        id: omsrefresh
+        MDCard:
+            orientation: "vertical"
+            pos_hint: {'center_x': .626, 'center_y': .5}
+            size_hint: .25, .45
+            radius:[30]
+            md_bg_color: 0/255, 106/255, 240/255, .4
+            RelativeLayout:
+                orientation: 'vertical'
+                size_hint: 1, 1
+                MDTextField:
+                    id: policy
+                    hint_text: "Номер полиса"
+                    mode: "fill"
+                    fill_color_normal: 0/255, 106/255, 240/255, .4
+                    max_text_length: 16
+                    hint_text_color_normal: "white"
+                    helper_text_color_normal: "white"
+                    helper_text_color_focus: 'white'
+                    icon_left_color_normal: 'white'
+                    max_length_text_color: 'white'
+                    helper_text: 'Например 7700 0000 0000 0000'
+                    min_text_length: 16
+                    text_color_normal: "white"
+                    font_size: dp(40)
+                    input_filter: 'int'
+                    pos_hint: {'center_x': .5, 'center_y': .8}
+                    size_hint: 1, .20
+                    helper_text_mode: "persistent"
+                    font_name: 'roboto'
+                    md_bg_color: 0/255, 106/255, 240/255, .4
+                    icon_left: "account-details"
+                MDTextField:
+                    id: bdate
+                    hint_text: "Выберите дату рождения"
+                    fill_color_normal: 0/255, 106/255, 240/255, .4
+                    hint_text_color_normal: "white"
+                    helper_text_color_normal: "white"
+                    text_color_normal: "white"
+                    mode: "fill"
+                    font_size: dp(40)
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: 1, .20
+                    helper_text_mode: "persistent"
+                    font_name: 'roboto'
+                    readonly: True
+                    icon_left: "calendar"
+                MDIcon:
+                    icon: "calendar"
+                    pos_hint: {'center_x': .079, 'center_y': .5}
+                    color: 'white'
+                MDTextButton:
+                    size_hint: 1, .45
+                    halign: 'center'
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: 1, .20
+                    font_size: dp(25)
+                    on_release: root.datepicker()
+                MDFillRoundFlatButton:
+                    text: "Войти"
+                    ripple_color: app.theme_cls.primary_color
+                    font_name: 'roboto'
+                    font_size: 45
+                    size_hint: .8, .1
+                    md_bg_color: 0/255, 106/255, 240/255, .4
+                    pos_hint: {'center_x': .5, 'center_y': .25}
+                    bold: True
+                    on_release: root.omslogin()
+                MDLabel:
+                    text: "[color=#ffffff]Авторизируясь по полису[/color]"
+                    bold: True
+                    font_size: 15
+                    markup: True
+                    font_name: 'roboto'
+                    pos_hint: {'center_x': .51, 'center_y': .10}
+                MDLabel:
+                    text: "[color=#ffffff]будет доступен не полный функционал[/color]"
+                    bold: True
+                    font_size: 15
+                    markup: True
+                    font_name: 'roboto'
+                    pos_hint: {'center_x': .51, 'center_y': .06}
+                MDIconButton:
+                    icon: "help"
+                    pos_hint: {'center_x': .9, 'center_y': .075}
+                    md_bg_color: 0/255, 106/255, 240/255, .4
+                    theme_icon_color: "Custom"
+                    icon_color: 1,1,1,1
+                    on_release: root.show_alert_dialog_info()

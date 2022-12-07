@@ -1,0 +1,180 @@
+<MOSLoged>:
+    name: 'mosloged'
+    Image:
+        source: 'Assets/mosloged/mainmenubgmos.png'
+        allow_stretch: True
+        keep_ratio: False
+    MDTextButton:
+        size_hint: .18, .15
+        halign: 'center'
+        pos_hint: {'center_x': .911, 'center_y': .1}
+        font_size: dp(25)
+        on_release: root.exits()
+        Image:
+            source: 'Assets/exitbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 300, 350
+    MDLabel:
+        id: authname
+        text:''
+        markup: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        size_hint: .2, .15
+        halign: 'center'
+        pos_hint: {'center_x': .909, 'center_y': .78}
+        font_size: dp(35) 
+        font_name: 'roboto'
+    MDLabel:
+        id: sures
+        text:''
+        markup: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        size_hint: .2, .15
+        halign: 'center'
+        pos_hint: {'center_x': .909, 'center_y': .74}
+        font_size: dp(35) 
+        font_name: 'roboto'
+    MDLabel:
+        id: ages
+        text:''
+        markup: True
+        size_hint: .2, .15
+        halign: 'center'
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        pos_hint: {'center_x': .909, 'center_y': .70}
+        font_size: dp(35) 
+        font_name: 'roboto'
+    MDCard:
+        orientation: "vertical"
+        pos_hint: {'center_x': .5, 'center_y': .8}
+        size_hint: .27, .26
+        radius: [30]
+        md_bg_color: 0,0,0,0
+        RelativeLayout:
+            Image:
+                source: 'Assets/mosloged/emiasbutton.png'
+                size: self.parent.size
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Мои записи[/color]'
+                markup: True
+                pos_hint: {'center_x': .27, 'center_y': .5}
+                font_name: 'roboto'
+                font_size: dp(25)
+                size_hint: .4,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.manager.get_screen('loged').zapisi()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Новая запись[/color]'
+                markup: True
+                pos_hint: {'center_x': .27, 'center_y': .2}
+                font_name: 'roboto'
+                font_size: dp(25)
+                size_hint: .4,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.manager.get_screen('loged').newzapis()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Направления[/color]'
+                markup: True
+                pos_hint: {'center_x': .72, 'center_y': .5}
+                font_name: 'roboto'
+                font_size: dp(25)
+                size_hint: .4,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.manager.get_screen('loged').prosmotrnapr()
+                bold: True
+            MDFillRoundFlatButton:
+                text: '[color=#1959d1]Прикрепления[/color]'
+                markup: True
+                pos_hint: {'center_x': .72, 'center_y': .2}
+                font_name: 'roboto'
+                font_size: dp(25)
+                size_hint: .4,.23
+                md_bg_color: 1,1,1,1
+                on_release: root.manager.get_screen('loged').prikreplenia()
+                bold: True
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        size_hint: .27, .26
+        radius: [30]
+        on_release: root.manager.current = "lkcard"
+        Image:
+            source: 'Assets/mosloged/lkcardbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .5, 'center_y': .2}
+        size_hint: .27, .26
+        radius: [30]
+        on_release: root.exits()
+        Image:
+            source: 'Assets/mosloged/priemmosbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .715, 'center_y': .5}
+        size_hint: .12, .25
+        radius: [30]
+        on_release: root.exits()
+        Image:
+            source: 'Assets/mosloged/cardanalizbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+    MDLabel:
+        id: time
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .7}
+        font_size: dp(90)
+        font_name: 'roboto'
+    MDLabel:
+        id: days
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .2, 'center_y': .6}
+        font_size: dp(90)
+        font_name: 'roboto'
+        halign: 'center'
+    MDLabel:
+        id: months
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .5}
+        font_size: dp(90)
+        font_name: 'roboto'
+    MDLabel:
+        id: years
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .4}
+        font_size: dp(90)
+        font_name: 'roboto'
+    MDLabel:
+        id: week
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .6, 'center_y': .6}
+        font_size: dp(90)
+        font_name: 'roboto'

@@ -1,0 +1,89 @@
+<ENTERScreen>:
+    name: 'enter'
+    email: email_input
+    password: text_field
+    Image:
+        source: 'Assets/firstscreen/bg.png'
+        allow_stretch: True
+        keep_ratio: False
+    RelativeLayout:
+        MDCard:
+            orientation: "vertical"
+            pos_hint: {'center_x': 0.5, 'center_y': .55}
+            size_hint: .25, .45
+            radius:[30]
+            RelativeLayout:
+                orientation: 'vertical'
+                size_hint: 1, 1
+                MDTextField:
+                    id: email_input
+                    hint_text: "Логин"
+                    mode: "fill"
+                    font_size: root.height*.03
+                    pos_hint: {'center_x': .5, 'center_y': .8}
+                    size_hint: 1, .20
+                    helper_text_mode: "persistent"
+                    helper_text: "mymail@mail.ru"
+                    icon_left: "account-badge"
+                MDTextField:
+                    id: text_field
+                    hint_text: "Пароль"
+                    password: True
+                    font_size: root.height*.03
+                    helper_text_mode: "persistent"
+                    size_hint: 1, .20
+                    pos_hint: {'center_x': .5, 'center_y': .50}
+                    mode: "fill"
+                    icon_left: "key-variant"
+                MDTextButton:
+                    ripple_color: app.theme_cls.primary_color
+                    font_name: 'roboto'
+                    size_hint: 1, .25
+                    pos_hint: {'center_x': .4999, 'center_y': .20}
+                    bold: True
+                    ripple_color: 0,0,1,1
+                    on_press: root.check()
+                    Image:
+                        source: 'Assets/firstscreen/emias.png'
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        allow_stretch: True
+                        size: self.parent.size
+        MDLabel:
+            text: "[color=#ffffff]ИЛИ[/color]"
+            bold: True
+            markup: True
+            font_size: root.height*.03
+            font_name: 'roboto'
+            pos_hint: {'center_x': .5, 'center_y': .29}
+            halign: 'center'
+        MDCard:
+            orientation: "vertical"
+            radius:[30]
+            pos_hint: {'center_x': 0.5, 'center_y': .15}
+            size_hint: .25, .20
+            MDRelativeLayout:
+                orientation: 'horizontal'
+                MDTextButton:
+                    size_hint: 1, .45
+                    halign: 'center'
+                    pos_hint: {'center_x': .4999, 'center_y': .30}
+                    on_release: root.mos()
+                    Image:
+                        source: 'Assets/firstscreen/mos.png'
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        allow_stretch: True
+                        size: self.parent.size
+                MDTextButton:
+                    size_hint: 1, .45
+                    halign: 'center'
+                    pos_hint: {'center_x': .4999, 'center_y': .70}
+                    font_size: dp(25)
+                    on_release: root.oms()
+                    Image:
+                        source: 'Assets/firstscreen/oms.png'
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                        allow_stretch: True
+                        size: self.parent.size
