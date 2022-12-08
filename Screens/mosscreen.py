@@ -3,7 +3,6 @@ import time
 import locale
 locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
-from kivy.clock import Clock
 import threading
 from kivy.clock import Clock, mainthread
 from kivy.uix.screenmanager import Screen
@@ -49,10 +48,10 @@ class MOSScreen(Screen):
             options=chrome_options
         )
         try:
-            while driver.current_url !="https://lk.emias.mos.ru/medical-recordsq":
-                None
+            while driver.current_url !="https://lk.emias.mos.ru/medical-records":
                 time.sleep(1)
-            else:    
+            else:
+                time.sleep(5) 
                 idus = driver.execute_script(
                     "return window.sessionStorage.getItem('profile/currentProfileId')"
                 ).replace('"', "")

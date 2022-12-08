@@ -10,11 +10,13 @@
         text: '< Назад'
         markup: True
         pos_hint: {'center_x': .626, 'center_y': .2}
-        font_name: 'roboto'
+        font_name: 'Assets/roboto'
         font_size: dp(40)
         size_hint: .25,.1
         md_bg_color: 0/255, 106/255, 240/255, .4
-        on_press: root.back()
+        on_press:
+            root.back()
+            root.manager.transition.direction = "up"
         ripple_color: 1, 0, 0, 0.1
         bold: True
     RelativeLayout:
@@ -47,7 +49,7 @@
                     pos_hint: {'center_x': .5, 'center_y': .8}
                     size_hint: 1, .20
                     helper_text_mode: "persistent"
-                    font_name: 'roboto'
+                    font_name: 'Assets/roboto'
                     md_bg_color: 0/255, 106/255, 240/255, .4
                     icon_left: "account-details"
                 MDTextField:
@@ -62,7 +64,7 @@
                     pos_hint: {'center_x': .5, 'center_y': .5}
                     size_hint: 1, .20
                     helper_text_mode: "persistent"
-                    font_name: 'roboto'
+                    font_name: 'Assets/roboto'
                     readonly: True
                     icon_left: "calendar"
                 MDIcon:
@@ -79,7 +81,7 @@
                 MDFillRoundFlatButton:
                     text: "Войти"
                     ripple_color: app.theme_cls.primary_color
-                    font_name: 'roboto'
+                    font_name: 'Assets/roboto'
                     font_size: 45
                     size_hint: .8, .1
                     md_bg_color: 0/255, 106/255, 240/255, .4
@@ -91,19 +93,13 @@
                     bold: True
                     font_size: 15
                     markup: True
-                    font_name: 'roboto'
+                    font_name: 'Assets/roboto'
                     pos_hint: {'center_x': .51, 'center_y': .10}
                 MDLabel:
                     text: "[color=#ffffff]будет доступен не полный функционал[/color]"
                     bold: True
                     font_size: 15
                     markup: True
-                    font_name: 'roboto'
+                    font_name: 'Assets/roboto'
                     pos_hint: {'center_x': .51, 'center_y': .06}
-                MDIconButton:
-                    icon: "help"
-                    pos_hint: {'center_x': .9, 'center_y': .075}
-                    md_bg_color: 0/255, 106/255, 240/255, .4
-                    theme_icon_color: "Custom"
-                    icon_color: 1,1,1,1
-                    on_release: root.show_alert_dialog_info()
+                

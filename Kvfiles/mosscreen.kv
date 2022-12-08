@@ -10,11 +10,13 @@
         text: '< Назад'
         markup: True
         pos_hint: {'center_x': .6, 'center_y': .2}
-        font_name: 'roboto'
+        font_name: 'Assets/roboto'
         font_size: dp(40)
         size_hint: .25,.1
         md_bg_color: 255/255, 255/255, 255/255, .3
-        on_press: root.back()
+        on_press:
+            root.back()
+            root.manager.transition.direction = "down"
         ripple_color: 1, 0, 0, 0.1
         bold: True
     RelativeLayout:

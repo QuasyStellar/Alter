@@ -6,7 +6,7 @@ from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
 from kivymd.uix.label import MDLabel
 from kivy.clock import Clock
-from html2image import Html2Image
+import imgkit
 from cairosvg import svg2png
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -58,7 +58,6 @@ class LKCard(Screen):
             f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
             headers={'X-Access-JWT': self.authtoken})
         jspros = prosmotr.json()
-        hti = Html2Image()
         html = jspros['documentHtml']
         firefox_options = Options()
         firefox_options.add_argument("--headless")
@@ -67,7 +66,7 @@ class LKCard(Screen):
         driver.get("data:text/html;charset=utf-8,{html_content}".format(html_content=html))
         driver.quit()
         height = driver.execute_script("return document.body.scrollHeight")
-        hti.screenshot(html_str=html, save_as=f"document.png", size=(1000, height))
+        imgkit.from_string(html, 'document.png')
         self.show_document()
 
 

@@ -1,4 +1,5 @@
 import locale
+from kivy.clock import Clock
 from Screens.enterscreen import ENTERScreen
 from Screens.mosscreen import MOSScreen
 from Screens.omsscreen import OMSScreen
@@ -14,9 +15,7 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 from os import listdir
 
 
-
-Window.size = (2048, 1440)
-Window.maximize()
+Window.size = (1920, 1080)
 for kv in listdir('Kvfiles'):
     Builder.load_file(f"Kvfiles/{kv}")
 
@@ -94,7 +93,10 @@ class AlterApp(MDApp):
         sm.add_widget((PrivivkiView(name='privview')))
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
+        Clock.schedule_interval(sm.get_screen('enter').update, 2)
         return sm
+
+        
 
 
 if __name__ == '__main__':

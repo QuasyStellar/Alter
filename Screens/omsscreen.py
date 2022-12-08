@@ -102,7 +102,7 @@ class OMSScreen(Screen):
             self.policy.helper_text_color_focus = "red"
         elif self.bdate.text != "":
             if self.timeclocks == None:
-                self.timeclocks = Clock.schedule_interval(self.manager.get_screen('loged').update, 1)
+                self.timeclocks = Clock.schedule_interval(self.manager.get_screen('loged').update, 2)
             bdate = self.bdate.text.replace(".", "-")
             oms = self.policy.text
             self.omsfunc(self.policy.text, bdate)
