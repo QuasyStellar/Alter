@@ -6,7 +6,7 @@ from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
 from kivymd.uix.label import MDLabel
 from kivy.clock import Clock
-import imgkit
+from html2image import Html2Image
 from cairosvg import svg2png
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -15,7 +15,7 @@ from kivy.uix.screenmanager import Screen
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.dialog import MDDialog
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
 from kivymd.uix.card import MDCard
 
 class LKCard(Screen):
@@ -62,11 +62,12 @@ class LKCard(Screen):
         firefox_options = Options()
         firefox_options.add_argument("--headless")
         firefox_options.add_argument("--width=1000")
-        driver = webdriver.Firefox(options=firefox_options)
+        driver = webdriver.Chrome(options=firefox_options)
         driver.get("data:text/html;charset=utf-8,{html_content}".format(html_content=html))
-        driver.quit()
         height = driver.execute_script("return document.body.scrollHeight")
-        imgkit.from_string(html, 'document.png')
+        driver.quit()
+        hti = Html2Image()
+        hti.screenshot(html_str=html, save_as='document.png', custom_flags=['--chrome_path'])
         self.show_document()
 
 

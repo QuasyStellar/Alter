@@ -24,14 +24,14 @@ class MOSScreen(Screen):
     waiterror = None
     factor = None
     timeclock = None
-    def mosfunc(self, login, password):
+    def mosfunc(self):
         t = threading.Thread(
-            target=self.open_moslogin, args=[login, password], daemon=True
+            target=self.open_moslogin, args=[], daemon=True
         )
         if not t.is_alive():
             t.start()
 
-    def open_moslogin(self, login, password):
+    def open_moslogin(self):
         chrome_options = Options()
         chrome_options.add_argument("--app=https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
         chrome_options.add_experimental_option("useAutomationExtension", False)
@@ -51,6 +51,7 @@ class MOSScreen(Screen):
             while driver.current_url !="https://lk.emias.mos.ru/medical-records":
                 time.sleep(1)
             else:
+                driver.minimize_window()
                 time.sleep(5) 
                 idus = driver.execute_script(
                     "return window.sessionStorage.getItem('profile/currentProfileId')"
@@ -101,14 +102,6 @@ class MOSScreen(Screen):
         self.manager.get_screen('loged').types = 'mos'
     def back(self):
         self.manager.current = "enter"
-        self.password.helper_text = ""
-        self.password.helper_text_color_normal = "white"
-        self.password.helper_text_color_focus = "white"
-        self.email.helper_text = ""
-        self.email.helper_text_color_normal = "white"
-        self.email.helper_text_color_focus = "white"
-        self.password.text = ""
-        self.email.text = ""
 
     def error_dialog(self):
         if not self.dialogerror:
@@ -126,30 +119,7 @@ class MOSScreen(Screen):
 
 
     def check(self):
-        if self.email.text != "":
-            if len(self.password.text) >= 8:
-                login = self.email.text
-                password = self.password.text
-                self.password.text = ''
-                self.email.text = ''
-                self.password.helper_text = ""
-                self.password.helper_text_color_normal = "white"
-                self.password.helper_text_color_focus = "white"
-                self.email.helper_text = ""
-                self.email.helper_text_color_normal = "white"
-                self.email.helper_text_color_focus = "white"
-                self.mosfunc(login, password)
-                self.manager.current = "load"
-                if self.timeclock == None:
-                    self.timeclock = Clock.schedule_interval(self.manager.get_screen('mosloged').update, 1)
-            else:
-                self.password.helper_text = "Пароль слишком короткий "
-                self.password.helper_text_color_normal = "red"
-                self.password.helper_text_color_focus = "red"
-                self.email.helper_text = ""
-                self.email.helper_text_color_normal = "white"
-                self.email.helper_text_color_focus = "white"
-        else:
-            self.email.helper_text = "Введите телефон, электронную почту или СНИЛС "
-            self.email.helper_text_color_normal = "red"
-            self.email.helper_text_color_focus = "red"
+        self.mosfunc()
+        self.manager.current = "load"
+        if self.timeclock == None:
+            self.timeclock = Clock.schedule_interval(self.manager.get_screen('mosloged').update, 1)

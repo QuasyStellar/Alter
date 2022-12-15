@@ -126,7 +126,7 @@
         pos_hint: {'center_x': .715, 'center_y': .5}
         size_hint: .12, .25
         radius: [30]
-        on_release: root.exits()
+        on_release: root.manager.get_screen('lkcard').view(4)
         Image:
             source: 'Assets/mosloged/cardanalizbutton.png'
             center_x: self.parent.center_x

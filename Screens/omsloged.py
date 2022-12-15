@@ -932,3 +932,5 @@ class OMSLoged(Screen):
             tabs.add_widget(tab)
         self.manager.get_screen('timetable').ids.lay.add_widget(tabs)
         self.manager.current = 'timetable'
+    def priem(self):
+        self.manager.current = 'priem'

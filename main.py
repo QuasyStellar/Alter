@@ -7,6 +7,7 @@ from Screens.lkcardscreen import LKCard
 from Screens.mosloged import MOSLoged
 from Screens.omsloged import OMSLoged
 from Screens.privivkiscreen import Privivki
+from Screens.priemscreen import Priem
 locale.setlocale(locale.LC_ALL, '')
 from kivy.lang import Builder
 from kivymd.app import MDApp
@@ -91,6 +92,7 @@ class AlterApp(MDApp):
         sm.add_widget(AnamnesView(name='anamn'))
         sm.add_widget(Privivki(name='priv'))
         sm.add_widget((PrivivkiView(name='privview')))
+        sm.add_widget(Priem(name='priem'))
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
         Clock.schedule_interval(sm.get_screen('enter').update, 2)
