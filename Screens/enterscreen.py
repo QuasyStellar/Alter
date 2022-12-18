@@ -21,6 +21,9 @@ class ENTERScreen(Screen):
         if not self.dialogs:
             self.dialogs = MDDialog(
                 title="При входе по полису ОМС не доступно: первичный осмотр с использованием AI, анализ медкарты. Доступно: Запись по направлению, запись к врачу, перенос. Чтобы воспользоваться полной версией, войдите через mos.ru",
+                md_bg_color=(49/255, 72/255, 73/255),
+                shadow_softness=100,
+                elevation=0,
                 buttons=[
                     MDFillRoundFlatButton(
                         text="    ОК    ",
@@ -36,28 +39,26 @@ class ENTERScreen(Screen):
         today = datetime.datetime.now()
         dt = datetime.datetime.today()
         days = str(datetime.datetime.strftime(today, '%d'))
-        months = str(datetime.datetime.strftime(today, '%B'))
-        years = str(datetime.datetime.strftime(today, '%Y'))
+        months = str(datetime.datetime.strftime(today, '%b')).upper()
         time = str(datetime.datetime.now().strftime("%H:%M"))
         week = datetime.datetime.weekday(today)
         if week == 0:
-            week = '[color=#85B6C1]ПН[/color]'
+            week = '[color=#D4F5EC]ПН[/color]'
         elif week == 1:
-            week = '[color=#85B6C1]ВТ[/color]'
+            week = '[color=#D4F5EC]ВТ[/color]'
         elif week == 2:
-            week = '[color=#85B6C1]СР[/color]'
+            week = '[color=#D4F5EC]СР[/color]'
         elif week == 3:
-            week = '[color=#85B6C1]ЧТ[/color]'
+            week = '[color=#D4F5EC]ЧТ[/color]'
         elif week == 4:
-            week = '[color=#85B6C1]ПТ[/color]'
+            week = '[color=#D4F5EC]ПТ[/color]'
         elif week == 5:
-            week = '[color=#85B6C1]СБ[/color]'
+            week = '[color=#D4F5EC]СБ[/color]'
         elif week == 6:
-            week = '[color=#85B6C1]ВС[/color]'
-        self.ids.days.text = f'[color=#85B6C1]{days}[/color]'
-        self.ids.months.text = f'[color=#85B6C1]{months}[/color]'
-        self.ids.years.text = f'[color=#85B6C1]{years}[/color]'
-        self.ids.time.text = f'[color=#85B6C1]{time}[/color]'
-        self.ids.week.text = f'[color=#85B6C1]{week}[/color]'
+            week = '[color=#D4F5EC]ВС[/color]'
+        self.ids.days.text = f'[color=#D4F5EC]{days}[/color]'
+        self.ids.months.text = f'[color=#D4F5EC]{months}[/color]'
+        self.ids.time.text = f'[color=#D4F5EC]{time}[/color]'
+        self.ids.week.text = f'[color=#D4F5EC]{week}[/color]'
 
     pass

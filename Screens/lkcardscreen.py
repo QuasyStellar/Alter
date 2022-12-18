@@ -18,7 +18,22 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from kivymd.uix.card import MDCard
 
+
 class LKCard(Screen):
+    def OKAKLK(self, instance):
+        prosmotr = self.s.get(
+            f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
+            headers={'X-Access-JWT': self.authtoken})
+        jspros = prosmotr.json()
+        html = jspros['documentHtml'].replace('\n', '')
+        OKAK(html, self.age, self.gender, instance.date)
+    def OAMLK(self, instance):
+        prosmotr = self.s.get(
+            f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
+            headers={'X-Access-JWT': self.authtoken})
+        jspros = prosmotr.json()
+        html = jspros['documentHtml'].replace('\n', '')
+        OAM(html, self.age, self.gender, instance.date)
     def show_document(self):
         dialog = None
         box = BoxLayout()
@@ -36,7 +51,7 @@ class LKCard(Screen):
                     on_release=lambda _: self.dialog.dismiss(),
                     size_hint=(None, None)
                 )
-        ima.height = self.height  
+        ima.height = 3500  
         lay.height = ima.height
         but.height = 150
         but.width = 200
@@ -59,15 +74,12 @@ class LKCard(Screen):
             headers={'X-Access-JWT': self.authtoken})
         jspros = prosmotr.json()
         html = jspros['documentHtml']
-        firefox_options = Options()
-        firefox_options.add_argument("--headless")
-        firefox_options.add_argument("--width=1000")
-        driver = webdriver.Chrome(options=firefox_options)
-        driver.get("data:text/html;charset=utf-8,{html_content}".format(html_content=html))
-        height = driver.execute_script("return document.body.scrollHeight")
-        driver.quit()
+        html = html.replace('<span>Отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
+        html = html.replace('<span>отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
+        html = html.replace('<span>норма</span>', '<span style="color: green">НОРМА</span>')
+        html = html.replace('<span>Норма</span>', '<span style="color: green">НОРМА</span>')
         hti = Html2Image()
-        hti.screenshot(html_str=html, save_as='document.png', custom_flags=['--chrome_path'])
+        hti.screenshot(html_str=html, save_as='document.png', size=(1000, 3500))
         self.show_document()
 
 
@@ -439,7 +451,6 @@ class LKCard(Screen):
                 f'https://lk.emias.mos.ru/api/1/documents/ambulance?ehrId={self.idus}&shortDateFilter=all_time',
                 headers={'X-Access-JWT': self.authtoken})
             jsemg = emergency.json()
-            print(jsemg)
             for i in range(len(jsemg['documents'])):
                 card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
                           md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])

@@ -8,12 +8,14 @@ from Screens.mosloged import MOSLoged
 from Screens.omsloged import OMSLoged
 from Screens.privivkiscreen import Privivki
 from Screens.priemscreen import Priem
+from Screens.decryptscreen import Decrypt
 locale.setlocale(locale.LC_ALL, '')
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen, ScreenManager
 from os import listdir
+
 
 
 Window.size = (1920, 1080)
@@ -43,7 +45,7 @@ class Showdate(Screen):
             else:
                 None
         except:
-            None
+            Nonet
 
 
 class Perenos(Screen):
@@ -69,7 +71,6 @@ class AnamnesView(Screen):
 class PrivivkiView(Screen):
     pass
 
-
 class AlterApp(MDApp):
     sm = None
     def build(self):
@@ -93,6 +94,7 @@ class AlterApp(MDApp):
         sm.add_widget(Privivki(name='priv'))
         sm.add_widget((PrivivkiView(name='privview')))
         sm.add_widget(Priem(name='priem'))
+        sm.add_widget(Decrypt(name='decrypt'))
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
         Clock.schedule_interval(sm.get_screen('enter').update, 2)

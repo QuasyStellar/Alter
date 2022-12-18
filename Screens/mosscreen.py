@@ -14,7 +14,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.chrome.options import Options
 
 class MOSScreen(Screen):
@@ -66,13 +65,17 @@ class MOSScreen(Screen):
                 oms = jsdata["profile"]["policyNum"]
                 bdates = jsdata["profile"]["birthDate"]
                 names = jsdata["profile"]['firstName']
+                if jsdata["profile"]['gender'] == 'MALE':
+                    gender = 0
+                else:
+                    gender = 1
                 sure = jsdata["profile"]['middleName'] +" "+jsdata["profile"]['lastName']
                 age = bdates.replace("-", ".")
                 s = requests.Session()
                 for cookie in driver.get_cookies():
                     c = {cookie["name"]: cookie["value"]}
                     s.cookies.update(c)
-                self.succ(names, sure, age, idus, authtoken, oms, bdates, s)
+                self.succ(names, sure, age, idus, authtoken, oms, bdates, s, gender)
                 driver.quit()
         except Exception as ex:
             print(ex)
@@ -86,13 +89,22 @@ class MOSScreen(Screen):
         self.error_dialog()
         self.manager.current = "mos"
     @mainthread
-    def succ(self, names, sure, age, idus, authtoken, oms, bdates, s):
+    def succ(self, names, sure, age, idus, authtoken, oms, bdates, s, gender):
         self.manager.current = "mosloged"
         self.manager.get_screen("mosloged").ids.authname.text = names
         self.manager.get_screen("mosloged").ids.sures.text = sure
         self.manager.get_screen("mosloged").ids.ages.text = age
+        self.manager.get_screen("mosloged").age = age
+        self.manager.get_screen("mosloged").gender = gender
+        self.manager.get_screen("lkcard").age = age
+        self.manager.get_screen("lkcard").gender = gender
         self.manager.get_screen("lkcard").idus = idus
         self.manager.get_screen("lkcard").authtoken = authtoken
+        self.manager.get_screen("decrypt").age = age
+        self.manager.get_screen("decrypt").gender = gender
+        self.manager.get_screen("decrypt").idus = idus
+        self.manager.get_screen("decrypt").authtoken = authtoken
+        self.manager.get_screen("decrypt").s = s
         self.manager.get_screen("priv").idus = idus
         self.manager.get_screen("priv").authtoken = authtoken
         self.manager.get_screen("lkcard").s = s

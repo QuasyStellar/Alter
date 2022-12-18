@@ -4,9 +4,9 @@
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
-        size_hint: .3, .2
+        size_hint: .35, .22
         halign: 'center'
-        pos_hint: {'center_x': .5, 'center_y': .58}
+        pos_hint: {'center_x': .75, 'center_y': .6}
         font_size: dp(25)
         on_release: root.oms()
         Image:
@@ -16,9 +16,9 @@
             allow_stretch: True
             size: self.parent.size
     MDTextButton:
-        size_hint: .3, .2
+        size_hint: .35, .22
         halign: 'center'
-        pos_hint: {'center_x': .5, 'center_y': .35}
+        pos_hint: {'center_x': .75, 'center_y': .37}
         on_release: root.mos()
         Image:
             source: 'Assets/firstscreen/mos.png'
@@ -26,31 +26,36 @@
             center_y: self.parent.center_y
             allow_stretch: True
             size: self.parent.size
-    MDIconButton:
-        icon: "help"
-        pos_hint: {'center_x': .635, 'center_y': .715}
-        md_bg_color: 150/255,200/255, 210/255, .4
-        size_hint: .027, .05
-        theme_icon_color: "Custom"
-        icon_color: 1,1,1,1
+    MDTextButton:
+        size_hint: .1, .1
+        halign: 'center'
+        pos_hint: {'center_x': .91, 'center_y': .08}
+        font_size: dp(25)
         on_release: root.show_alert_dialog_info()
+        Image:
+            source: 'Assets/firstscreen/question.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
     MDLabel:
         id: time
         bold: True
         theme_text_color: 'Custom'
         text_color: 'white'
         markup: True
-        pos_hint: {'center_x': .55, 'center_y': .64}
-        font_size: dp(90)
+        pos_hint: {'center_x': .62, 'center_y': .82}
+        font_size: dp(80)
         font_name: 'Assets/roboto'
+        halign: 'center'
     MDLabel:
         id: days
         bold: True
         theme_text_color: 'Custom'
         text_color: 'white'
         markup: True
-        pos_hint: {'center_x': .15, 'center_y': .54}
-        font_size: dp(90)
+        pos_hint: {'center_x': .79, 'center_y': .82}
+        font_size: dp(80)
         font_name: 'Assets/roboto'
         halign: 'center'
     MDLabel:
@@ -59,24 +64,17 @@
         theme_text_color: 'Custom'
         text_color: 'white'
         markup: True
-        pos_hint: {'center_x': .55, 'center_y': .44}
-        font_size: dp(90)
+        pos_hint: {'center_x': .87, 'center_y': .82}
+        font_size: dp(80)
         font_name: 'Assets/roboto'
-    MDLabel:
-        id: years
-        bold: True
-        theme_text_color: 'Custom'
-        text_color: 'white'
-        markup: True
-        pos_hint: {'center_x': .55, 'center_y': .34}
-        font_size: dp(90)
-        font_name: 'Assets/roboto'
+        halign: 'center'
     MDLabel:
         id: week
         bold: True
         theme_text_color: 'Custom'
         text_color: 'white'
         markup: True
-        pos_hint: {'center_x': .55, 'center_y': .54}
-        font_size: dp(90)
+        pos_hint: {'center_x': .72, 'center_y': .82}
+        font_size: dp(80)
         font_name: 'Assets/roboto'
+        halign: 'center'
