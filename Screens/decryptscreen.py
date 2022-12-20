@@ -59,7 +59,7 @@ class Decrypt(Screen):
             )
             timelab.font_size = 35
             timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
-            if 'ОАК' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ крови' in jsanaliz['documents'][i]['title'] or ('кров' in jsanaliz['documents'][i]['title'] and 'общ' in jsanaliz['documents'][i]['title']):
+            if 'ОАК' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ крови' in jsanaliz['documents'][i]['title'] or ('кров' in jsanaliz['documents'][i]['title'] and 'общ' in jsanaliz['documents'][i]['title']) or 'Клинический анализ крови' in jsanaliz['documents'][i]['title']:
                 but = MDRaisedButton(
                     text="Расшифровать анализ",
                     on_release=self.OKAKLK,
@@ -68,6 +68,11 @@ class Decrypt(Screen):
                 but.docid = jsanaliz['documents'][i]['documentId']
                 but.date = jsanaliz['documents'][i]['date']
                 layout.add_widget(but)
+                layout.add_widget(timelab)
+                card.add_widget(layout)
+                card.docid = jsanaliz['documents'][i]['documentId']
+                card.bind(on_release=self.manager.get_screen('lkcard').documentview)
+                self.ids.scrollid.add_widget(card)
             elif 'ОАМ' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ мочи' in jsanaliz['documents'][i]['title'] or 'Клинический анализ мочи' in jsanaliz['documents'][i]['title'] or ('моч' in jsanaliz['documents'][i]['title'] and 'анализ' in jsanaliz['documents'][i]['title']):
                 but = MDRaisedButton(
                     text="Расшифровать анализ",
@@ -77,11 +82,11 @@ class Decrypt(Screen):
                 but.docid = jsanaliz['documents'][i]['documentId']
                 but.date = jsanaliz['documents'][i]['date']
                 layout.add_widget(but)
-            layout.add_widget(timelab)
-            card.add_widget(layout)
-            card.docid = jsanaliz['documents'][i]['documentId']
-            card.bind(on_release=self.manager.get_screen('lkcard').documentview)
-            self.ids.scrollid.add_widget(card)
+                layout.add_widget(timelab)
+                card.add_widget(layout)
+                card.docid = jsanaliz['documents'][i]['documentId']
+                card.bind(on_release=self.manager.get_screen('lkcard').documentview)
+                self.ids.scrollid.add_widget(card)
         self.manager.current = 'decrypt'
     def OKAK(self, html, age, gender, date):
         try:

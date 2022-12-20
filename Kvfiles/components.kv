@@ -331,13 +331,17 @@
             center_y: self.parent.center_y
             allow_stretch: True
             size: 300, 350
-    MDCard:
-        orientation: "vertical"
-        pos_hint: {'center_x': .47, 'center_y': .55}
-        size_hint: .7, .7
-        radius: [30]
-        md_bg_color: 1,1,1,1
-        id: lay
+    ScrollView:
+        size_hint: .6, .9
+        md_bg_color: 1,1,1,0
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        GridLayout:
+            scroll_distance: 30
+            cols:1
+            spacing:10
+            size_hint_y: None
+            height: self.minimum_height
+            id: lay
 <Napravlenia>:
     name: 'napr'
     MDTextButton:

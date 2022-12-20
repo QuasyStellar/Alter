@@ -138,28 +138,31 @@ class OMSLoged(Screen):
                                         "params": {"omsNumber": self.oms, "birthDate": self.bdates, "typeAttach": [0, 1, 2],
                                                    "onlyMoscowPolicy": False}})
         jsinf = inf.json()
-        layout = RelativeLayout()
+        rlayout = RelativeLayout()
         for i in range(len(jsinf['result']['attachments']['attachment'])):
+            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
+                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
             name = MDLabel(
                 text=jsinf['result']['attachments']['attachment'][i]['lpu']['name']
             )
             name.font_size = 45
             name.pos_hint = {'center_x': .55, 'center_y': .8}
-            layout.add_widget(name)
+            rlayout.add_widget(name)
             address = MDLabel(
                 text=jsinf['result']['attachments']['attachment'][i]['lpu']['address']
             )
             address.font_size = 35
             address.pos_hint = {'center_x': .55, 'center_y': .6}
-            layout.add_widget(address)
+            rlayout.add_widget(address)
             time = datetime.datetime.fromisoformat(jsinf['result']['attachments']['attachment'][i]['createDate'])
             create = MDLabel(
                 text=f'{time.strftime("Прикреплено от %d %B %Y")}',
             )
             create.font_size = 35
             create.pos_hint = {'center_x': .55, 'center_y': .4}
-            layout.add_widget(create)
-            self.manager.get_screen('prik').ids.lay.add_widget(layout)
+            rlayout.add_widget(create)
+            card.add_widget(rlayout)
+            self.manager.get_screen('prik').ids.lay.add_widget(card)
         self.manager.current = 'prik'
 
     def zapisi(self):
