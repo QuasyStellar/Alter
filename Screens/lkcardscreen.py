@@ -21,7 +21,7 @@ from kivymd.uix.card import MDCard
 
 
 class LKCard(Screen):
-    def show_document(self):
+    def show_document(self, hei):
         dialog = None
         box = BoxLayout()
         lay = RelativeLayout()
@@ -38,7 +38,7 @@ class LKCard(Screen):
             on_release=lambda _: self.dialog.dismiss(),
             size_hint=(None, None)
         )
-        ima.height = 3500
+        ima.height = hei
         lay.height = ima.height
         but.height = 150
         but.width = 200
@@ -66,9 +66,10 @@ class LKCard(Screen):
         html = html.replace('<span>отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
         html = html.replace('<span>норма</span>', '<span style="color: green">НОРМА</span>')
         html = html.replace('<span>Норма</span>', '<span style="color: green">НОРМА</span>')
+        hei = html.count('<tr>')*80
         hti = Html2Image()
-        hti.screenshot(html_str=html, save_as='document.png', size=(1000, 3500))
-        self.show_document()
+        hti.screenshot(html_str=html, save_as='document.png', size=(1000, hei))
+        self.show_document(hei)
 
     def historyanamnes(self, instance):
         anamnes = self.s.get(
