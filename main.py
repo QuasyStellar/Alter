@@ -45,7 +45,7 @@ class Showdate(Screen):
             else:
                 None
         except:
-            Nonet
+            None
 
 
 class Perenos(Screen):
