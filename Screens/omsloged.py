@@ -138,8 +138,8 @@ class OMSLoged(Screen):
                                         "params": {"omsNumber": self.oms, "birthDate": self.bdates, "typeAttach": [0, 1, 2],
                                                    "onlyMoscowPolicy": False}})
         jsinf = inf.json()
-        rlayout = RelativeLayout()
         for i in range(len(jsinf['result']['attachments']['attachment'])):
+            rlayout = RelativeLayout()
             card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
                           md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
             name = MDLabel(

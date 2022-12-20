@@ -1,5 +1,6 @@
 import sys
 import time
+import datetime
 import locale
 locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
@@ -35,7 +36,7 @@ class MOSScreen(Screen):
         chrome_options.add_argument("--app=https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
        	chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
         chrome_options.add_experimental_option('useAutomationExtension', False)
-        chrome_options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36")
+        chrome_options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
         chrome_options.add_argument("window-size=600,960")
         chrome_options.add_argument('window-position=960,150')
         chrome_options.add_experimental_option('prefs', {
@@ -71,10 +72,10 @@ class MOSScreen(Screen):
                 else:
                     gender = 1
                 sure = jsdata["profile"]['middleName'] +" "+jsdata["profile"]['lastName']
-                time = datetime.datetime.strptime(bdates, "%Y.%m.%d")
-                year = int(time.strftime("%Y"))
-                month = int(time.strftime('%m'))
-                day = int(time.strftime('%d'))
+                times = datetime.datetime.strptime(bdates, "%Y-%m-%d")
+                year = int(times.strftime("%Y"))
+                month = int(times.strftime('%m'))
+                day = int(times.strftime('%d'))
                 age = f"{day}.{month}.{year}"
 
                 s = requests.Session()

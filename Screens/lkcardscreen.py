@@ -1,6 +1,7 @@
 import datetime
 import locale
 from kivy.uix.image import Image
+
 locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
@@ -20,20 +21,6 @@ from kivymd.uix.card import MDCard
 
 
 class LKCard(Screen):
-    def OKAKLK(self, instance):
-        prosmotr = self.s.get(
-            f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
-            headers={'X-Access-JWT': self.authtoken})
-        jspros = prosmotr.json()
-        html = jspros['documentHtml'].replace('\n', '')
-        OKAK(html, self.age, self.gender, instance.date)
-    def OAMLK(self, instance):
-        prosmotr = self.s.get(
-            f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
-            headers={'X-Access-JWT': self.authtoken})
-        jspros = prosmotr.json()
-        html = jspros['documentHtml'].replace('\n', '')
-        OAM(html, self.age, self.gender, instance.date)
     def show_document(self):
         dialog = None
         box = BoxLayout()
@@ -47,11 +34,11 @@ class LKCard(Screen):
         ima.size_hint_y = None
         ima.reload()
         but = MDRaisedButton(
-                    text="Выйти",
-                    on_release=lambda _: self.dialog.dismiss(),
-                    size_hint=(None, None)
-                )
-        ima.height = 3500  
+            text="Выйти",
+            on_release=lambda _: self.dialog.dismiss(),
+            size_hint=(None, None)
+        )
+        ima.height = 3500
         lay.height = ima.height
         but.height = 150
         but.width = 200
@@ -61,13 +48,14 @@ class LKCard(Screen):
         self.dialog = MDDialog(
             type='custom',
             content_cls=scrollview,
-            size_hint_x= .5,
-            elevation = 0,
+            size_hint_x=.5,
+            elevation=0,
             buttons=[
                 but,
-                ]
+            ]
         )
         self.dialog.open()
+
     def documentview(self, instance):
         prosmotr = self.s.get(
             f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
@@ -82,10 +70,10 @@ class LKCard(Screen):
         hti.screenshot(html_str=html, save_as='document.png', size=(1000, 3500))
         self.show_document()
 
-
     def historyanamnes(self, instance):
-        anamnes = self.s.get(f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={self.idus}&shortDateFilter=all_time',
-                        headers={'X-Access-JWT': self.authtoken})
+        anamnes = self.s.get(
+            f'https://lk.emias.mos.ru/api/1/documents/inspections?ehrId={self.idus}&shortDateFilter=all_time',
+            headers={'X-Access-JWT': self.authtoken})
         jsanam = anamnes.json()
         for i in range(len(jsanam['documents'])):
             card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
@@ -96,34 +84,37 @@ class LKCard(Screen):
                 if date[0:4] == instance.year:
                     flag = False
                     try:
-                        doctorspec = MDLabel(
-                            text=f"{jsanam['documents'][i]['doctorSpecialization']}",
-                            theme_text_color='Custom',
-                            text_color='white',
-                        )
-                        doctorspec.font_size = 45
-                        doctorspec.pos_hint = {'center_x': .55, 'center_y': .8}
-                        layout.add_widget(doctorspec)
+                        if 'doctorSpecialization' in jsanam['documents'][i] and jsanam['documents'][i]['doctorSpecialization'] != None:
+                            doctorspec = MDLabel(
+                                text=f"{jsanam['documents'][i]['doctorSpecialization']}",
+                                theme_text_color='Custom',
+                                text_color='white',
+                            )
+                            doctorspec.font_size = 45
+                            doctorspec.pos_hint = {'center_x': .55, 'center_y': .8}
+                            layout.add_widget(doctorspec)
                     except:
-                        title = MDLabel(
-                            text=f"{jsanam['documents'][i]['title']}",
-                            theme_text_color='Custom',
-                            text_color='white',
-                        )
-                        title.font_size = 45
-                        title.pos_hint = {'center_x': .55, 'center_y': .8}
-                        layout.add_widget(title)
-                        flag = True
+                        if 'title' in jsanam['documents'][i] and jsanam['documents'][i]['title'] != None:
+                            title = MDLabel(
+                                text=f"{jsanam['documents'][i]['title']}",
+                                theme_text_color='Custom',
+                                text_color='white',
+                            )
+                            title.font_size = 45
+                            title.pos_hint = {'center_x': .55, 'center_y': .8}
+                            layout.add_widget(title)
+                            flag = True
                     if flag == False:
-                        title = MDLabel(
-                            text=f"{jsanam['documents'][i]['title']}",
-                            theme_text_color='Custom',
-                            text_color='white',
-                        )
-                        title.font_size = 45
-                        title.pos_hint = {'center_x': .55, 'center_y': .6}
-                        layout.add_widget(title)
-                    if 'doctorName' in jsanam['documents'][i]:
+                        if 'title' in jsanam['documents'][i] and jsanam['documents'][i]['title'] != None:
+                            title = MDLabel(
+                                text=f"{jsanam['documents'][i]['title']}",
+                                theme_text_color='Custom',
+                                text_color='white',
+                            )
+                            title.font_size = 45
+                            title.pos_hint = {'center_x': .55, 'center_y': .6}
+                            layout.add_widget(title)
+                    if 'doctorName' in jsanam['documents'][i] and jsanam['documents'][i]['doctorName'] != None:
                         doctorname = MDLabel(
                             text=f"{jsanam['documents'][i]['doctorName']}",
                             theme_text_color='Custom',
@@ -132,7 +123,7 @@ class LKCard(Screen):
                         doctorname.font_size = 45
                         doctorname.pos_hint = {'center_x': .55, 'center_y': .4}
                         layout.add_widget(doctorname)
-                    if 'appointmentDate' in jsanam['documents'][i]:
+                    if 'appointmentDate' in jsanam['documents'][i] and jsanam['documents'][i]['appointmentDate'] != None:
                         time = datetime.datetime.fromisoformat(jsanam['documents'][i]['appointmentDate'])
                         timelab = MDLabel(
                             text=f'{time.strftime("%a, %d %b %Y")}',
@@ -142,7 +133,7 @@ class LKCard(Screen):
                         timelab.font_size = 35
                         timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
                         layout.add_widget(timelab)
-                    if 'organisation' in jsanam['documents'][i]:
+                    if 'organisation' in jsanam['documents'][i] and jsanam['documents'][i]['organisation'] != None:
                         address = MDLabel(
                             text=jsanam['documents'][i]['organisation'],
                             theme_text_color='Custom',
@@ -185,7 +176,7 @@ class LKCard(Screen):
                 timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
                 layout.add_widget(timelab)
                 card.docid = jscov["documents"][i]["documentId"]
-                card.bind(on_release = self.documentview)
+                card.bind(on_release=self.documentview)
                 card.add_widget(layout)
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
@@ -221,12 +212,13 @@ class LKCard(Screen):
             self.manager.current = 'history'
 
         def myanaliz(*args):
-            analiz = self.s.get(f'https://lk.emias.mos.ru/api/1/documents/analyzes?ehrId={self.idus}&shortDateFilter=all_time',
-                           headers={'X-Access-JWT': self.authtoken})
+            analiz = self.s.get(
+                f'https://lk.emias.mos.ru/api/1/documents/analyzes?ehrId={self.idus}&shortDateFilter=all_time',
+                headers={'X-Access-JWT': self.authtoken})
             jsanaliz = analiz.json()
             for i in range(len(jsanaliz['documents'])):
                 card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                 layout = RelativeLayout()
                 title = MDLabel(
                     text=f"{jsanaliz['documents'][i]['title']}",
@@ -251,14 +243,14 @@ class LKCard(Screen):
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
 
-
         def myldp(*args):
-            ldp = self.s.get(f'https://lk.emias.mos.ru/api/1/documents/research?ehrId={self.idus}&shortDateFilter=all_time',
-                        headers={'X-Access-JWT': self.authtoken})
+            ldp = self.s.get(
+                f'https://lk.emias.mos.ru/api/1/documents/research?ehrId={self.idus}&shortDateFilter=all_time',
+                headers={'X-Access-JWT': self.authtoken})
             jsldp = ldp.json()
             for i in range(len(jsldp['documents'])):
                 card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                 layout = RelativeLayout()
                 title = MDLabel(
                     text=f"{jsldp['documents'][i]['title']}",
@@ -278,10 +270,10 @@ class LKCard(Screen):
                 timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
                 layout.add_widget(timelab)
                 doctorname = MDLabel(
-                            text=f"{jsldp['documents'][i]['muName']}",
-                            theme_text_color='Custom',
-                            text_color='white',
-                        )
+                    text=f"{jsldp['documents'][i]['muName']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
                 doctorname.font_size = 45
                 doctorname.pos_hint = {'center_x': .55, 'center_y': .4}
                 layout.add_widget(doctorname)
@@ -290,6 +282,7 @@ class LKCard(Screen):
                 card.bind(on_release=self.documentview)
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
+
         def myboln(*args):
             None
 
@@ -310,34 +303,33 @@ class LKCard(Screen):
                 title.font_size = 45
                 title.pos_hint = {'center_x': .55, 'center_y': .8}
                 layout.add_widget(title)
-                
 
                 doctorname = MDLabel(
-                            text=f"{jssp['certificates095'][i]['medicalEmployeeName']}",
-                            theme_text_color='Custom',
-                            text_color='white',
-                        )
+                    text=f"{jssp['certificates095'][i]['medicalEmployeeName']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
                 doctorname.font_size = 45
                 doctorname.pos_hint = {'center_x': .55, 'center_y': .4}
                 layout.add_widget(doctorname)
                 doctorspec = MDLabel(
-                            text=f"{jssp['certificates095'][i]['medicalEmployeeSpeciality']}",
-                            theme_text_color='Custom',
-                            text_color='white',
-                        )
+                    text=f"{jssp['certificates095'][i]['medicalEmployeeSpeciality']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
                 doctorspec.font_size = 45
                 doctorspec.pos_hint = {'center_x': .55, 'center_y': .6}
                 layout.add_widget(doctorspec)
                 mu = MDLabel(
-                            text=f"{jssp['certificates095'][i]['muName']}",
-                            theme_text_color='Custom',
-                            text_color='white',
-                        )
+                    text=f"{jssp['certificates095'][i]['muName']}",
+                    theme_text_color='Custom',
+                    text_color='white',
+                )
                 mu.font_size = 45
                 mu.pos_hint = {'center_x': .55, 'center_y': .6}
                 layout.add_widget(mu)
                 card.docid = jssp['certificates095'][i]['documentId']
-                card.bind(on_release = self.documentview)
+                card.bind(on_release=self.documentview)
                 card.add_widget(layout)
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
@@ -349,7 +341,7 @@ class LKCard(Screen):
             jsstac = stacionar.json()
             for i in range(len(jsstac['documents'])):
                 card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                 layout = RelativeLayout()
                 title = MDLabel(
                     text=f"{jsstac['documents'][i]['organisation']}",
@@ -359,7 +351,7 @@ class LKCard(Screen):
                 title.font_size = 45
                 title.pos_hint = {'center_x': .55, 'center_y': .8}
                 layout.add_widget(title)
-                time = datetime.datetime.strptime(jsstac['documents'][i]['dischargeDate'], "%Y-%m-%dT%H:%M:%S%z") 
+                time = datetime.datetime.strptime(jsstac['documents'][i]['dischargeDate'], "%Y-%m-%dT%H:%M:%S%z")
                 timelab = MDLabel(
                     text=f'{time.strftime("%a, %d %b %Y")}',
                     theme_text_color='Custom',
@@ -373,34 +365,33 @@ class LKCard(Screen):
                 card.bind(on_release=self.documentview)
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
-            
 
         def myrecepies(*args):
             recepies = self.s.get(f'https://lk.emias.mos.ru/api/2/receipt?ehrId={self.idus}&shortDateFilter=all_time',
-                             headers={'X-Access-JWT': self.authtoken})
+                                  headers={'X-Access-JWT': self.authtoken})
             jsrec = recepies.json()
             for i in range(len(jsrec['receipts'])):
                 layout = RelativeLayout()
                 if jsrec['receipts'][i]['prescriptionStatus'] == 'expired':
                     doctorspec = MDLabel(
-                            text=f"Cтатус: Просрочен",
-                            theme_text_color='Custom',
-                            text_color='white',
-                        )
+                        text=f"Cтатус: Просрочен",
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
                     doctorspec.font_size = 45
                     doctorspec.pos_hint = {'center_x': .55, 'center_y': .6}
                     layout.add_widget(doctorspec)
                 else:
                     doctorspec = MDLabel(
-                            text=f"Cтатус: Действует",
-                            theme_text_color='Custom',
-                            text_color='white',
-                        )
+                        text=f"Cтатус: Действует",
+                        theme_text_color='Custom',
+                        text_color='white',
+                    )
                     doctorspec.font_size = 45
                     doctorspec.pos_hint = {'center_x': .55, 'center_y': .6}
                     layout.add_widget(doctorspec)
                 card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                 title = MDLabel(
                     text=f"{jsrec['receipts'][i]['medicineName']}",
                     theme_text_color='Custom',
@@ -426,14 +417,16 @@ class LKCard(Screen):
                 )
                 timelabs.font_size = 35
                 timelabs.pos_hint = {'center_x': .55, 'center_y': .2}
-                prosmotr = self.s.get(f"https://lk.emias.mos.ru/api/3/receipt/details?ehrId={self.idus}&prescriptionNumber={jsrec['receipts'][i]['prescriptionNumber']}",
+                prosmotr = self.s.get(
+                    f"https://lk.emias.mos.ru/api/3/receipt/details?ehrId={self.idus}&prescriptionNumber={jsrec['receipts'][i]['prescriptionNumber']}",
                     headers={'X-Access-JWT': self.authtoken})
                 jspros = prosmotr.json()
-                svg_code =  jspros['qrCode']
-                svg2png(bytestring=svg_code,output_width=350, output_height=350, write_to='document.png', negate_colors= (1,1,1,1))
+                svg_code = jspros['qrCode']
+                svg2png(bytestring=svg_code, output_width=350, output_height=350, write_to='document.png',
+                        negate_colors=(1, 1, 1, 1))
                 ima = Image(
                     source='document.png',
-                    size_hint = (None, None)
+                    size_hint=(None, None)
                 )
                 ima.height = 300
                 ima.width = 300
@@ -445,7 +438,6 @@ class LKCard(Screen):
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
 
-
         def myemergency(*args):
             emergency = self.s.get(
                 f'https://lk.emias.mos.ru/api/1/documents/ambulance?ehrId={self.idus}&shortDateFilter=all_time',
@@ -453,7 +445,7 @@ class LKCard(Screen):
             jsemg = emergency.json()
             for i in range(len(jsemg['documents'])):
                 card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
                 layout = RelativeLayout()
                 title = MDLabel(
                     text=f"{jsemg['documents'][i]['diagnosis']}",
@@ -464,7 +456,7 @@ class LKCard(Screen):
                 title.pos_hint = {'center_x': .55, 'center_y': .8}
                 layout.add_widget(title)
                 timeclean = jsemg['documents'][i]['callDate']
-                time = datetime.datetime.strptime(timeclean[0:16], "%Y-%m-%dT%H:%M") 
+                time = datetime.datetime.strptime(timeclean[0:16], "%Y-%m-%dT%H:%M")
                 timelab = MDLabel(
                     text=f'{time.strftime("%a, %d %b %Y")}',
                     theme_text_color='Custom',
@@ -478,7 +470,6 @@ class LKCard(Screen):
                 card.bind(on_release=self.documentview)
                 self.manager.get_screen("history").ids.scrollid.add_widget(card)
             self.manager.current = 'history'
-
 
         if id == 1:
             Clock.schedule_once(covidtest)
