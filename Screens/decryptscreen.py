@@ -26,28 +26,30 @@ class Decrypt(Screen):
     def report(self, report):
         dialog = None
         print(report)
-        box = BoxLayout()
-        lay = RelativeLayout()
+        lay = BoxLayout(orientation='vertical', padding = (50, 50), spacing=50)
         scrollview = ScrollView(size_hint=(.8, None))
         scrollview.height = 900
         lay.size_hint_y = None
         for i in range(len(report['interpretations'])):
             title = MDLabel(
-                    text=f"{report['interpretations'][i]['title']}",
+                    text=f"[color=#18191b]{report['interpretations'][i]['title']}[/color]",
                     theme_text_color='Custom',
                     text_color='white',
+                    bold= True,
+                    markup = True
                 )
-            title.font_size = 80
+            title.font_size = 30
             lay.add_widget(title)
             try:
-                det = report['interpretations'][i]['detail'].split('.')
+                det = report['interpretations'][i]['detail'].replace(".",'.#').split('#')
                 for details in det:
                     texts = MDLabel(
-                            text=f"{details}",
+                            text=f"[color=#18191b]{details}[/color]",
                             theme_text_color='Custom',
                             text_color='white',
+                            markup = True
                         )
-                    texts.font_size = 40
+                    texts.font_size = 20
                     lay.add_widget(texts)
             except:
                 None
@@ -55,23 +57,24 @@ class Decrypt(Screen):
                 sug = report['interpretations'][i]['suggestions'].split('.')
                 for sugs in sug:
                     s = MDLabel(
-                            text=f"{sugs}",
+                            text=f"[color=#18191b]{sugs}[/color]",
                             theme_text_color='Custom',
                             text_color='white',
+                            markup = True
                         )
                     s.font_size = 40
                     lay.add_widget(s)
             except:
                 None
-        for i in range(len(report['resultsOutOfRange'])):
-            print(report['resultsOutOfRange'][i]['name'])
-            if report['resultsOutOfRange'][i]['refLow']<=report['resultsOutOfRange'][i]['displayValue']<=report['resultsOutOfRange'][i]['refHi']:
-                print('Норма')
-            elif report['resultsOutOfRange'][i]['refLow']>=report['resultsOutOfRange'][i]['displayValue']:
-                print('Отклонение ниже нормы')
-            else:
-                print("Отклонение выше нормы")
-            print(report['resultsOutOfRange'][i]['displayValue'])
+        # for i in range(len(report['resultsOutOfRange'])):
+        #     print(report['resultsOutOfRange'][i]['name'])
+        #     if report['resultsOutOfRange'][i]['refLow']<=report['resultsOutOfRange'][i]['displayValue']<=report['resultsOutOfRange'][i]['refHi']:
+        #         print('Норма')
+        #     elif report['resultsOutOfRange'][i]['refLow']>=report['resultsOutOfRange'][i]['displayValue']:
+        #         print('Отклонение ниже нормы')
+        #     else:
+        #         print("Отклонение выше нормы")
+        #     print(report['resultsOutOfRange'][i]['displayValue'])
         but = MDRaisedButton(
             text="Выйти",
             on_release=lambda _: self.dialog.dismiss(),
