@@ -115,7 +115,7 @@
         pos_hint: {'center_x': .5, 'center_y': .2}
         size_hint: .27, .26
         radius: [30]
-        on_release: root.exits()
+        on_release: root.manager.current = 'priem'
         Image:
             source: 'Assets/mosloged/priemmosbutton.png'
             center_x: self.parent.center_x
