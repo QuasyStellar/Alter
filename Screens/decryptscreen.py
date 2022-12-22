@@ -21,49 +21,27 @@ from kivymd.uix.dialog import MDDialog
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from kivymd.uix.card import MDCard
+from kivy.uix.rst import RstDocument
 class Decrypt(Screen):
     dialogerror = None
     def report(self, report):
         dialog = None
-        print(report)
-        lay = BoxLayout(orientation='vertical', padding = (50, 50), spacing=50)
-        scrollview = ScrollView(size_hint=(.8, None))
-        scrollview.height = 900
-        lay.size_hint_y = None
+        text = ''
         for i in range(len(report['interpretations'])):
-            title = MDLabel(
-                    text=f"[color=#18191b]{report['interpretations'][i]['title']}[/color]",
-                    theme_text_color='Custom',
-                    text_color='white',
-                    bold= True,
-                    markup = True
-                )
-            title.font_size = 30
-            lay.add_widget(title)
             try:
-                det = report['interpretations'][i]['detail'].replace(".",'.#').split('#')
-                for details in det:
-                    texts = MDLabel(
-                            text=f"[color=#18191b]{details}[/color]",
-                            theme_text_color='Custom',
-                            text_color='white',
-                            markup = True
-                        )
-                    texts.font_size = 20
-                    lay.add_widget(texts)
+                mark = '='*len(report['interpretations'][i]['title'])
+                title= f"{report['interpretations'][i]['title']}\n{mark}\n"
+                text += title
             except:
                 None
             try:
-                sug = report['interpretations'][i]['suggestions'].split('.')
-                for sugs in sug:
-                    s = MDLabel(
-                            text=f"[color=#18191b]{sugs}[/color]",
-                            theme_text_color='Custom',
-                            text_color='white',
-                            markup = True
-                        )
-                    s.font_size = 40
-                    lay.add_widget(s)
+                det = f"{report['interpretations'][i]['detail']}\n"
+                text += det
+            except:
+                None
+            try:
+                sug = f"{report['interpretations'][i]['suggestions']}\n"
+                text += sug
             except:
                 None
         # for i in range(len(report['resultsOutOfRange'])):
@@ -75,6 +53,7 @@ class Decrypt(Screen):
         #     else:
         #         print("Отклонение выше нормы")
         #     print(report['resultsOutOfRange'][i]['displayValue'])
+        document = RstDocument(text=text)
         but = MDRaisedButton(
             text="Выйти",
             on_release=lambda _: self.dialog.dismiss(),
@@ -83,10 +62,10 @@ class Decrypt(Screen):
         but.height = 150
         but.width = 200
         but.font_size = 30
-        scrollview.add_widget(lay)
+        # scrollview.add_widget(lay)
         self.dialog = MDDialog(
             type='custom',
-            content_cls=scrollview,
+            content_cls=document,
             size_hint_x=.5,
             elevation=0,
             buttons=[
@@ -206,7 +185,7 @@ class Decrypt(Screen):
         wbc = None
         rbc = None
         hgb = None
-        htc = None
+        hct = None
         mcv = None
         mch = None
         mchc = None
