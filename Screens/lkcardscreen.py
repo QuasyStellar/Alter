@@ -69,7 +69,7 @@ class LKCard(Screen):
         html = html.replace('<span>отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
         html = html.replace('<span>норма</span>', '<span style="color: green">НОРМА</span>')
         html = html.replace('<span>Норма</span>', '<span style="color: green">НОРМА</span>')
-        hei = html.count('<tr>')*80
+        hei = 3500
         hti = Html2Image()
         hti.screenshot(html_str=html, save_as='document.png', size=(1000, hei))
         self.show_document(hei)

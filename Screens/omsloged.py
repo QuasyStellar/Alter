@@ -425,6 +425,7 @@ class OMSLoged(Screen):
                                 text_color='white',
                             )
                             perenos.vrachnum = i
+                            perenos.zapisvibor = zapisvibor
                             perenos.bind(on_release=self.showdateandtime)
                             perenos.pos_hint = {'center_x': .85, 'center_y': .2}
                             perenos.font_size = 40
@@ -505,6 +506,7 @@ class OMSLoged(Screen):
                                 text_color='white',
                             )
                             perenos.vrachnum = i
+                            perenos.zapisvibor = zapisvibor
                             perenos.bind(on_release=self.showdateandtime)
                             perenos.pos_hint = {'center_x': .85, 'center_y': .2}
                             perenos.font_size = 40
@@ -515,6 +517,7 @@ class OMSLoged(Screen):
 
     def showdateandtime(self, instance):
         vrachchoose = instance.vrachnum
+        zapisvibor =  instance.zapisvibor
         spisokzapisei = requests.post("https://emias.info/api/emc/appointment-eip/v1/?getAppointmentReceptionsByPatient", json={"jsonrpc": "2.0", "id": "H0XYtGjt9CtPQqfGt7NYp",
                                                      "method": "getAppointmentReceptionsByPatient",
                                                      "params": {"omsNumber": self.oms, "birthDate": self.bdates}})

@@ -11,3 +11,15 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
+    MDTextButton:
+        size_hint: .18, .15
+        halign: 'center'
+        pos_hint: {'center_x': .911, 'center_y': .1}
+        font_size: dp(25)
+        on_release: root.exits()
+        Image:
+            source: 'Assets/exitbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: 300, 350

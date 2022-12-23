@@ -119,6 +119,7 @@ class MOSScreen(Screen):
         self.manager.get_screen("loged").oms = oms
         self.manager.get_screen('loged').bdates = bdates
         self.manager.get_screen('loged').types = 'mos'
+        self.manager.get_screen('priem').cur = 'mosloged'
     def back(self):
         self.manager.current = "enter"
 

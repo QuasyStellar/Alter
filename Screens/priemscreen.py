@@ -20,6 +20,9 @@ from kivy.uix.screenmanager import Screen
 import requests
 class Priem(Screen):
 	dialogerror = None
+	def exits(self):
+		self.manager.current = self.cur
+
 	def report(self, report):
 		dialog = None
 		scrollview = ScrollView(size_hint=(.9, None))
@@ -75,34 +78,15 @@ class Priem(Screen):
 		    )
 		self.dialogerror.open()
 	def helzy(self):
-		def priem(driver):
-			driver.get('https://helzy.ru/anamnesis/1')
-			driver.execute_script("document.body.style.zoom='200%'")
-			driver.maximize_window()
-			try:
-			    while (driver.current_url != 'https://helzy.ru/report/1') and (driver.current_url != 'https://helzy.ru/'):
-			        None
-			    else:
-			        if driver.current_url == 'https://helzy.ru/':
-			          	priem(driver)
-			        else:
-			            driver.quit()
-			            reports = requests.get('https://helzy.ru/api/v1/reports',
-			                                  headers={'appsessionid': app}).json()
-			            self.report(reports)
-			except:
-			    self.error_dialog()
-
 		dc = DesiredCapabilities.CHROME
 		dc["goog:loggingPrefs"] = {"browser": "ALL"}
 		app = requests.post('https://helzy.ru/api/v1/sessions').json()['appSessionId']
 		chrome_options = Options()
 		chrome_options.add_argument("--app=https://helzy.ru")
-		chrome_options.add_argument('--kiosk')
+		chrome_options.add_argument('--window-size=1,1')
 		chrome_options.add_experimental_option("useAutomationExtension", False)
 		chrome_options.add_experimental_option(
 		    "excludeSwitches", ["enable-automation"])
-		chrome_options.add_argument('window-position=5000,5000')
 		chrome_options.add_experimental_option('prefs', {
 		    'credentials_enable_service': False,
 		    'profile': {
@@ -115,8 +99,21 @@ class Priem(Screen):
 		    options=chrome_options,
 		    desired_capabilities=dc
 		)
-		driver.minimize_window()
-		driver.get('https://helzy.ru/')
 		idb = IndexedDB(driver, "ngStorage", 1)
 		idb.add_value("localStorage", "helzyCheckId", app)
-		priem(driver)
+		driver.get('https://helzy.ru/anamnesis/1')
+		driver.execute_script("document.body.style.zoom='200%'")
+		driver.maximize_window()
+		try:
+			while (driver.current_url != 'https://helzy.ru/report/1') and (driver.current_url != 'https://helzy.ru/'):
+				None
+			else:
+				if driver.current_url == 'https://helzy.ru/':
+					self.error_dialog()
+				else:
+					driver.quit()
+					reports = requests.get('https://helzy.ru/api/v1/reports',
+										   headers={'appsessionid': app}).json()
+					self.report(reports)
+		except:
+			self.error_dialog()

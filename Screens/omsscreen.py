@@ -32,6 +32,7 @@ class OMSScreen(Screen):
         self.manager.get_screen("loged").oms = policy
         self.manager.get_screen('loged').bdates = bdate
         self.manager.get_screen('loged').types = 'oms'
+        self.manager.get_screen('priem').cur = 'omsloged'
     def back(self):
         self.manager.current = "enter"
         self.bdate.helper_text = ""
