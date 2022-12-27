@@ -1,7 +1,9 @@
 import datetime
 import locale
 from kivy.uix.image import Image
-
+from selenium import webdriver
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
 locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
@@ -15,13 +17,11 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.dialog import MDDialog
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from kivymd.uix.card import MDCard
 
 
 class LKCard(Screen):
-    def show_document(self, hei):
+    def show_document(self):
         dialog = None
         box = BoxLayout()
         lay = RelativeLayout()
@@ -38,7 +38,7 @@ class LKCard(Screen):
             on_release=lambda _: self.dialog.dismiss(),
             size_hint=(None, None)
         )
-        ima.height = hei
+        ima.height = ima.texture_size[1]
         lay.height = ima.height
         but.height = 150
         but.width = 200
@@ -61,18 +61,19 @@ class LKCard(Screen):
             f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
             headers={'X-Access-JWT': self.authtoken})
         jspros = prosmotr.json()
-        try:
-            html = jspros['documentHtml']
-        except:
-            self.documentview(instance)
+        html = jspros['documentHtml']
         html = html.replace('<span>Отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
         html = html.replace('<span>отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
         html = html.replace('<span>норма</span>', '<span style="color: green">НОРМА</span>')
         html = html.replace('<span>Норма</span>', '<span style="color: green">НОРМА</span>')
-        hei = 3500
-        hti = Html2Image()
-        hti.screenshot(html_str=html, save_as='document.png', size=(1000, hei))
-        self.show_document(hei)
+        options = Options()
+        options.headless = True
+        options.add_argument("--width=1000")
+        driver = webdriver.Firefox(options=options)
+        driver.get(f"data:text/html;charset=utf-8,{html}")
+        driver.get_full_page_screenshot_as_file('document.png')
+        driver.close()
+        self.show_document()
 
     def historyanamnes(self, instance):
         anamnes = self.s.get(

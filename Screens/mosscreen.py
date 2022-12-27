@@ -73,9 +73,9 @@ class MOSScreen(Screen):
                     gender = 1
                 sure = jsdata["profile"]['middleName'] +" "+jsdata["profile"]['lastName']
                 times = datetime.datetime.strptime(bdates, "%Y-%m-%d")
-                year = int(times.strftime("%Y"))
-                month = int(times.strftime('%m'))
-                day = int(times.strftime('%d'))
+                year = times.strftime("%Y")
+                month = times.strftime('%m')
+                day = times.strftime('%d')
                 age = f"{day}.{month}.{year}"
 
                 s = requests.Session()
