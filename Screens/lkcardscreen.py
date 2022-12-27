@@ -61,7 +61,10 @@ class LKCard(Screen):
             f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
             headers={'X-Access-JWT': self.authtoken})
         jspros = prosmotr.json()
-        html = jspros['documentHtml']
+        try:
+            html = jspros['documentHtml']
+        except:
+            self.documentview(instance)
         html = html.replace('<span>Отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
         html = html.replace('<span>отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
         html = html.replace('<span>норма</span>', '<span style="color: green">НОРМА</span>')
