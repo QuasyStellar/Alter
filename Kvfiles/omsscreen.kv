@@ -1,105 +1,106 @@
 <OMSScreen>:
-    bdate: bdate
-    policy: policy
     name: 'oms'
+    md_bg_color: (114/255, 195/255, 172/255, 0.49)
     Image:
         source: 'Assets/omsscreen/omsbg.png'
         allow_stretch: True
         keep_ratio: False
-    MDFillRoundFlatButton:
-        text: '< Назад'
-        markup: True
-        pos_hint: {'center_x': .626, 'center_y': .2}
-        font_name: 'Assets/roboto'
-        font_size: dp(40)
-        size_hint: .25,.1
-        md_bg_color: 0/255, 106/255, 240/255, .4
-        on_press:
-            root.back()
-            root.manager.transition.direction = "up"
-        ripple_color: 1, 0, 0, 0.1
-        bold: True
+    MDTextButton:
+        size_hint: .38, .25
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .12}
+        font_size: dp(25)
+        on_release:
+            root.manager.transition = FadeTransition(duration=.1)
+            root.manager.current = 'enter'
+            root.manager.get_screen('enter').on_touch_down()
+        Image:
+            source: 'Assets/omsscreen/exitbut.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
     RelativeLayout:
         id: omsrefresh
+        MDTextField:
+            id: policy
+            text_color_focus: get_color_from_hex('#E2F9F2')
+            text_color_normal: get_color_from_hex('#E2F9F2')
+            mode: "fill"
+            helper_text_color_normal: (114/255, 195/255, 172/255, .49)
+            fill_color_focus:  get_color_from_hex("#32494B")
+            size_hint: .332, .08
+            on_touch_down: root.validation()
+            on_text_validate: root.validation()
+            active_line: False
+            fill_color_normal: 53/255,73/255,75/255,0
+            line_color_focus: (0/255, 228/255, 182/255, 0)
+            multiline: False
+            on_text:
+                root.cou()
+                root.validation()
+            font_size: 50
+            radius: [15]
+            line_color_normal: (114/255, 195/255, 172/255, 0)
+            pos_hint: {'center_x': .601, 'center_y': .63}
+            input_filter: 'int'
+
+        MDLabel:
+            id: counts
+            text: "0/16"
+            halign: "center"
+            pos_hint: {'center_x': .75, 'center_y': .56}
+            theme_text_color: "Custom"
+            text_color: "white"
+            font_size: 30
+        MDTextButton:
+            size_hint: .35, .1
+            halign: 'center'
+            pos_hint: {'center_x': .6, 'center_y': .35}
+            font_size: dp(25)
+            on_release:
+                root.omslogin()
+            Image:
+                source: 'Assets/omsscreen/enter.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+                allow_stretch: True
+                size: self.parent.size
         MDCard:
-            orientation: "vertical"
-            pos_hint: {'center_x': .626, 'center_y': .5}
-            size_hint: .25, .45
-            radius:[30]
-            md_bg_color: 0/255, 106/255, 240/255, .4
-            RelativeLayout:
-                orientation: 'vertical'
-                size_hint: 1, 1
-                MDTextField:
-                    id: policy
-                    hint_text: "Номер полиса"
-                    mode: "fill"
-                    fill_color_normal: 0/255, 106/255, 240/255, .4
-                    max_text_length: 16
-                    hint_text_color_normal: "white"
-                    helper_text_color_normal: "white"
-                    helper_text_color_focus: 'white'
-                    icon_left_color_normal: 'white'
-                    max_length_text_color: 'white'
-                    helper_text: 'Например 7700 0000 0000 0000'
-                    min_text_length: 16
-                    text_color_normal: "white"
-                    font_size: dp(40)
-                    input_filter: 'int'
-                    pos_hint: {'center_x': .5, 'center_y': .8}
-                    size_hint: 1, .20
-                    helper_text_mode: "persistent"
-                    font_name: 'Assets/roboto'
-                    md_bg_color: 0/255, 106/255, 240/255, .4
-                    icon_left: "account-details"
-                MDTextField:
-                    id: bdate
-                    hint_text: "Выберите дату рождения"
-                    fill_color_normal: 0/255, 106/255, 240/255, .4
-                    hint_text_color_normal: "white"
-                    helper_text_color_normal: "white"
-                    text_color_normal: "white"
-                    mode: "fill"
-                    font_size: dp(40)
-                    pos_hint: {'center_x': .5, 'center_y': .5}
-                    size_hint: 1, .20
-                    helper_text_mode: "persistent"
-                    font_name: 'Assets/roboto'
-                    readonly: True
-                    icon_left: "calendar"
-                MDIcon:
-                    icon: "calendar"
-                    pos_hint: {'center_x': .079, 'center_y': .5}
-                    color: 'white'
-                MDTextButton:
-                    size_hint: 1, .45
-                    halign: 'center'
-                    pos_hint: {'center_x': .5, 'center_y': .5}
-                    size_hint: 1, .20
-                    font_size: dp(25)
-                    on_release: root.datepicker()
-                MDFillRoundFlatButton:
-                    text: "Войти"
-                    ripple_color: app.theme_cls.primary_color
-                    font_name: 'Assets/roboto'
-                    font_size: 45
-                    size_hint: .8, .1
-                    md_bg_color: 0/255, 106/255, 240/255, .4
-                    pos_hint: {'center_x': .5, 'center_y': .25}
-                    bold: True
-                    on_release: root.omslogin()
-                MDLabel:
-                    text: "[color=#ffffff]Авторизируясь по полису[/color]"
-                    bold: True
-                    font_size: 15
-                    markup: True
-                    font_name: 'Assets/roboto'
-                    pos_hint: {'center_x': .51, 'center_y': .10}
-                MDLabel:
-                    text: "[color=#ffffff]будет доступен не полный функционал[/color]"
-                    bold: True
-                    font_size: 15
-                    markup: True
-                    font_name: 'Assets/roboto'
-                    pos_hint: {'center_x': .51, 'center_y': .06}
+            md_bg_color: 0,0,0,0
+            size_hint: .09, .087
+            pos_hint: {'center_x': .484, 'center_y': .48}
+            ScrollView:
+                bar_color: 0,0,0,0
+                bar_inactive_color: 0,0,0,0
+                BoxLayout:
+                    height: self.minimum_height
+                    size_hint_y: None
+                    orientation: 'vertical'
+                    id: container1
+        MDCard:
+            md_bg_color: 0,0,0,0
+            size_hint: .09, .087
+            pos_hint: {'center_x': .6, 'center_y': .48}
+            ScrollView:
+                bar_color: 0,0,0,0
+                bar_inactive_color: 0,0,0,0
+                BoxLayout:
+                    height: self.minimum_height
+                    size_hint_y: None
+                    orientation: 'vertical'
+                    id: container2
+        MDCard:
+            md_bg_color: 0,0,0,0
+            size_hint: .09, .087
+            pos_hint: {'center_x': .715, 'center_y': .48}
+            ScrollView:
+                bar_color: 0,0,0,0
+                bar_inactive_color: 0,0,0,0
+                BoxLayout:
+                    height: self.minimum_height
+                    size_hint_y: None
+                    orientation: 'vertical'
+                    id: container3
+                
                 

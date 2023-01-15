@@ -5,11 +5,23 @@ from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
 import threading
 from kivy.clock import Clock, mainthread
-from kivy.uix.screenmanager import Screen
+from kivymd.uix.screen import MDScreen as Screen
 from kivymd.uix.button import MDFillRoundFlatButton
+from kivymd.effects.fadingedge.fadingedge import FadingEdgeEffect
+from kivymd.uix.list import OneLineListItem
+from kivy.uix.scrollview import ScrollView
 from kivymd.uix.dialog import MDDialog
 from kivymd_extensions.akivymd.uix.datepicker import AKDatePicker
+from kivy.utils import get_color_from_hex
 import requests
+
+class FadeScrollView(FadingEdgeEffect, ScrollView):
+    pass
+
+class OneLineListItemAligned(OneLineListItem):
+    def __init__(self, halign, **kwargs):
+        super(OneLineListItemAligned, self).__init__(**kwargs)
+        self.ids._lbl_primary.halign = halign
 
 class OMSScreen(Screen):
     dialog = None
@@ -170,5 +182,50 @@ class OMSScreen(Screen):
                 ],
             )
         self.dialogs.open()
+    def validation(self):
+        if self.ids.policy.text != '':
+            if len(self.ids.policy.text) != 16:
+                self.ids.policy.fill_color_normal = get_color_from_hex("B5474D")
+            else:
+                self.ids.policy.fill_color_normal = get_color_from_hex("#32494B")
+        else:
+            self.ids.policy.fill_color_normal = 53/255,73/255,75/255,0
+    def cou(self):
+        self.ids.counts.text = f'{len(self.ids.policy.text)}/16'
+        if 16>len(self.ids.policy.text) or len(self.ids.policy.text)>16:
+            self.ids.counts.text_color = 'red'
+        else:
+            self.ids.counts.text_color = 'white'
+    def days(self, instance):
+        self.day = str(instance.date).zfill(2)
+    def months(self, instance):
+        print(instance.month)
+        if instance.month == 'Январь':
+            self.month = '01'
+        if instance.month == 'Февраль':
+            self.month = '02'
+        if instance.month == 'Март':
+            self.month = '03'
+        if instance.month == 'Апрель':
+            self.month = '04'
+        if instance.month == 'Май':
+            self.month = '05'
+        if instance.month == 'Июнь':
+            self.month = '06'
+        if instance.month == 'Июль':
+            self.month = '07'
+        if instance.month == 'Август':
+            self.month = '08'
+        if instance.month == 'Сентябрь':
+            self.month = '09'
+        if instance.month == 'Октябрь':
+            self.month = '10'
+        if instance.month == 'Ноябрь':
+            self.month = '11'
+        if instance.month == 'Декабрь':
+            self.month = '12'
 
+
+    def years(self, instance):
+        self.year = instance.year
     pass

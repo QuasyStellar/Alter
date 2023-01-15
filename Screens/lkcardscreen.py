@@ -63,6 +63,7 @@ class LKCard(Screen):
         jspros = prosmotr.json()
         try:
             html = jspros['documentHtml']
+            print(html)
         except:
             self.documentview(instance)
         html = html.replace('<span>Отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
@@ -70,10 +71,11 @@ class LKCard(Screen):
         html = html.replace('<span>норма</span>', '<span style="color: green">НОРМА</span>')
         html = html.replace('<span>Норма</span>', '<span style="color: green">НОРМА</span>')
         options = Options()
-        options.headless = True
+        #options.headless = True
         options.add_argument("--width=1000")
         driver = webdriver.Firefox(options=options)
-        driver.get(f"data:text/html;charset=utf-8,{html}")
+        driver.get("data:text/html;charset=utf-8," + html)
+        time.sleep(1000)
         driver.get_full_page_screenshot_as_file('document.png')
         driver.close()
         self.show_document()

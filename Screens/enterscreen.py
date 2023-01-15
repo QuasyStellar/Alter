@@ -1,40 +1,39 @@
 from kivymd.uix.dialog import MDDialog
-from kivy.uix.screenmanager import Screen, SlideTransition
+from kivy.uix.screenmanager import Screen, FadeTransition
 from kivymd.uix.button import MDFillRoundFlatButton
+from kivy.uix.image import Image
+from kivy.clock import Clock
+from kivy.core.window import Window
+from kivy.uix.relativelayout import RelativeLayout
 import locale
 locale.setlocale(locale.LC_ALL, '')
 import datetime
 
 class ENTERScreen(Screen):
     dialogs = None
+    timer = None
+    def on_touch_down(self, touch=None):
+        def inactive(*args):
+            self.manager.get_screen('mos').check(flag=True)
+            self.manager.current = 'afk'
+
+        if self.timer is not None:
+            self.timer.cancel()
+        self.timer = Clock.schedule_once(inactive, 300)
+        if touch !=None:
+            return super(ENTERScreen, self).on_touch_down(touch)
     def oms(self):
-        self.manager.transition = SlideTransition()
-        self.manager.transition.direction = "down"
+        self.manager.transition = FadeTransition()
         self.manager.current = "oms"
 
     def mos(self):
-        self.manager.transition = SlideTransition()
-        self.manager.transition.direction = "up"
+        self.manager.transition = FadeTransition()
         self.manager.current = "mos"
-
+        self.manager.get_screen('mos').widths = int(Window.size[0]*0.476)
+        self.manager.get_screen('mos').heights = int(Window.size[1]*0.75)
+        self.manager.get_screen('mos').check()
     def show_alert_dialog_info(self):
-        if not self.dialogs:
-            self.dialogs = MDDialog(
-                title="При входе по полису ОМС не доступно: первичный осмотр с использованием AI, анализ медкарты. Доступно: Запись по направлению, запись к врачу, перенос. Чтобы воспользоваться полной версией, войдите через mos.ru",
-                md_bg_color=(49/255, 72/255, 73/255),
-                shadow_softness=100,
-                elevation=0,
-                buttons=[
-                    MDFillRoundFlatButton(
-                        text="    ОК    ",
-                        md_bg_color=(0 / 255, 106 / 255, 240 / 255, 0.4),
-                        on_release=lambda _: self.dialogs.dismiss(),
-                        font_size=35
-                    )
-                ],
-            )
-        self.dialogs.open()
-
+        self.manager.current = 'alert'
     def update(self, *args):
         today = datetime.datetime.now()
         dt = datetime.datetime.today()
@@ -56,9 +55,6 @@ class ENTERScreen(Screen):
             week = '[color=#D4F5EC]СБ[/color]'
         elif week == 6:
             week = '[color=#D4F5EC]ВС[/color]'
-        self.ids.days.text = f'[color=#D4F5EC]{days}[/color]'
-        self.ids.months.text = f'[color=#D4F5EC]{months}[/color]'
         self.ids.time.text = f'[color=#D4F5EC]{time}[/color]'
-        self.ids.week.text = f'[color=#D4F5EC]{week}[/color]'
-
+        self.ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
     pass

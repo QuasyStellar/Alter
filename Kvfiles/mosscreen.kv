@@ -4,35 +4,33 @@
         source: 'Assets/mosscreen/mosbg.png'
         allow_stretch: True
         keep_ratio: False
-    MDFillRoundFlatButton:
-        text: '< Назад'
-        markup: True
-        pos_hint: {'center_x': .6, 'center_y': .2}
-        font_name: 'Assets/roboto'
-        font_size: dp(40)
-        size_hint: .25,.1
-        md_bg_color: 255/255, 255/255, 255/255, .3
-        on_press:
-            root.back()
+    MDTextButton:
+        size_hint: .28, .25
+        halign: 'center'
+        pos_hint: {'center_x': .6, 'center_y': .12}
+        font_size: dp(25)
+        on_release:
             root.manager.transition.direction = "down"
-        ripple_color: 1, 0, 0, 0.1
-        bold: True
-    RelativeLayout:
-        id: omsrefresh
-        MDCard:
-            orientation: "vertical"
-            pos_hint: {'center_x': 0.6, 'center_y': .5}
-            size_hint: .25, .45
-            radius:[30]
-            MDTextButton:
-                size_hint: 1, .2
-                halign: 'center'
-                pos_hint: {'center_x': .499, 'center_y': .2}
-                font_size: dp(25)
-                on_release: root.check()
-                Image:
-                    source: 'Assets/mosscreen/mosbutton.png'
-                    center_x: self.parent.center_x
-                    center_y: self.parent.center_y
-                    allow_stretch: True
-                    size: self.parent.size
+            root.manager.current = "enter"
+            root.check(flag=True)
+        Image:
+            source: 'Assets/mosscreen/helpbut.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        size_hint: .18, .25
+        halign: 'center'
+        pos_hint: {'center_x': .36, 'center_y': .12}
+        font_size: dp(25)
+        on_release:
+            root.manager.transition.direction = "down"
+            root.manager.current = "enter"
+            root.check(flag=True)
+        Image:
+            source: 'Assets/mosscreen/exitbut.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size

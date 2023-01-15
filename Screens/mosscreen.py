@@ -11,6 +11,7 @@ from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.dialog import MDDialog
 import requests
 import json
+from threading import Event
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -24,21 +25,22 @@ class MOSScreen(Screen):
     waiterror = None
     factor = None
     timeclock = None
-    def mosfunc(self):
+    def mosfunc(self, event, width, height):
         t = threading.Thread(
-            target=self.open_moslogin, args=[], daemon=True
+            target=self.open_moslogin, args=[event, width, height], daemon=True
         )
         if not t.is_alive():
             t.start()
 
-    def open_moslogin(self):
+    def open_moslogin(self, event, width, height):
         chrome_options = Options()
         chrome_options.add_argument("--app=https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
        	chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
         chrome_options.add_experimental_option('useAutomationExtension', False)
         chrome_options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
-        chrome_options.add_argument("window-size=600,960")
-        chrome_options.add_argument('window-position=960,150')
+        chrome_options.add_argument(f"window-size={width},{height}")
+        chrome_options.add_argument(f'window-position={int(width*0.56)},{int(height*0.05)}')
+        print(f'{int(width/0.1)},{int(height/0.1)}')
         chrome_options.add_experimental_option('prefs', {
             'credentials_enable_service': False,
             'profile': {
@@ -50,6 +52,9 @@ class MOSScreen(Screen):
         )
         try:
             while driver.current_url !="https://lk.emias.mos.ru/medical-records":
+                if event.is_set():
+                    driver.quit()
+                    sys.exit()
                 time.sleep(1)
             else:
                 driver.minimize_window()
@@ -93,8 +98,8 @@ class MOSScreen(Screen):
 
     @mainthread
     def err(self):
+        self.manager.current ='enter'
         self.error_dialog()
-        self.manager.current = "mos"
     @mainthread
     def succ(self, names, sure, age, idus, authtoken, oms, bdates, s, gender):
         self.manager.current = "mosloged"
@@ -138,8 +143,14 @@ class MOSScreen(Screen):
         self.dialogerror.open()
 
 
-    def check(self):
-        self.mosfunc()
-        self.manager.current = "load"
-        if self.timeclock == None:
-            self.timeclock = Clock.schedule_interval(self.manager.get_screen('mosloged').update, 1)
+    def check(self, flag=None):
+        if flag == None:
+            self.event = Event()
+            self.mosfunc(self.event, self.widths, self.heights)
+            if self.timeclock == None:
+                self.timeclock = Clock.schedule_interval(self.manager.get_screen('mosloged').update, 1)
+        else:
+            try:
+                self.event.set()
+            except:
+                None
