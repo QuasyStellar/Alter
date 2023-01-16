@@ -1,8 +1,6 @@
 import sys
 import time
 import datetime
-import locale
-locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
 import threading
 from kivy.clock import Clock, mainthread
@@ -90,9 +88,8 @@ class MOSScreen(Screen):
                 self.succ(names, sure, age, idus, authtoken, oms, bdates, s, gender)
                 driver.quit()
         except Exception as ex:
-            print(ex)
+            self.mosfunc(event, width, height)
             driver.quit()
-            self.err()
             sys.exit()
 
 
@@ -154,3 +151,5 @@ class MOSScreen(Screen):
                 self.event.set()
             except:
                 None
+class HelpScreen(Screen):
+    pass

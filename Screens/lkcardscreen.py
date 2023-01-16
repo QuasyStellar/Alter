@@ -1,13 +1,12 @@
 import datetime
-import locale
 from kivy.uix.image import Image
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
-locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
 from kivymd.uix.label import MDLabel
+import os
 from kivy.clock import Clock
 from html2image import Html2Image
 from cairosvg import svg2png
@@ -70,12 +69,14 @@ class LKCard(Screen):
         html = html.replace('<span>отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
         html = html.replace('<span>норма</span>', '<span style="color: green">НОРМА</span>')
         html = html.replace('<span>Норма</span>', '<span style="color: green">НОРМА</span>')
+        Html_file= open("document.html","w", encoding="utf-8")
+        Html_file.write(html)
+        Html_file.close()
         options = Options()
-        #options.headless = True
+        options.headless = True
         options.add_argument("--width=1000")
         driver = webdriver.Firefox(options=options)
-        driver.get("data:text/html;charset=utf-8," + html)
-        time.sleep(1000)
+        driver.get(f'file://{os.path.abspath("document.html")}')
         driver.get_full_page_screenshot_as_file('document.png')
         driver.close()
         self.show_document()

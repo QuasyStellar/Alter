@@ -1,7 +1,4 @@
 import datetime
-import locale
-
-locale.setlocale(locale.LC_ALL, '')
 from kivymd.uix.label import MDLabel
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.screenmanager import Screen

@@ -1,17 +1,21 @@
-import locale
 from kivy.clock import Clock
 from Screens.enterscreen import ENTERScreen
-from Screens.mosscreen import MOSScreen
+from Screens.mosscreen import MOSScreen, HelpScreen
 from Screens.omsscreen import OMSScreen
 from Screens.lkcardscreen import LKCard
 from Screens.mosloged import MOSLoged
+import locale
+locale.setlocale(
+    category=locale.LC_ALL,
+    locale="Russian"
+)
 from kivy.utils import get_color_from_hex
 from Screens.omsloged import OMSLoged
 from Screens.privivkiscreen import Privivki
 from Screens.priemscreen import Priem
+from Screens.emiasscreen import EmiasScreen
 from kivy.uix.scrollview import ScrollView
 from Screens.decryptscreen import Decrypt
-locale.setlocale(locale.LC_ALL, '')
 from kivymd.effects.fadingedge.fadingedge import FadingEdgeEffect
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.behaviors.toggle_behavior import MDToggleButton
@@ -89,12 +93,12 @@ class Alert(Screen):
 class MyToggleButton(MDFlatButton, MDToggleButton):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.background_down = get_color_from_hex('#00E4B6')
-        self.font_color_normal =  get_color_from_hex('#E2F9F2')
-        self.font_color_down =  get_color_from_hex('#E2F9F2')
+        self.background_down = get_color_from_hex('#51857A')
+        self.font_color_normal =  get_color_from_hex('#72C3AC')
+        self.font_color_down =  get_color_from_hex('#72C3AC')
 
     def on_state(self, widget, value):
-        print(1)
+        print(self.state)
 
 class AlterApp(MDApp):
     sm = None
@@ -102,7 +106,9 @@ class AlterApp(MDApp):
         self.sm = ScreenManager()
         sm = self.sm
         sm.add_widget(AFK(name='afk'))
+        sm.add_widget(EmiasScreen(name='emiasscreen'))
         sm.add_widget(Alert(name='alert'))
+        sm.add_widget(HelpScreen(name='help'))
         sm.add_widget(ENTERScreen(name="enter"))
         sm.add_widget(OMSScreen(name="oms"))
         sm.add_widget(MOSScreen(name="mos"))
@@ -124,7 +130,7 @@ class AlterApp(MDApp):
         sm.add_widget(Decrypt(name='decrypt'))
         Clock.schedule_interval(sm.get_screen('enter').update, 2)
         for i in range(1,32):
-            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('#E2F9F2'), theme_text_color='Custom', font_style='H4', on_press = sm.get_screen('oms').days, md_bg_color = get_color_from_hex('#32494B'), size_hint = (1, .2), group="x")
+            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('#72C3AC'), theme_text_color='Custom', font_style='H4', on_press = sm.get_screen('oms').days, md_bg_color = get_color_from_hex('#32494B'), size_hint = (1, .2), group="x")
             twl.date = i
             sm.get_screen('oms').ids.container1.add_widget(twl)
         months=[
@@ -142,11 +148,11 @@ class AlterApp(MDApp):
         'Декабрь'
         ]
         for i in months:
-            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('#E2F9F2'), theme_text_color='Custom', font_style='H4', on_press = sm.get_screen('oms').months, md_bg_color = get_color_from_hex('#32494B'), size_hint = (1, .2), group="y")
+            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('#72C3AC'), theme_text_color='Custom', font_style='H4', on_press = sm.get_screen('oms').months, md_bg_color = get_color_from_hex('#32494B'), size_hint = (1, .2), group="y")
             twl.month = i
             sm.get_screen('oms').ids.container2.add_widget(twl)
         for i in reversed(range(1900, 2024)):
-            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('#E2F9F2'), theme_text_color='Custom', font_style='H4', on_press = sm.get_screen('oms').years, md_bg_color = get_color_from_hex('#32494B'), size_hint = (1, .2), group="z")
+            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('#72C3AC'), theme_text_color='Custom', font_style='H4', on_press = sm.get_screen('oms').years, md_bg_color = get_color_from_hex('#32494B'), size_hint = (1, .2), group="z")
             twl.year = i
             sm.get_screen('oms').ids.container3.add_widget(twl)
         return sm

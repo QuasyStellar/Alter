@@ -1,7 +1,5 @@
 import datetime
-import locale
 from MyComponents.mycomponents import Tab, MyToggleButton, MyToggleButtonNew, Item, Itemerrors, Itemfactor, Itemwait, Full
-locale.setlocale(locale.LC_ALL, '')
 from kivymd.uix.label import MDLabel
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.stacklayout import StackLayout

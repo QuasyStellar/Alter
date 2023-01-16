@@ -1,7 +1,5 @@
 import requests
 from kivy.uix.screenmanager import Screen
-import locale
-locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
 from kivymd.uix.label import MDLabel
 from kivy.uix.relativelayout import RelativeLayout

@@ -5,8 +5,6 @@ from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.uix.relativelayout import RelativeLayout
-import locale
-locale.setlocale(locale.LC_ALL, '')
 import datetime
 
 class ENTERScreen(Screen):
@@ -57,4 +55,14 @@ class ENTERScreen(Screen):
             week = '[color=#D4F5EC]ВС[/color]'
         self.ids.time.text = f'[color=#D4F5EC]{time}[/color]'
         self.ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
+        self.manager.get_screen('oms').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
+        self.manager.get_screen('oms').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
+        self.manager.get_screen('mos').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
+        self.manager.get_screen('mos').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
+        self.manager.get_screen('alert').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
+        self.manager.get_screen('alert').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
+        self.manager.get_screen('emiasscreen').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
+        self.manager.get_screen('emiasscreen').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
+        self.manager.get_screen('help').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
+        self.manager.get_screen('help').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
     pass

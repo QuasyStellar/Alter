@@ -11,9 +11,7 @@
         pos_hint: {'center_x': .5, 'center_y': .12}
         font_size: dp(25)
         on_release:
-            root.manager.transition = FadeTransition(duration=.1)
-            root.manager.current = 'enter'
-            root.manager.get_screen('enter').on_touch_down()
+            root.back()
         Image:
             source: 'Assets/omsscreen/exitbut.png'
             center_x: self.parent.center_x
@@ -24,39 +22,35 @@
         id: omsrefresh
         MDTextField:
             id: policy
-            text_color_focus: get_color_from_hex('#E2F9F2')
-            text_color_normal: get_color_from_hex('#E2F9F2')
+            text_color_focus: get_color_from_hex('#72C3AC')
+            text_color_normal: get_color_from_hex('#72C3AC')
             mode: "fill"
-            helper_text_color_normal: (114/255, 195/255, 172/255, .49)
             fill_color_focus:  get_color_from_hex("#32494B")
-            size_hint: .332, .08
-            on_touch_down: root.validation()
-            on_text_validate: root.validation()
+            size_hint: .33, .075
             active_line: False
-            fill_color_normal: 53/255,73/255,75/255,0
+            fill_color_normal: get_color_from_hex("#32494B")
             line_color_focus: (0/255, 228/255, 182/255, 0)
             multiline: False
             on_text:
                 root.cou()
-                root.validation()
-            font_size: 50
+            font_size: self.height/2
             radius: [15]
             line_color_normal: (114/255, 195/255, 172/255, 0)
-            pos_hint: {'center_x': .601, 'center_y': .63}
+            pos_hint: {'center_x': .595, 'center_y': .603}
             input_filter: 'int'
 
         MDLabel:
             id: counts
             text: "0/16"
             halign: "center"
-            pos_hint: {'center_x': .75, 'center_y': .56}
+            pos_hint: {'center_x': .75, 'center_y': .54}
             theme_text_color: "Custom"
-            text_color: "white"
+            text_color: get_color_from_hex("#72C3AC")
             font_size: 30
         MDTextButton:
             size_hint: .35, .1
             halign: 'center'
-            pos_hint: {'center_x': .6, 'center_y': .35}
+            pos_hint: {'center_x': .6, 'center_y': .335}
             font_size: dp(25)
             on_release:
                 root.omslogin()
@@ -68,8 +62,8 @@
                 size: self.parent.size
         MDCard:
             md_bg_color: 0,0,0,0
-            size_hint: .09, .087
-            pos_hint: {'center_x': .484, 'center_y': .48}
+            size_hint: .095, .0757
+            pos_hint: {'center_x': .481, 'center_y': .456}
             ScrollView:
                 bar_color: 0,0,0,0
                 bar_inactive_color: 0,0,0,0
@@ -80,8 +74,8 @@
                     id: container1
         MDCard:
             md_bg_color: 0,0,0,0
-            size_hint: .09, .087
-            pos_hint: {'center_x': .6, 'center_y': .48}
+            size_hint: .125, .0757
+            pos_hint: {'center_x': .596, 'center_y': .455}
             ScrollView:
                 bar_color: 0,0,0,0
                 bar_inactive_color: 0,0,0,0
@@ -92,8 +86,8 @@
                     id: container2
         MDCard:
             md_bg_color: 0,0,0,0
-            size_hint: .09, .087
-            pos_hint: {'center_x': .715, 'center_y': .48}
+            size_hint: .095, .0757
+            pos_hint: {'center_x': .712, 'center_y': .455}
             ScrollView:
                 bar_color: 0,0,0,0
                 bar_inactive_color: 0,0,0,0
@@ -102,5 +96,25 @@
                     size_hint_y: None
                     orientation: 'vertical'
                     id: container3
+        MDLabel:
+            id: time
+            bold: True
+            theme_text_color: 'Custom'
+            text_color: 'white'
+            markup: True
+            pos_hint: {'center_x': .08, 'center_y': .93}
+            font_size: dp(100)
+            font_name: 'Assets/roboto'
+            halign: 'center'
+        MDLabel:
+            id: week
+            bold: True
+            theme_text_color: 'Custom'
+            text_color: 'white'
+            markup: True
+            pos_hint: {'center_x': .08, 'center_y': .87}
+            font_size: dp(50)
+            font_name: 'Assets/roboto'
+            halign: 'center'
                 
                 

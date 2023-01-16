@@ -7,9 +7,7 @@ from bs4 import BeautifulSoup
 import requests
 import json
 from kivy.uix.screenmanager import Screen, SlideTransition
-import locale
 from kivy.uix.image import Image
-locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
 from kivymd.uix.label import MDLabel
 from kivy.uix.relativelayout import RelativeLayout

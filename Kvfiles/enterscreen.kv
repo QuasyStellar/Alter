@@ -25,7 +25,9 @@
             allow_stretch: True
             size: self.parent.size
     MDTextButton:
-        on_release:root.mos()
+        on_release:
+            root.manager.current = 'emiasscreen'
+            root.manager.transition = FadeTransition(duration=.1)
         size_hint: .25, .25
         pos_hint: {'center_x': .7, 'center_y': .49}
         Image:
@@ -55,7 +57,7 @@
         text_color: 'white'
         markup: True
         pos_hint: {'center_x': .08, 'center_y': .93}
-        font_size: dp(80)
+        font_size: dp(100)
         font_name: 'Assets/roboto'
         halign: 'center'
     MDLabel:
@@ -65,7 +67,7 @@
         text_color: 'white'
         markup: True
         pos_hint: {'center_x': .08, 'center_y': .87}
-        font_size: dp(40)
+        font_size: dp(50)
         font_name: 'Assets/roboto'
         halign: 'center'
 
@@ -111,3 +113,23 @@
             center_y: self.parent.center_y
             allow_stretch: True
             size: self.parent.size
+    MDLabel:
+        id: time
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .08, 'center_y': .93}
+        font_size: dp(100)
+        font_name: 'Assets/roboto'
+        halign: 'center'
+    MDLabel:
+        id: week
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .08, 'center_y': .87}
+        font_size: dp(50)
+        font_name: 'Assets/roboto'
+        halign: 'center'

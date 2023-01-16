@@ -1,6 +1,4 @@
 import sys
-import locale
-locale.setlocale(locale.LC_ALL, '')
 from kivy.properties import DictProperty, ObjectProperty
 from kivy.clock import Clock
 import threading
@@ -8,26 +6,48 @@ from kivy.clock import Clock, mainthread
 from kivymd.uix.screen import MDScreen as Screen
 from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.effects.fadingedge.fadingedge import FadingEdgeEffect
+from kivy.uix.behaviors import ToggleButtonBehavior
 from kivymd.uix.list import OneLineListItem
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.dialog import MDDialog
 from kivymd_extensions.akivymd.uix.datepicker import AKDatePicker
+from kivy.uix.screenmanager import FadeTransition
 from kivy.utils import get_color_from_hex
+from kivymd.uix.textfield import MDTextField
 import requests
 
 class FadeScrollView(FadingEdgeEffect, ScrollView):
     pass
 
-class OneLineListItemAligned(OneLineListItem):
-    def __init__(self, halign, **kwargs):
-        super(OneLineListItemAligned, self).__init__(**kwargs)
-        self.ids._lbl_primary.halign = halign
+
+        
 
 class OMSScreen(Screen):
     dialog = None
     dialog1 = None
     dialogs = None
     timeclocks = None
+    day = None
+    year = None
+    month = None
+    def back(self):
+        self.ids.policy.text =""
+        self.day = None
+        self.year = None
+        self.month = None
+        self.manager.transition = FadeTransition(duration=.1)
+        self.manager.current = 'enter'
+        self.manager.get_screen('enter').on_touch_down()
+        self.ids.counts.text_color ='white'
+        x = ToggleButtonBehavior.get_widgets('x')
+        for i in x:
+            i.state = 'normal'
+        y = ToggleButtonBehavior.get_widgets('y')
+        for i in y:
+            i.state = 'normal'
+        z = ToggleButtonBehavior.get_widgets('z')
+        for i in z:
+            i.state = 'normal'
     @mainthread
     def error(self):
         self.manager.current = "oms"
@@ -45,12 +65,6 @@ class OMSScreen(Screen):
         self.manager.get_screen('loged').bdates = bdate
         self.manager.get_screen('loged').types = 'oms'
         self.manager.get_screen('priem').cur = 'omsloged'
-    def back(self):
-        self.manager.current = "enter"
-        self.bdate.helper_text = ""
-        self.policy.helper_text = ""
-        self.policy.text = ""
-        self.bdate.text = ""
 
     def datepicker(self):
         self.date = AKDatePicker(callback=self.callback)
@@ -109,34 +123,20 @@ class OMSScreen(Screen):
         sys.exit()
 
     def omslogin(self):
-        if len(self.policy.text) < 16 or len(self.policy.text) > 16:
-            self.policy.helper_text = "Некорректный полис"
-            self.policy.helper_text_color_normal = "red"
-            self.policy.helper_text_color_focus = "red"
-        elif self.bdate.text != "":
+        if len(self.ids.policy.text) < 16 or len(self.ids.policy.text) > 16:
+            None
+        elif self.day !=None and self.month !=None and self.year !=None:
             if self.timeclocks == None:
                 self.timeclocks = Clock.schedule_interval(self.manager.get_screen('loged').update, 2)
-            bdate = self.bdate.text.replace(".", "-")
-            oms = self.policy.text
-            self.omsfunc(self.policy.text, bdate)
-            self.bdate.helper_text = ""
-            self.bdate.helper_text_color_normal = "white"
-            self.bdate.helper_text_color_focus = "white"
-            self.policy.helper_text_color_normal = "white"
-            self.policy.helper_text = ""
-            self.bdate.text = ''
-            self.policy.text = ''
-            self.policy.helper_text_color_focus = "white"
+            bdate = f'{self.year}-{self.month}-{self.day}'
+            print(bdate)
+            self.omsfunc(self.ids.policy.text, bdate)
+            self.ids.policy.text = ''
             self.manager.current = "loadoms"
 
 
         else:
-            self.bdate.helper_text = "Введите дату"
-            self.bdate.helper_text_color_normal = "red"
-            self.bdate.helper_text_color_focus = "red"
-            self.policy.helper_text_color_normal = "white"
-            self.policy.helper_text = ""
-            self.policy.helper_text_color_focus = "white"
+            None
 
     def show_alert_dialog(self):
         if not self.dialog:
@@ -182,20 +182,12 @@ class OMSScreen(Screen):
                 ],
             )
         self.dialogs.open()
-    def validation(self):
-        if self.ids.policy.text != '':
-            if len(self.ids.policy.text) != 16:
-                self.ids.policy.fill_color_normal = get_color_from_hex("B5474D")
-            else:
-                self.ids.policy.fill_color_normal = get_color_from_hex("#32494B")
-        else:
-            self.ids.policy.fill_color_normal = 53/255,73/255,75/255,0
     def cou(self):
         self.ids.counts.text = f'{len(self.ids.policy.text)}/16'
         if 16>len(self.ids.policy.text) or len(self.ids.policy.text)>16:
-            self.ids.counts.text_color = 'red'
+            self.ids.counts.text_color = get_color_from_hex("#72C3AC")
         else:
-            self.ids.counts.text_color = 'white'
+            self.ids.counts.text_color = get_color_from_hex("#72C3AC")
     def days(self, instance):
         self.day = str(instance.date).zfill(2)
     def months(self, instance):

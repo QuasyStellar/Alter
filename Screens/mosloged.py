@@ -1,6 +1,4 @@
 import datetime
-import locale
-locale.setlocale(locale.LC_ALL, '')
 from kivy.uix.screenmanager import Screen
 
 class MOSLoged(Screen):
