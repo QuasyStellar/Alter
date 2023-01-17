@@ -65,4 +65,10 @@ class ENTERScreen(Screen):
         self.manager.get_screen('emiasscreen').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
         self.manager.get_screen('help').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
         self.manager.get_screen('help').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
+        self.manager.get_screen('mosloged').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
+        self.manager.get_screen('mosloged').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
+        self.manager.get_screen('loged').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
+        self.manager.get_screen('loged').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
+        self.manager.get_screen('omsalert').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
+        self.manager.get_screen('omsalert').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
     pass

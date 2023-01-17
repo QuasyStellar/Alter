@@ -100,9 +100,7 @@ class MOSScreen(Screen):
     @mainthread
     def succ(self, names, sure, age, idus, authtoken, oms, bdates, s, gender):
         self.manager.current = "mosloged"
-        self.manager.get_screen("mosloged").ids.authname.text = names
-        self.manager.get_screen("mosloged").ids.sures.text = sure
-        self.manager.get_screen("mosloged").ids.ages.text = age
+        self.manager.get_screen("mosloged").ids.authname.text = f'{names} {sure}'
         self.manager.get_screen("mosloged").age = age
         self.manager.get_screen("mosloged").gender = gender
         self.manager.get_screen("lkcard").age = age
@@ -144,8 +142,6 @@ class MOSScreen(Screen):
         if flag == None:
             self.event = Event()
             self.mosfunc(self.event, self.widths, self.heights)
-            if self.timeclock == None:
-                self.timeclock = Clock.schedule_interval(self.manager.get_screen('mosloged').update, 1)
         else:
             try:
                 self.event.set()

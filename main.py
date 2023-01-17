@@ -10,7 +10,7 @@ locale.setlocale(
     locale="Russian"
 )
 from kivy.utils import get_color_from_hex
-from Screens.omsloged import OMSLoged
+from Screens.omsloged import OMSLoged, OMSAlertScreen
 from Screens.privivkiscreen import Privivki
 from Screens.priemscreen import Priem
 from Screens.emiasscreen import EmiasScreen
@@ -106,6 +106,7 @@ class AlterApp(MDApp):
         self.sm = ScreenManager()
         sm = self.sm
         sm.add_widget(AFK(name='afk'))
+        sm.add_widget(OMSAlertScreen(name='omsalert'))
         sm.add_widget(EmiasScreen(name='emiasscreen'))
         sm.add_widget(Alert(name='alert'))
         sm.add_widget(HelpScreen(name='help'))

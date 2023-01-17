@@ -59,7 +59,7 @@ class OMSScreen(Screen):
     @mainthread
     def succ(self, policy, bdate):
         self.manager.current = "loged"
-        policnum = f"[color=#ffffff]{policy[0:4] + ' **** **** ' + policy[12:16]}[/color]"
+        policnum = f"{policy[0:4] + ' **** **** ' + policy[12:16]}"
         self.manager.get_screen("loged").ids.authname.text = policnum
         self.manager.get_screen("loged").oms = policy
         self.manager.get_screen('loged').bdates = bdate
@@ -126,8 +126,6 @@ class OMSScreen(Screen):
         if len(self.ids.policy.text) < 16 or len(self.ids.policy.text) > 16:
             None
         elif self.day !=None and self.month !=None and self.year !=None:
-            if self.timeclocks == None:
-                self.timeclocks = Clock.schedule_interval(self.manager.get_screen('loged').update, 2)
             bdate = f'{self.year}-{self.month}-{self.day}'
             print(bdate)
             self.omsfunc(self.ids.policy.text, bdate)

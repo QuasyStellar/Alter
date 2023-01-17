@@ -7,94 +7,94 @@
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .89, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release: root.exits()
         Image:
-            source: 'Assets/exitbutton.png'
+            source: 'Assets/mosloged/exitbut.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
-    MDTextButton:
-        size_hint: .2, .2
-        halign: 'center'
-        pos_hint: {'center_x': .89, 'center_y': .65}
-        font_size: dp(25)
-        on_release: root.full_dialog()
-        Image:
-            source: 'Assets/omsloged/enterfull.png'
-            center_x: self.parent.center_x
-            center_y: self.parent.center_y
-            allow_stretch: True
-            size: 400, 200
+            size: self.parent.size
     MDLabel:
         id: authname
-        text:'[color=#ffffff]7700 0000 0000 0000[/color]'
-        markup: True
-        size_hint: .2, .15
+        text:'Если вы не видете здесь свою фамилию вам очень повезло'
+        text_color: get_color_from_hex('#72C3AC')
+        theme_text_color: 'Custom'
         halign: 'center'
-        pos_hint: {'center_x': .89, 'center_y': .8}
-        font_size: dp(35) 
-    MDCard:
-        orientation: "vertical"
-        pos_hint: {'center_x': .5, 'center_y': .7}
-        size_hint: .339, .3
-        md_bg_color: 1,1,1,0
-        radius: [30]
-        RelativeLayout:
-            Image:
-                source: 'Assets/omsloged/emiasmainbutton.png'
-                allow_stretch: True
-                size: self.parent.size
-            MDFillRoundFlatButton:
-                text: '[color=#1959d1]Мои записи[/color]'
-                markup: True
-                pos_hint: {'center_x': .25, 'center_y': .5}
-                font_name: 'Assets/roboto'
-                font_size: dp(32)
-                size_hint: .45,.23
-                md_bg_color: 1,1,1,1
-                on_release: root.zapisi()
-                bold: True
-            MDFillRoundFlatButton:
-                text: '[color=#1959d1]Новая запись[/color]'
-                markup: True
-                pos_hint: {'center_x': .25, 'center_y': .2}
-                font_name: 'Assets/roboto'
-                font_size: dp(32)
-                size_hint: .45,.23
-                md_bg_color: 1,1,1,1
-                on_release: root.newzapis()
-                bold: True
-            MDFillRoundFlatButton:
-                text: '[color=#1959d1]Направления[/color]'
-                markup: True
-                pos_hint: {'center_x': .72, 'center_y': .5}
-                font_name: 'Assets/roboto'
-                font_size: dp(32)
-                size_hint: .45,.23
-                md_bg_color: 1,1,1,1
-                on_release: root.prosmotrnapr()
-                bold: True
-            MDFillRoundFlatButton:
-                text: '[color=#1959d1]Прикрепления[/color]'
-                markup: True
-                pos_hint: {'center_x': .72, 'center_y': .2}
-                font_name: 'Assets/roboto'
-                font_size: dp(32)
-                size_hint: .45,.23
-                md_bg_color: 1,1,1,1
-                on_release: root.prikreplenia()
-                bold: True
+        size_hint: .27, .06
+        pos_hint: {'center_x': .515, 'center_y': .09}
+        font_size: dp(40) 
+        font_name: 'Assets/roboto'
+
     MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .5, 'center_y': .3}
-        size_hint: .339, .3
-        radius: [30]
-        on_release: root.priem()
+        pos_hint: {'center_x': .367, 'center_y': .575}
+        size_hint: .106, .069
+        on_release: root.manager.get_screen('loged').newzapis()
         Image:
-            source: 'Assets/omsloged/priemmainbutton.png'
+            source: 'Assets/mosloged/myzapis.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .488, 'center_y': .575}
+        size_hint: .1226, .069
+        on_release: root.manager.get_screen('loged').prosmotrnapr()
+        Image:
+            source: 'Assets/mosloged/mynapr.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .625, 'center_y': .575}
+        size_hint: .13125, .069
+        on_release: root.manager.get_screen('loged').prosmotrnapr()
+        Image:
+            source: 'Assets/mosloged/myprik.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .5, 'center_y': .7059}
+        size_hint: .3906, .1159
+        on_release: root.manager.get_screen('loged').zapisi()
+        Image:
+            source: 'Assets/mosloged/emiasbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .405, 'center_y': .4267}
+        size_hint: .1886, .152
+        on_release: root.manager.current = "omsalert"
+        Image:
+            source: 'Assets/omsloged/lkcardbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .5, 'center_y': .2454}
+        size_hint: .3906, .1326
+        on_release: root.manager.current = 'priem'
+        Image:
+            source: 'Assets/mosloged/priemmosbutton.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            size: self.parent.size
+    MDTextButton:
+        orientation: "vertical"
+        pos_hint: {'center_x': .60, 'center_y': .4267}
+        size_hint: .1886, .152
+        on_release: root.manager.current = 'omsalert'
+        Image:
+            source: 'Assets/omsloged/cardanalizbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
@@ -104,43 +104,79 @@
         theme_text_color: 'Custom'
         text_color: 'white'
         markup: True
-        pos_hint: {'center_x': .6, 'center_y': .7}
-        font_size: dp(90)
-        font_name: 'Assets/roboto'
-    MDLabel:
-        id: days
-        bold: True
-        theme_text_color: 'Custom'
-        text_color: 'white'
-        markup: True
-        pos_hint: {'center_x': .2, 'center_y': .6}
-        font_size: dp(90)
+        pos_hint: {'center_x': .08, 'center_y': .93}
+        font_size: dp(100)
         font_name: 'Assets/roboto'
         halign: 'center'
-    MDLabel:
-        id: months
-        bold: True
-        theme_text_color: 'Custom'
-        text_color: 'white'
-        markup: True
-        pos_hint: {'center_x': .6, 'center_y': .5}
-        font_size: dp(90)
-        font_name: 'Assets/roboto'
-    MDLabel:
-        id: years
-        bold: True
-        theme_text_color: 'Custom'
-        text_color: 'white'
-        markup: True
-        pos_hint: {'center_x': .6, 'center_y': .4}
-        font_size: dp(90)
-        font_name: 'Assets/roboto'
     MDLabel:
         id: week
         bold: True
         theme_text_color: 'Custom'
         text_color: 'white'
         markup: True
-        pos_hint: {'center_x': .6, 'center_y': .6}
-        font_size: dp(90)
+        pos_hint: {'center_x': .08, 'center_y': .87}
+        font_size: dp(50)
         font_name: 'Assets/roboto'
+        halign: 'center'
+<OMSAlertScreen>:
+    name: 'omsalert'
+    Image:
+        source: 'Assets/omsloged/helpbg.png'
+        allow_stretch: True
+        keep_ratio: False
+    MDTextButton:
+        size_hint: .4, .25
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .12}
+        on_release:
+            root.manager.current = 'loged'
+        Image:
+            source: 'Assets/omsscreen/exitbut.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        size_hint: .25, .11
+        halign: 'center'
+        pos_hint: {'center_x': .65, 'center_y': .378}
+        on_release:
+            root.manager.current = 'emiasscreen'
+        Image:
+            source: 'Assets/omsloged/emiasenter.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        size_hint: .25, .14
+        halign: 'center'
+        pos_hint: {'center_x': .353, 'center_y': .37}
+        on_release:
+            root.manager.get_screen('enter').mos()
+        Image:
+            source: 'Assets/omsloged/mosenter.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
+    MDLabel:
+        id: time
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .08, 'center_y': .93}
+        font_size: dp(100)
+        font_name: 'Assets/roboto'
+        halign: 'center'
+    MDLabel:
+        id: week
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .08, 'center_y': .87}
+        font_size: dp(50)
+        font_name: 'Assets/roboto'
+        halign: 'center'
