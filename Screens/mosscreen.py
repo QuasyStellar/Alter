@@ -17,12 +17,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 
 class MOSScreen(Screen):
-    dialogerror = None
-    mobiles = None
-    mobileerror = None
-    waiterror = None
-    factor = None
-    timeclock = None
     def mosfunc(self, event, width, height):
         t = threading.Thread(
             target=self.open_moslogin, args=[event, width, height], daemon=True
@@ -92,11 +86,6 @@ class MOSScreen(Screen):
             driver.quit()
             sys.exit()
 
-
-    @mainthread
-    def err(self):
-        self.manager.current ='enter'
-        self.error_dialog()
     @mainthread
     def succ(self, names, sure, age, idus, authtoken, oms, bdates, s, gender):
         self.manager.current = "mosloged"
@@ -122,21 +111,6 @@ class MOSScreen(Screen):
         self.manager.get_screen('priem').cur = 'mosloged'
     def back(self):
         self.manager.current = "enter"
-
-    def error_dialog(self):
-        if not self.dialogerror:
-            self.dialogerror = MDDialog(
-                text="Авторизация прервана.",
-                buttons=[
-                    MDFillRoundFlatButton(
-                        text="ОК",
-                        md_bg_color="ff0000",
-                        on_release=lambda _: self.dialogerror.dismiss(),
-                    )
-                ],
-            )
-        self.dialogerror.open()
-
 
     def check(self, flag=None):
         if flag == None:

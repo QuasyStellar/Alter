@@ -1,6 +1,8 @@
 import datetime
-from MyComponents.mycomponents import Tab, MyToggleButton, MyToggleButtonNew, Item, Itemerrors, Itemfactor, Itemwait, Full
+from MyComponents.mycomponents import Tab, MyToggleButton, MyToggleButtonNew
 from kivymd.uix.label import MDLabel
+from kivymd.uix.fitimage import FitImage
+from kivy.utils import get_color_from_hex
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.scrollview import ScrollView
@@ -110,26 +112,32 @@ class OMSLoged(Screen):
         jsinf = inf.json()
         for i in range(len(jsinf['result']['attachments']['attachment'])):
             rlayout = RelativeLayout()
-            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+            card = MDCard(orientation='vertical', size_hint=(1, None), height=330, radius=[30])
+            rlayout.add_widget(FitImage(source= 'Assets/omsloged/prikbutton.png'))
             name = MDLabel(
-                text=jsinf['result']['attachments']['attachment'][i]['lpu']['name']
+                text=jsinf['result']['attachments']['attachment'][i]['lpu']['name'],
+                text_color=get_color_from_hex('#D4F5EC'), 
+                theme_text_color='Custom'
             )
             name.font_size = 45
-            name.pos_hint = {'center_x': .55, 'center_y': .8}
+            name.pos_hint = {'center_x': .75, 'center_y': .75}
             rlayout.add_widget(name)
             address = MDLabel(
-                text=jsinf['result']['attachments']['attachment'][i]['lpu']['address']
+                text=jsinf['result']['attachments']['attachment'][i]['lpu']['address'],
+                text_color=get_color_from_hex('#D4F5EC'), 
+                theme_text_color='Custom'
             )
             address.font_size = 35
-            address.pos_hint = {'center_x': .55, 'center_y': .6}
+            address.pos_hint = {'center_x': .75, 'center_y': .55}
             rlayout.add_widget(address)
             time = datetime.datetime.fromisoformat(jsinf['result']['attachments']['attachment'][i]['createDate'])
             create = MDLabel(
                 text=f'{time.strftime("Прикреплено от %d %B %Y")}',
+                text_color=get_color_from_hex('#D4F5EC'), 
+                theme_text_color='Custom'
             )
             create.font_size = 35
-            create.pos_hint = {'center_x': .55, 'center_y': .4}
+            create.pos_hint = {'center_x': .75, 'center_y': .35}
             rlayout.add_widget(create)
             card.add_widget(rlayout)
             self.manager.get_screen('prik').ids.lay.add_widget(card)
@@ -141,18 +149,9 @@ class OMSLoged(Screen):
                                                 "params": {"omsNumber": self.oms, "birthDate": self.bdates}})
         jsps = prosmotr.json()
         if len(jsps["result"]) == 0:
-            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+            card = MDCard(orientation='vertical', size_hint=(1, None), height=200, radius=[30])
             layout = RelativeLayout()
-            label = MDLabel(
-                text='Записей нет',
-                theme_text_color='Custom',
-                text_color='white',
-                halign='center'
-            )
-            label.font_size = 60
-            label.pos_hint = {'center_x': .5, 'center_y': .5}
-            layout.add_widget(label)
+            layout.add_widget(FitImage(source= 'Assets/omsloged/nozapis.png'))
             card.add_widget(layout)
             self.manager.get_screen("zapisi").ids.scrollid.add_widget(card)
         else:
@@ -736,29 +735,21 @@ class OMSLoged(Screen):
                                                 "params": {"omsNumber": self.oms, "birthDate": self.bdates}})
         jsspec = specialities.json()
         for i in range(len(jsspec["result"])):
-            card = MDCard(orientation='vertical', size_hint=(1, None), height=150,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+            choose = MDCard(orientation='vertical', size_hint=(1, None), height=200, radius=[30])
             layout = RelativeLayout()
+            layout.add_widget(FitImage(source= 'Assets/omsloged/newzapisbutton.png'))
             name = MDLabel(
                 text=jsspec['result'][i]["name"].replace("_", " "),
                 theme_text_color='Custom',
-                text_color='white'
+                text_color=get_color_from_hex('#D4F5EC')
             )
-            name.font_size = 35
-            name.pos_hint = {'center_x': .55, 'center_y': .8}
-            choose = MDFillRoundFlatButton(
-                text="Выбрать",
-                theme_text_color='Custom',
-                text_color='white',
-            )
+            name.font_size = 50
+            name.pos_hint = {'center_x': .7, 'center_y': .5}
             choose.bind(on_release=self.new)
             choose.zapisid = i
-            choose.pos_hint = {'center_x': .85, 'center_y': .5}
-            choose.font_size = 40
-            layout.add_widget(choose)
             layout.add_widget(name)
-            card.add_widget(layout)
-            self.manager.get_screen("zapisi").ids.scrollid.add_widget(card)
+            choose.add_widget(layout)
+            self.manager.get_screen("zapisi").ids.scrollid.add_widget(choose)
         self.manager.current = 'zapisi'
 
     def new(self, instance):

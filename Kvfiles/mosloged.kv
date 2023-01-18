@@ -25,13 +25,12 @@
         size_hint: .27, .06
         pos_hint: {'center_x': .5, 'center_y': .09}
         font_size: dp(40) 
-        font_name: 'Assets/roboto'
 
     MDTextButton:
         orientation: "vertical"
         pos_hint: {'center_x': .367, 'center_y': .575}
         size_hint: .106, .069
-        on_release: root.manager.get_screen('loged').newzapis()
+        on_release: root.manager.get_screen('loged').zapisi()
         Image:
             source: 'Assets/mosloged/myzapis.png'
             center_x: self.parent.center_x
@@ -51,7 +50,7 @@
         orientation: "vertical"
         pos_hint: {'center_x': .625, 'center_y': .575}
         size_hint: .13125, .069
-        on_release: root.manager.get_screen('loged').prosmotrnapr()
+        on_release: root.manager.get_screen('loged').prikreplenia()
         Image:
             source: 'Assets/mosloged/myprik.png'
             center_x: self.parent.center_x
@@ -61,7 +60,7 @@
         orientation: "vertical"
         pos_hint: {'center_x': .5, 'center_y': .7059}
         size_hint: .3906, .1159
-        on_release: root.manager.get_screen('loged').zapisi()
+        on_release: root.manager.get_screen('loged').newzapis()
         Image:
             source: 'Assets/mosloged/emiasbutton.png'
             center_x: self.parent.center_x
@@ -106,7 +105,6 @@
         markup: True
         pos_hint: {'center_x': .08, 'center_y': .93}
         font_size: dp(100)
-        font_name: 'Assets/roboto'
         halign: 'center'
     MDLabel:
         id: week
@@ -116,5 +114,4 @@
         markup: True
         pos_hint: {'center_x': .08, 'center_y': .87}
         font_size: dp(50)
-        font_name: 'Assets/roboto'
         halign: 'center'

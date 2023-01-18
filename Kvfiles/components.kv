@@ -1,235 +1,27 @@
 <Loading>:
     name: "load"
-    canvas.before:
-        Color:
-            rgba: 176/255,0,0, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
+    Image:
+        source: 'Assets/loadingscreen/loadbg.png'
+        allow_stretch: True
+        keep_ratio: False
     MDSpinner:
         size_hint: None, None
-        size: dp(60), dp(60)
-        color: 1,1,1,1
+        size: dp(100), dp(100)
+        line_width: 6
+        color: get_color_from_hex('#E2F9F2')
         pos_hint: {'center_x': .5, 'center_y': .5}
         active: True 
-<Loadingoms>:
-    name: "loadoms"
-    canvas.before:
-        Color:
-            rgba: 0/255, 106/255, 240/255, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    MDSpinner:
-        size_hint: None, None
-        size: dp(60), dp(60)
-        color: 1,1,1,1
-        pos_hint: {'center_x': .5, 'center_y': .5}
-        active: True 
-    
-<Item>
-    id: mobiledialog
-    orientation: "horizontal"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "120dp"
-    MDTextField:
-        id: verif1
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        on_text: verif2.focus = True
-        size_hint: .1, .5
-        max_text_length: 1
-        pos_hint: {'center_x': .10, 'center_y': .65}
-        mode: "fill"
-    MDTextField:
-        id: verif2
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        size_hint: .1, .5
-        on_text: verif3.focus = True
-        pos_hint: {'center_x': .28, 'center_y': .65}
-        mode: "fill"
-        max_text_length: 1
-    MDTextField:
-        id: verif3
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        size_hint: .1, .5
-        on_text: verif4.focus = True
-        pos_hint: {'center_x': .46, 'center_y': .65}
-        mode: "fill"
-        max_text_length: 1
-    MDTextField:
-        id: verif4
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        size_hint: .1, .5
-        on_text: verif5.focus = True
-        pos_hint: {'center_x': .64, 'center_y': .65}
-        mode: "fill"
-        max_text_length: 1
-    MDTextField:
-        id: verif5
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        max_text_length: 1
-        size_hint: .1, .5
-        pos_hint: {'center_x': .82, 'center_y': .65}
-        mode: "fill"
-<Itemfactor>
-    orientation: "horizontal"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "120dp"
-    MDTextField:
-        id: verif1
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        on_text: verif2.focus = True
-        size_hint: .1, .5
-        max_text_length: 1
-        pos_hint: {'center_x': .05, 'center_y': .65}
-        mode: "fill"
-    MDTextField:
-        id: verif2
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        size_hint: .1, .5
-        on_text: verif3.focus = True
-        pos_hint: {'center_x': .23, 'center_y': .65}
-        mode: "fill"
-        max_text_length: 1
-    MDTextField:
-        id: verif3
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        size_hint: .1, .5
-        on_text: verif4.focus = True
-        pos_hint: {'center_x': .41, 'center_y': .65}
-        mode: "fill"
-        max_text_length: 1
-    MDTextField:
-        id: verif4
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        size_hint: .1, .5
-        on_text: verif5.focus = True
-        pos_hint: {'center_x': .59, 'center_y': .65}
-        mode: "fill"
-        max_text_length: 1
-    MDTextField:
-        id: verif5
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        max_text_length: 1
-        on_text: verif6.focus = True
-        size_hint: .1, .5
-        pos_hint: {'center_x': .77, 'center_y': .65}
-        mode: "fill"
-    MDTextField:
-        id: verif6
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        max_text_length: 1
-        size_hint: .1, .5
-        pos_hint: {'center_x': .95, 'center_y': .65}
-        mode: "fill"
-<Itemerrors>
-    id: mobiledialog
-    orientation: "horizontal"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "120dp"
-    MDTextField:
-        id: verif1
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        on_text: verif2.focus = True
-        size_hint: .1, .5
-        max_text_length: 1
-        pos_hint: {'center_x': .10, 'center_y': .65}
-        mode: "fill"
-    MDTextField:
-        id: verif2
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        size_hint: .1, .5
-        on_text: verif3.focus = True
-        pos_hint: {'center_x': .28, 'center_y': .65}
-        mode: "fill"
-        max_text_length: 1
-    MDTextField:
-        id: verif3
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        size_hint: .1, .5
-        on_text: verif4.focus = True
-        pos_hint: {'center_x': .46, 'center_y': .65}
-        mode: "fill"
-        max_text_length: 1
-    MDTextField:
-        id: verif4
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        size_hint: .1, .5
-        on_text: verif5.focus = True
-        pos_hint: {'center_x': .64, 'center_y': .65}
-        mode: "fill"
-        max_text_length: 1
-    MDTextField:
-        id: verif5
-        helper_text_mode: "persistent"
-        font_name: 'Assets/roboto'
-        max_text_length: 1
-        size_hint: .1, .5
-        pos_hint: {'center_x': .82, 'center_y': .65}
-        mode: "fill"
-<Itemwait>
-    id: mobiledialog
-    orientation: "horizontal"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "200dp"
-    MDIcon:
-        id: icons
-        icon: 'alert-circle'
-        font_size: 100
-        pos_hint: {'center_x': .5, 'center_y': .7}
-    MDLabel:
-        id: timers
-        text: '60'
-        halign: 'center'
-        font_name: 'Assets/roboto'
-        font_size: dp(26)
-        pos_hint: {'center_x': .85, 'center_y': .14}
-    MDLabel:
-        id: succ
-        text: ''
-        halign: 'center'
-        font_name: 'Assets/roboto'
-        font_size: dp(26)
-        pos_hint: {'center_x': .5, 'center_y': .35}
-    MDLabel:
-        id: succ1
-        text: ''
-        halign: 'center'
-        font_name: 'Assets/roboto'
-        font_size: dp(26)
-        pos_hint: {'center_x': .5, 'center_y': .09}
-    MDLabel:
-        id: labels
-        text: 'Доступ разблокируется через'
-        halign: 'center'
-        font_name: 'Assets/roboto'
-        font_size: dp(25)
-        pos_hint: {'center_x': .4, 'center_y': .14}
+
 <Zapisi>:
     name: 'zapisi'
+    Image:
+        source: 'Assets/omsloged/myzapisi.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.get_screen('loged').screenback()
@@ -239,39 +31,28 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     ScrollView:
-        size_hint: .6, .9
+        size_hint: .5, .7
         md_bg_color: 1,1,1,0
-        pos_hint: {'center_x': .5, 'center_y': .5}
+        pos_hint: {'center_x': .5, 'center_y': .37}
         GridLayout:
             scroll_distance: 30
             cols:1
-            spacing:10 
+            spacing: 45
             size_hint_y: None
             height: self.minimum_height
             id: scrollid
-<Full>
-    id: fulldialog
-    orientation: "horizontal"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "120dp"
-    MDLabel:
-        bold: True
-        theme_text_color: 'Custom'
-        text_color: 'grey'
-        markup: True
-        pos_hint: {'center_x': .5, 'center_y': .5}
-        font_size: dp(20)
-        font_name: 'Assets/roboto'
-        text: "Чтобы войти в полную версию необходимо авторизоваться через mos.ru. Текущая авторизация будет прервана и вы будете перенаправлены на страницу входа через mos.ru"
 <Perenos>:
     name: 'perenos'
+    Image:
+        source: 'Assets/omsloged/myzapisi.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.current = 'zapisi'
@@ -281,7 +62,7 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     ScrollView:
         size_hint: .6, .9
         md_bg_color: 1,1,1,0
@@ -296,9 +77,9 @@
 <Showdate>:
     name: 'timetable'
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release: root.back()
         Image:
@@ -306,7 +87,7 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     MDCard:
         orientation: "vertical"
         pos_hint: {'center_x': .47, 'center_y': .55}
@@ -317,10 +98,14 @@
             id: lay 
 <Prikreplenia>:
     name: 'prik'
+    Image:
+        source: 'Assets/omsloged/prikbg.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.get_screen('loged').screenback()
@@ -330,24 +115,28 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     ScrollView:
-        size_hint: .6, .9
+        size_hint: .5, .7
         md_bg_color: 1,1,1,0
-        pos_hint: {'center_x': .5, 'center_y': .5}
+        pos_hint: {'center_x': .5, 'center_y': .37}
         GridLayout:
             scroll_distance: 30
             cols:1
-            spacing:10
+            spacing: 45
             size_hint_y: None
             height: self.minimum_height
             id: lay
 <Napravlenia>:
     name: 'napr'
+    Image:
+        source: 'Assets/omsloged/mynapr.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.get_screen('loged').screenback()
@@ -357,7 +146,7 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     ScrollView:
         size_hint: .6, .9
         md_bg_color: 1,1,1,0
@@ -372,18 +161,17 @@
 <LKCard>:
     name: 'lkcard'
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
-        on_release:
-            root.manager.current = 'mosloged'
+        on_release: root.manager.current = 'mosloged'
         Image:
             source: 'Assets/exitbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     MDCard:
         size_hint: .6, .8
         md_bg_color: 170/255,170/255,170/255,1
@@ -463,19 +251,19 @@
 <History>:
     name: 'history'
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release:
-            root.manager.current = 'lkcard'
+            root.manager.get_screen('loged').screenback()
             root.ids.scrollid.clear_widgets()
         Image:
             source: 'Assets/exitbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     ScrollView:
         size_hint: .6, .9
         md_bg_color: 1,1,1,0
@@ -490,9 +278,9 @@
 <AnamnesView>
     name: 'anamn'
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.current = 'history'
@@ -502,7 +290,7 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     ScrollView:
         size_hint: .6, .9
         md_bg_color: 1,1,1,0
@@ -517,9 +305,9 @@
 <Privivki>:
     name: 'priv'
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.current = 'lkcard'
@@ -528,7 +316,7 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     MDCard:
         size_hint: .8, .8
         md_bg_color: 170/255,170/255,170/255,1
@@ -552,9 +340,9 @@
 <PrivivkiView>
     name: 'privview'
     MDTextButton:
-        size_hint: .18, .15
+        size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .911, 'center_y': .1}
+        pos_hint: {'center_x': .88, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.current = 'priv'
@@ -564,7 +352,7 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
-            size: 300, 350
+            size: self.parent.size
     ScrollView:
         size_hint: .6, .9
         md_bg_color: 1,1,1,0

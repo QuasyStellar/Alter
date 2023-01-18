@@ -22,8 +22,8 @@
         id: omsrefresh
         MDTextField:
             id: policy
-            text_color_focus: get_color_from_hex('#72C3AC')
-            text_color_normal: get_color_from_hex('#72C3AC')
+            text_color_focus: get_color_from_hex('#D4F5EC')
+            text_color_normal: get_color_from_hex('#D4F5EC')
             mode: "fill"
             fill_color_focus:  get_color_from_hex("#32494B")
             size_hint: .33, .075
@@ -104,7 +104,6 @@
             markup: True
             pos_hint: {'center_x': .08, 'center_y': .93}
             font_size: dp(100)
-            font_name: 'Assets/roboto'
             halign: 'center'
         MDLabel:
             id: week
@@ -114,7 +113,82 @@
             markup: True
             pos_hint: {'center_x': .08, 'center_y': .87}
             font_size: dp(50)
-            font_name: 'Assets/roboto'
             halign: 'center'
-                
-                
+
+
+<OMSErrorScreen>:
+    name: 'omserror'
+    Image:
+        source: 'Assets/omsscreen/errorbg.png'
+        allow_stretch: True
+        keep_ratio: False
+    MDTextButton:
+        size_hint: .38, .25
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .12}
+        font_size: dp(25)
+        on_release:
+            root.manager.current = 'oms'
+        Image:
+            source: 'Assets/firstscreen/pon.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
+    MDLabel:
+        id: time
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .08, 'center_y': .93}
+        font_size: dp(100)
+        halign: 'center'
+    MDLabel:
+        id: week
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .08, 'center_y': .87}
+        font_size: dp(50)
+        halign: 'center'
+
+<OMSErrorUnkScreen>:
+    name: 'omserrorunk'
+    Image:
+        source: 'Assets/omsscreen/errorunkbg.png'
+        allow_stretch: True
+        keep_ratio: False
+    MDTextButton:
+        size_hint: .38, .25
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .12}
+        font_size: dp(25)
+        on_release:
+            root.manager.current = 'oms'
+        Image:
+            source: 'Assets/firstscreen/pon.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
+    MDLabel:
+        id: time
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .08, 'center_y': .93}
+        font_size: dp(100)
+        halign: 'center'
+    MDLabel:
+        id: week
+        bold: True
+        theme_text_color: 'Custom'
+        text_color: 'white'
+        markup: True
+        pos_hint: {'center_x': .08, 'center_y': .87}
+        font_size: dp(50)
+        
+        halign: 'center'

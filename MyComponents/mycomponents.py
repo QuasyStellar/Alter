@@ -6,22 +6,6 @@ from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.behaviors.toggle_behavior import MDToggleButton
 
 
-
-class Itemfactor(RelativeLayout):
-    pass
-
-class Item(RelativeLayout):
-    pass
-
-class Full(RelativeLayout):
-    pass
-
-class Itemwait(RelativeLayout):
-    pass
-
-class Itemerrors(RelativeLayout):
-    pass
-
 class Tab(MDFloatLayout, MDTabsBase):
     pass
 
