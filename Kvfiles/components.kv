@@ -15,13 +15,14 @@
 <Zapisi>:
     name: 'zapisi'
     Image:
+        id: backgr
         source: 'Assets/omsloged/myzapisi.png'
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.get_screen('loged').screenback()
@@ -39,20 +40,20 @@
         GridLayout:
             scroll_distance: 30
             cols:1
-            spacing: 20
+            spacing: 10
             size_hint_y: None
             height: self.minimum_height
             id: scrollid
 <Perenos>:
     name: 'perenos'
     Image:
-        source: 'Assets/omsloged/myzapisi.png'
+        source: 'Assets/omsloged/perenos.png'
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.current = 'zapisi'
@@ -64,22 +65,25 @@
             allow_stretch: True
             size: self.parent.size
     ScrollView:
-        size_hint: .6, .9
+        size_hint: .5, .7
         md_bg_color: 1,1,1,0
-        pos_hint: {'center_x': .5, 'center_y': .5}
+        pos_hint: {'center_x': .5, 'center_y': .37}
         GridLayout:
             scroll_distance: 30
             cols:1
-            spacing:10 
             size_hint_y: None
             height: self.minimum_height
             id: scrollid
 <Showdate>:
     name: 'timetable'
+    Image:
+        source: 'Assets/omsloged/timechoose.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release: root.back()
         Image:
@@ -90,10 +94,11 @@
             size: self.parent.size
     MDCard:
         orientation: "vertical"
-        pos_hint: {'center_x': .47, 'center_y': .55}
-        size_hint: .7, .7
-        radius: [30]
+        pos_hint: {'center_x': .5, 'center_y': .456}
+        size_hint: .58, .508
+        radius: [10]
         md_bg_color: 1,1,1,1
+        border_radius: 10
         RelativeLayout:
             id: lay 
 <Prikreplenia>:
@@ -105,7 +110,7 @@
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.get_screen('loged').screenback()
@@ -123,7 +128,7 @@
         GridLayout:
             scroll_distance: 30
             cols:1
-            spacing: 45
+            spacing: 10
             size_hint_y: None
             height: self.minimum_height
             id: lay
@@ -136,7 +141,7 @@
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.get_screen('loged').screenback()
@@ -148,13 +153,14 @@
             allow_stretch: True
             size: self.parent.size
     ScrollView:
-        size_hint: .6, .9
+        size_hint: .5, .7
         md_bg_color: 1,1,1,0
-        pos_hint: {'center_x': .5, 'center_y': .5}
+        pos_hint: {'center_x': .5, 'center_y': .37}
         GridLayout:
             scroll_distance: 30
             cols:1
-            spacing:10 
+            spacing: 10
+
             size_hint_y: None
             height: self.minimum_height
             id: scrollid
@@ -163,7 +169,7 @@
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release: root.manager.current = 'mosloged'
         Image:
@@ -253,7 +259,7 @@
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.get_screen('loged').screenback()
@@ -265,13 +271,13 @@
             allow_stretch: True
             size: self.parent.size
     ScrollView:
-        size_hint: .6, .9
+        size_hint: .5, .7
         md_bg_color: 1,1,1,0
-        pos_hint: {'center_x': .5, 'center_y': .5}
+        pos_hint: {'center_x': .5, 'center_y': .37}
         GridLayout:
             scroll_distance: 30
             cols:1
-            spacing:10 
+            spacing: 10
             size_hint_y: None
             height: self.minimum_height
             id: scrollid
@@ -280,7 +286,7 @@
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.current = 'history'
@@ -292,13 +298,13 @@
             allow_stretch: True
             size: self.parent.size
     ScrollView:
-        size_hint: .6, .9
+        size_hint: .5, .7
         md_bg_color: 1,1,1,0
-        pos_hint: {'center_x': .5, 'center_y': .5}
+        pos_hint: {'center_x': .5, 'center_y': .37}
         GridLayout:
             scroll_distance: 30
             cols:1
-            spacing:10 
+            spacing: 10
             size_hint_y: None
             height: self.minimum_height
             id: scrollid
@@ -307,7 +313,7 @@
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.current = 'lkcard'
@@ -342,7 +348,7 @@
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
-        pos_hint: {'center_x': .88, 'center_y': .08}
+        pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
             root.manager.current = 'priv'
@@ -354,13 +360,13 @@
             allow_stretch: True
             size: self.parent.size
     ScrollView:
-        size_hint: .6, .9
+        size_hint: .5, .7
         md_bg_color: 1,1,1,0
-        pos_hint: {'center_x': .5, 'center_y': .5}
+        pos_hint: {'center_x': .5, 'center_y': .37}
         GridLayout:
             scroll_distance: 30
             cols:1
-            spacing:10 
+            spacing: 10
             size_hint_y: None
             height: self.minimum_height
             id: scrollid

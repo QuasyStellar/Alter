@@ -32,9 +32,7 @@ class OMSScreen(Screen):
         self.day = None
         self.year = None
         self.month = None
-        self.manager.transition = FadeTransition(duration=.1)
         self.manager.current = 'enter'
-        self.manager.get_screen('enter').on_touch_down()
         self.ids.counts.text_color ='white'
         x = ToggleButtonBehavior.get_widgets('x')
         for i in x:
@@ -198,4 +196,12 @@ class OMSErrorScreen(Screen):
     pass
 
 class OMSErrorUnkScreen(Screen):
+    def back(self):
+        if self.manager.get_screen('loged').types == None:
+            self.manager.current = 'oms'
+        elif self.manager.get_screen('loged').types == 'oms':
+            self.manager.current = 'loged'
+        else:
+            self.manager.current = 'mosloged'
+
     pass

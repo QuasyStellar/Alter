@@ -27,8 +27,8 @@ locale.setlocale(
     )
 
 
-Window.maximize()
-
+#Window.maximize()
+Window.size = (1920, 1080)
 
 for kv in listdir('Kvfiles'):
     Builder.load_file(f"Kvfiles/{kv}")
@@ -111,10 +111,10 @@ class AlterApp(MDApp):
         sm.add_widget(OMSLoged(name="loged"))#
         sm.add_widget(MOSLoged(name="mosloged"))#
         sm.add_widget(Loading(name="load"))#
-        sm.add_widget(Zapisi(name='zapisi'))
-        sm.add_widget(Perenos(name='perenos'))
-        sm.add_widget(Showdate(name=('timetable')))
-        sm.add_widget(Prikreplenia(name='prik'))
+        sm.add_widget(Zapisi(name='zapisi'))#
+        sm.add_widget(Perenos(name='perenos'))#
+        sm.add_widget(Showdate(name='timetable'))
+        sm.add_widget(Prikreplenia(name='prik'))#
         sm.add_widget(Napravlenia(name='napr'))
         sm.add_widget(LKCard(name="lkcard"))
         sm.add_widget(History(name='history'))

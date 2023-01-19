@@ -3,6 +3,7 @@ from kivy.uix.screenmanager import Screen, FadeTransition
 from kivymd.uix.button import MDFillRoundFlatButton
 from kivy.uix.image import Image
 from kivy.clock import Clock
+from kivy.uix.behaviors import ToggleButtonBehavior
 from kivy.core.window import Window
 from kivy.uix.relativelayout import RelativeLayout
 import datetime
@@ -12,6 +13,21 @@ class ENTERScreen(Screen):
     timer = None
     def on_touch_down(self, touch=None):
         def inactive(*args):
+            self.manager.get_screen('oms').ids.policy.text =""
+            self.manager.get_screen('oms').day = None
+            self.manager.get_screen('oms').year = None
+            self.manager.get_screen('oms').month = None
+            self.manager.get_screen('oms').manager.current = 'enter'
+            self.manager.get_screen('oms').ids.counts.text_color ='white'
+            x = ToggleButtonBehavior.get_widgets('x')
+            for i in x:
+                i.state = 'normal'
+            y = ToggleButtonBehavior.get_widgets('y')
+            for i in y:
+                i.state = 'normal'
+            z = ToggleButtonBehavior.get_widgets('z')
+            for i in z:
+                i.state = 'normal'
             self.manager.get_screen('mos').check(flag=True)
             self.manager.current = 'afk'
 
