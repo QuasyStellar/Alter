@@ -1,5 +1,5 @@
 from kivymd.uix.dialog import MDDialog
-from kivy.uix.screenmanager import Screen, FadeTransition
+from kivy.uix.screenmanager import Screen, FadeTransition, ScreenManager
 from kivymd.uix.button import MDFillRoundFlatButton
 from kivy.uix.image import Image
 from kivy.clock import Clock
@@ -12,6 +12,7 @@ class ENTERScreen(Screen):
     dialogs = None
     timer = None
     def on_touch_down(self, touch=None):
+        print('touch')
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None
@@ -19,6 +20,17 @@ class ENTERScreen(Screen):
             self.manager.get_screen('oms').month = None
             self.manager.get_screen('oms').manager.current = 'enter'
             self.manager.get_screen('oms').ids.counts.text_color ='white'
+            self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
+            self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
+            self.manager.get_screen('timetable').ids.lay.clear_widgets()
+            try:
+                if self.manager.get_screen('timetable').children[0].check == True:
+                        self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
+            except:
+                None
+                
+            self.manager.get_screen('prik').ids.lay.clear_widgets()
+            self.manager.get_screen('napr').ids.scrollid.clear_widgets()
             x = ToggleButtonBehavior.get_widgets('x')
             for i in x:
                 i.state = 'normal'
@@ -31,11 +43,12 @@ class ENTERScreen(Screen):
             self.manager.get_screen('mos').check(flag=True)
             self.manager.current = 'afk'
 
-        if self.timer is not None:
-            self.timer.cancel()
-        self.timer = Clock.schedule_once(inactive, 300)
+        if self.manager.get_screen('enter').timer is not None:
+            self.manager.get_screen('enter').timer.cancel()
+        self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
         if touch !=None:
-            return super(ENTERScreen, self).on_touch_down(touch)
+            return super(Screen, self).on_touch_down(touch)
+
     def oms(self):
         self.manager.transition = FadeTransition()
         self.manager.current = "oms"

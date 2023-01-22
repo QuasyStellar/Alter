@@ -85,7 +85,6 @@
         on_release:
             root.manager.transition = FadeTransition(duration=.1)
             root.manager.current = 'enter'
-            root.manager.get_screen('enter').on_touch_down()
         Image:
             source: 'Assets/firstscreen/continuebut.png'
             center_x: self.parent.center_x
@@ -106,7 +105,6 @@
         on_release:
             root.manager.transition = FadeTransition(duration=.1)
             root.manager.current = 'enter'
-            root.manager.get_screen('enter').on_touch_down()
         Image:
             source: 'Assets/firstscreen/pon.png'
             center_x: self.parent.center_x
