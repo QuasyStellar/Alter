@@ -21,7 +21,7 @@ from kivymd.uix.card import MDCard
 
 class LKCard(Screen):
     def on_touch_down(self, touch=None):
-        print('touch')
+        
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None

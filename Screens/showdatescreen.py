@@ -2,7 +2,7 @@ from kivymd.uix.screen import MDScreen as Screen
 from kivy.clock import Clock
 from kivy.uix.behaviors import ToggleButtonBehavior
 
-class EmiasScreen(Screen):
+class Showdate(Screen):
     def on_touch_down(self, touch=None):
         
         def inactive(*args):
@@ -39,4 +39,11 @@ class EmiasScreen(Screen):
         self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
         if touch !=None:
             return super(Screen, self).on_touch_down(touch)
-        pass
+    def back(self):
+        self.manager.current = 'perenos'
+        self.ids.lay.clear_widgets()
+        try:
+            if self.children[0].check == True:
+                self.remove_widget(self.children[0])
+        except Exception as ex:
+            print(ex)

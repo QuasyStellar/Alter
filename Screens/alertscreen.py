@@ -2,7 +2,10 @@ from kivymd.uix.screen import MDScreen as Screen
 from kivy.clock import Clock
 from kivy.uix.behaviors import ToggleButtonBehavior
 
-class EmiasScreen(Screen):
+
+
+
+class Alert(Screen):
     def on_touch_down(self, touch=None):
         
         def inactive(*args):
@@ -39,4 +42,4 @@ class EmiasScreen(Screen):
         self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
         if touch !=None:
             return super(Screen, self).on_touch_down(touch)
-        pass
+    pass

@@ -18,7 +18,6 @@ from kivymd.uix.card import MDCard
 
 class OMSLoged(Screen):
     def on_touch_down(self, touch=None):
-        print('touch')
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None
@@ -171,7 +170,7 @@ class OMSLoged(Screen):
                     if 'toDoctor' in jsps["result"][i]:
                         card = MDCard(size_hint=(1, None), height=350, md_bg_color = (0,0,0,0))
                         layout = RelativeLayout()
-                        layout.add_widget(Image(source= 'Assets/omsloged/zapisperenos.png', height = 185, width = 185, keep_ratio = False))
+                        layout.add_widget(Image(source= 'Assets/omsloged/zapisperenos.png', keep_ratio = False))
                         if 'Офтальмолог' in jsps['result'][i]["name"].replace("_", " ") or 'офтальм' in jsps['result'][i]["name"].replace("_", " "):
                             layout.add_widget(Image(source= 'Assets/omsloged/docicons/eyes.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.6}))
                         elif 'Оториноларинголог' in jsps['result'][i]["name"].replace("_", " ") or 'оторин 'in jsps['result'][i]["name"].replace("_", " "):
@@ -273,7 +272,7 @@ class OMSLoged(Screen):
                     else:
                         card = MDCard(size_hint=(1, None), height=350, md_bg_color = (0,0,0,0))
                         layout = RelativeLayout()
-                        layout.add_widget(Image(source= 'Assets/omsloged/zapisperenos.png', height = 185, width = 185, keep_ratio = False))
+                        layout.add_widget(Image(source= 'Assets/omsloged/zapisperenos.png', keep_ratio = False))
                         layout.add_widget(Image(source= 'Assets/omsloged/docicons/ldp.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.6}))
                         specname = MDLabel(
                             text=jsps["result"][i]["toLdp"]["ldpTypeName"],
@@ -402,72 +401,80 @@ class OMSLoged(Screen):
                         if 'room' in jsvrachi["result"][i]['complexResource'][j]:
                             c += 1
                 if c == 0:
-                    card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                  md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
-                    layout = RelativeLayout()
-                    label = MDLabel(
-                        text='Перенос не доступен',
-                        theme_text_color='Custom',
-                        text_color='white',
-                        halign='center'
-                    )
-                    label.font_size = 40
-                    label.pos_hint = {'center_x': .5, 'center_y': .5}
-                    layout.add_widget(label)
-                    card.add_widget(layout)
-                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                    layout = RelativeLayout(size_hint=(1, None), height=200)
+                    layout.add_widget(Image(source= 'Assets/omsloged/unableperenos.png'))
+                    self.manager.get_screen("perenos").ids.scrollid.add_widget(layout)
                 else:
                     for i in range(len(jsvrachi["result"])):
                         for j in range(len(jsvrachi["result"][i]['complexResource'])):
                             if 'room' in jsvrachi["result"][i]['complexResource'][j]:
-                                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                                card = MDCard(size_hint=(1, None), height=280, md_bg_color = (0,0,0,0))
                                 layout = RelativeLayout()
+                                layout.add_widget(Image(source= 'Assets/omsloged/vrachchoosebutton.png'))
+                                if 'Офтальмолог' in jsvrachi['result'][i]["name"].replace("_", " ") or 'офтальм' in jsvrachi['result'][i]["name"].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/eyes.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'Оториноларинголог' in jsvrachi['result'][i]["name"].replace("_", " ") or 'оторин 'in jsvrachi['result'][i]["name"].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/ear.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'Стоматолог' in jsvrachi['result'][i]["name"].replace("_", " ") or 'зуб' in jsvrachi['result'][i]["name"].replace("_", " ") or 'стомат' in jsvrachi['result'][i]["name"].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/tooth.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'Гастроэнтеролог' in jsvrachi['result'][i]["name"].replace("_", " ") or 'гастро' in jsvrachi['result'][i]["name"].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/gastro.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'справ' in jsvrachi['result'][i]["name"].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/document.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'ОРВИ' in jsvrachi['result'][i]["name"].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/covid19.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                else:
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/docdefault.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
                                 name = MDLabel(
                                     text=jsvrachi["result"][i]['name'].replace("_", " "),
                                     theme_text_color='Custom',
-                                    text_color='white'
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
-                                name.font_size = 45
-                                name.pos_hint = {'center_x': .55, 'center_y': .8}
+                                name.font_size = 30
+                                name.font_name =  'Assets/fonts/roboto.ttf'
+                                name.pos_hint = {'center_x': .7, 'center_y': .73}
                                 layout.add_widget(name)
                                 time = datetime.datetime.fromisoformat(
                                     jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
                                 avail = MDLabel(
                                     text=f'{time.strftime("С %d %b, %a")}',
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
-                                avail.font_size = 35
-                                avail.pos_hint = {'center_x': .55, 'center_y': .6}
+                                avail.font_size = 30
+                                avail.font_name =  'Assets/fonts/roboto.ttf'
+                                avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
                                 layout.add_widget(avail)
                                 address = MDLabel(
                                     text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
                                 address.font_size = 30
-                                address.pos_hint = {'center_x': .55, 'center_y': .4}
+                                address.font_name =  'Assets/fonts/roboto.ttf'
+                                address.pos_hint = {'center_x': .7, 'center_y': .58}
                                 fulladdress = MDLabel(
                                     text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
                                 fulladdress.font_size = 30
-                                fulladdress.pos_hint = {'center_x': .55, 'center_y': .2}
+                                fulladdress.font_name =  'Assets/fonts/roboto.ttf'
+                                fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
+                                cab = MDLabel(
+                                    text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                    theme_text_color='Custom',
+                                    text_color=get_color_from_hex('#D4F5EC'),
+                                )
+                                cab.font_size = 30
+                                cab.font_name =  'Assets/fonts/roboto.ttf'
+                                cab.pos_hint = {'center_x': .7, 'center_y': .28}
+                                layout.add_widget(cab)
                                 layout.add_widget(fulladdress)
                                 layout.add_widget(address)
-                                perenos = MDFillRoundFlatButton(
-                                    text="Выбрать",
-                                    theme_text_color='Custom',
-                                    text_color='white',
-                                )
-                                perenos.vrachnum = i
-                                perenos.zapisvibor = zapisvibor
-                                perenos.bind(on_release=self.showdateandtime)
-                                perenos.pos_hint = {'center_x': .85, 'center_y': .2}
-                                perenos.font_size = 40
-                                layout.add_widget(perenos)
+                                card.vrachnum = i
+                                card.zapisvibor = zapisvibor
+                                card.bind(on_release=self.showdateandtime)
                                 card.add_widget(layout)
                                 self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
             else:
@@ -484,72 +491,67 @@ class OMSLoged(Screen):
                         if 'room' in jsvrachi["result"][i]['complexResource'][j]:
                             c += 1
                 if c == 0:
-                    card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                  md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
-                    layout = RelativeLayout()
-                    label = MDLabel(
-                        text='Перенос не доступен',
-                        theme_text_color='Custom',
-                        text_color='white',
-                        halign='center'
-                    )
-                    label.font_size = 40
-                    label.pos_hint = {'center_x': .5, 'center_y': .5}
-                    layout.add_widget(label)
-                    card.add_widget(layout)
-                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                    layout = RelativeLayout(size_hint=(1, None), height=200)
+                    layout.add_widget(Image(source= 'Assets/omsloged/unableperenos.png'))
+                    self.manager.get_screen("perenos").ids.scrollid.add_widget(layout)
                 else:
                     for i in range(len(jsvrachi["result"])):
                         for j in range(len(jsvrachi["result"][i]['complexResource'])):
                             if 'room' in jsvrachi["result"][i]['complexResource'][j]:
-                                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                                card = MDCard(size_hint=(1, None), height=280, md_bg_color = (0,0,0,0))
                                 layout = RelativeLayout()
+                                layout.add_widget(Image(source= 'Assets/omsloged/vrachchoosebutton.png'))
+                                layout.add_widget(Image(source= 'Assets/omsloged/docicons/ldp.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
                                 name = MDLabel(
                                     text=jsvrachi["result"][i]['name'].replace("_", " "),
                                     theme_text_color='Custom',
-                                    text_color='white'
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
-                                name.font_size = 45
-                                name.pos_hint = {'center_x': .55, 'center_y': .8}
+                                name.font_size = 30
+                                name.pos_hint = {'center_x': .7, 'center_y': .73}
+                                name.font_name =  'Assets/fonts/roboto.ttf'
                                 layout.add_widget(name)
                                 time = datetime.datetime.fromisoformat(
                                     jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
                                 avail = MDLabel(
                                     text=f'{time.strftime("С %d %b, %a")}',
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
-                                avail.font_size = 35
-                                avail.pos_hint = {'center_x': .55, 'center_y': .6}
+                                avail.font_size = 30
+                                avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
+                                avail.font_name =  'Assets/fonts/roboto.ttf'
+                                cab = MDLabel(
+                                    text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                    theme_text_color='Custom',
+                                    text_color=get_color_from_hex('#D4F5EC'),
+                                )
+                                cab.font_size = 30
+                                cab.font_name =  'Assets/fonts/roboto.ttf'
+                                cab.pos_hint = {'center_x': .7, 'center_y': .28}
+                                layout.add_widget(cab)
                                 layout.add_widget(avail)
                                 address = MDLabel(
                                     text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
                                 address.font_size = 30
-                                address.pos_hint = {'center_x': .55, 'center_y': .4}
+                                address.pos_hint = {'center_x': .7, 'center_y': .58}
+                                address.font_name =  'Assets/fonts/roboto.ttf'
                                 fulladdress = MDLabel(
                                     text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
                                 fulladdress.font_size = 30
-                                fulladdress.pos_hint = {'center_x': .55, 'center_y': .2}
+                                fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
+                                fulladdress.font_name =  'Assets/fonts/roboto.ttf'
                                 layout.add_widget(fulladdress)
                                 layout.add_widget(address)
-                                perenos = MDFillRoundFlatButton(
-                                    text="Выбрать",
-                                    theme_text_color='Custom',
-                                    text_color='white',
-                                )
-                                perenos.vrachnum = i
-                                perenos.zapisvibor = zapisvibor
-                                perenos.bind(on_release=self.showdateandtime)
-                                perenos.pos_hint = {'center_x': .85, 'center_y': .2}
-                                perenos.font_size = 40
-                                layout.add_widget(perenos)
+                                card.vrachnum = i
+                                card.zapisvibor = zapisvibor
+                                card.bind(on_release=self.showdateandtime)
                                 card.add_widget(layout)
                                 self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
             self.manager.current = 'perenos'
@@ -784,33 +786,61 @@ class OMSLoged(Screen):
             else:
                 for i in range(len(jsnp["result"])):
                     if 'toDoctor' in jsnp['result'][i]:
-                        card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                      md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                        card = MDCard(size_hint=(1, None), height=280, md_bg_color = (0,0,0,0))
                         layout = RelativeLayout()
+                        layout.add_widget(Image(source= 'Assets/omsloged/vrachchoosebutton.png'))
+                        if 'Офтальмолог' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " ") or 'офтальм' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " "):
+                            layout.add_widget(Image(source= 'Assets/omsloged/docicons/eyes.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                        elif 'Оториноларинголог' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " ") or 'оторин 'in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " "):
+                            layout.add_widget(Image(source= 'Assets/omsloged/docicons/ear.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                        elif 'Стоматолог' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " ") or 'зуб' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " ") or 'стомат' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " "):
+                            layout.add_widget(Image(source= 'Assets/omsloged/docicons/tooth.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                        elif 'Гастроэнтеролог' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " ") or 'гастро' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " "):
+                            layout.add_widget(Image(source= 'Assets/omsloged/docicons/gastro.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                        elif 'справ' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " "):
+                            layout.add_widget(Image(source= 'Assets/omsloged/docicons/document.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                        elif 'ОРВИ' in jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " "):
+                            layout.add_widget(Image(source= 'Assets/omsloged/docicons/covid19.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                        else:
+                            layout.add_widget(Image(source= 'Assets/omsloged/docicons/docdefault.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
                         name = MDLabel(
                             text=jsnp["result"][i]["toDoctor"]["specialityName"].replace("_", " "),
                             theme_text_color='Custom',
-                            text_color='white'
+                            text_color=get_color_from_hex('#D4F5EC'),
+                            size_hint_x = .8
                         )
-                        name.font_size = 35
-                        name.pos_hint = {'center_x': .55, 'center_y': .8}
+                        name.font_size = 30
+                        name.font_name =  'Assets/fonts/roboto.ttf'
+                        name.pos_hint = {'center_x': .6, 'center_y': .73}
                         layout.add_widget(name)
                         time = datetime.datetime.fromisoformat(jsnp["result"][i]["startTime"])
                         avail = MDLabel(
-                            text=f'{time.strftime("С %d %b, %a")}',
+                            text=f'{time.strftime("Доступно с %d %b")}',
                             theme_text_color='Custom',
-                            text_color='white',
+                            text_color=get_color_from_hex('#D4F5EC'),
                         )
-                        avail.font_size = 35
-                        avail.pos_hint = {'center_x': .55, 'center_y': .6}
+                        avail.font_size = 30
+                        avail.font_name =  'Assets/fonts/roboto.ttf'
+                        avail.pos_hint = {'center_x': .7, 'center_y': .58}
                         layout.add_widget(avail)
+                        endtime = datetime.datetime.fromisoformat(jsnp["result"][i]["endTime"])
                         end = MDLabel(
-                            text=jsnp["result"][i]["endTime"],
+                            text=f'{endtime.strftime("До %d %b")}',
                             theme_text_color='Custom',
-                            text_color='white',
+                            text_color=get_color_from_hex('#D4F5EC'),
                         )
+                        end.font_name =  'Assets/fonts/roboto.ttf'
                         end.font_size = 30
-                        end.pos_hint = {'center_x': .55, 'center_y': .4}
+                        end.pos_hint = {'center_x': .7, 'center_y': .43}
+                        last = MDLabel(
+                            text=f'Осталось {(endtime-datetime.datetime.now()).days+1} дня',
+                            theme_text_color='Custom',
+                            text_color=get_color_from_hex('#D4F5EC'),
+                        )
+                        last.font_name =  'Assets/fonts/roboto.ttf'
+                        last.font_size = 30
+                        last.pos_hint = {'center_x': .7, 'center_y': .28}
+                        layout.add_widget(last)
                         layout.add_widget(end)
                         card.add_widget(layout)
                         card.zapisid = i
@@ -820,34 +850,49 @@ class OMSLoged(Screen):
                         card.bind(on_release=self.naprav)
                         self.manager.get_screen("napr").ids.scrollid.add_widget(card)
                     else:
-                        card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                      md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                        card = MDCard(size_hint=(1, None), height=280, md_bg_color = (0,0,0,0))
                         layout = RelativeLayout()
+                        layout.add_widget(Image(source= 'Assets/omsloged/vrachchoosebutton.png'))
+                        layout.add_widget(Image(source= 'Assets/omsloged/docicons/ldp.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
                         name = MDLabel(
                             text=jsnp["result"][i]["toLdp"]["ldpTypeName"].replace("_", " "),
                             theme_text_color='Custom',
-                            text_color='white'
+                            text_color=get_color_from_hex('#D4F5EC'),
+                            size_hint_x=.8
                         )
-                        name.font_size = 35
-                        name.pos_hint = {'center_x': .55, 'center_y': .8}
+                        name.font_size = 30
+                        name.font_name =  'Assets/fonts/roboto.ttf'
+                        name.pos_hint = {'center_x': .6, 'center_y': .73}
                         layout.add_widget(name)
                         time = datetime.datetime.fromisoformat(jsnp["result"][i]["startTime"])
                         avail = MDLabel(
-                            text=f'{time.strftime("С %d %b, %a")}',
+                            text=f'{time.strftime("Доступно с %d %b")}',
                             theme_text_color='Custom',
-                            text_color='white',
+                            text_color=get_color_from_hex('#D4F5EC'),
                         )
-                        avail.font_size = 35
-                        avail.pos_hint = {'center_x': .55, 'center_y': .6}
+                        avail.font_size = 30
+                        avail.font_name =  'Assets/fonts/roboto.ttf'
+                        avail.pos_hint = {'center_x': .7, 'center_y': .58}
                         layout.add_widget(avail)
+                        endtime = datetime.datetime.fromisoformat(jsnp["result"][i]["endTime"])
                         end = MDLabel(
-                            text=jsnp["result"][i]["endTime"],
+                            text=f'{endtime.strftime("До %d %b")}',
                             theme_text_color='Custom',
-                            text_color='white',
+                            text_color=get_color_from_hex('#D4F5EC'),
                         )
                         end.font_size = 30
-                        end.pos_hint = {'center_x': .55, 'center_y': .4}
+                        end.font_name =  'Assets/fonts/roboto.ttf'
+                        end.pos_hint = {'center_x': .7, 'center_y': .43}
                         layout.add_widget(end)
+                        last = MDLabel(
+                            text=f'Осталось {(endtime-datetime.datetime.now()).days+1} дня',
+                            theme_text_color='Custom',
+                            text_color=get_color_from_hex('#D4F5EC'),
+                        )
+                        last.font_name =  'Assets/fonts/roboto.ttf'
+                        last.font_size = 30
+                        last.pos_hint = {'center_x': .7, 'center_y': .28}
+                        layout.add_widget(last)
                         card.zapisid = i
                         card.refferal = jsnp["result"][i]['id']
                         card.recpID =  jsnp["result"][i]["toLdp"]['ldpTypeId']
@@ -885,7 +930,6 @@ class OMSLoged(Screen):
                                                       "params": {"omsNumber": self.oms, "birthDate": self.bdates,
                                                                  "specialityId": self.specID, 'referralId': instance.refferal}})
                 jsvrachi = zapis.json()
-                print(jsvrachi)
                 self.appID = jsvrachi["result"][zapisvibor]['id']
                 self.recpID = jsvrachi["result"][zapisvibor]["receptionType"][0]['code']
 
@@ -894,75 +938,83 @@ class OMSLoged(Screen):
                         if 'room' in jsvrachi["result"][i]['complexResource'][j]:
                             c += 1
                 if c == 0:
-                    card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                  md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
-                    layout = RelativeLayout()
-                    label = MDLabel(
-                        text='Перенос не доступен',
-                        theme_text_color='Custom',
-                        text_color='white',
-                        halign='center'
-                    )
-                    label.font_size = 40
-                    label.pos_hint = {'center_x': .5, 'center_y': .5}
-                    layout.add_widget(label)
-                    card.add_widget(layout)
-                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                    layout = RelativeLayout(size_hint=(1, None), height=200)
+                    layout.add_widget(Image(source= 'Assets/omsloged/nozapis.png'))
+                    self.manager.get_screen("perenos").ids.scrollid.add_widget(layout)
                 else:
                     for i in range(len(jsvrachi["result"])):
                         for j in range(len(jsvrachi["result"][i]['complexResource'])):
                             if 'room' in jsvrachi["result"][i]['complexResource'][j]:
-                                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                                card = MDCard(size_hint=(1, None), height=280, md_bg_color = (0,0,0,0))
                                 layout = RelativeLayout()
+                                layout.add_widget(Image(source= 'Assets/omsloged/vrachchoosebutton.png'))
+                                if 'Офтальмолог' in jsvrachi["result"][i]['name'].replace("_", " ") or 'офтальм' in jsvrachi["result"][i]['name'].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/eyes.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'Оториноларинголог' in jsvrachi["result"][i]['name'].replace("_", " ") or 'оторин 'in jsvrachi["result"][i]['name'].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/ear.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'Стоматолог' in jsvrachi["result"][i]['name'].replace("_", " ") or 'зуб' in jsvrachi["result"][i]['name'].replace("_", " ") or 'стомат' in jsvrachi["result"][i]['name'].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/tooth.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'Гастроэнтеролог' in jsvrachi["result"][i]['name'].replace("_", " ") or 'гастро' in jsvrachi["result"][i]['name'].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/gastro.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'справ' in jsvrachi["result"][i]['name'].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/document.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                elif 'ОРВИ' in jsvrachi["result"][i]['name'].replace("_", " "):
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/covid19.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
+                                else:
+                                    layout.add_widget(Image(source= 'Assets/omsloged/docicons/docdefault.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
                                 name = MDLabel(
                                     text=jsvrachi["result"][i]['name'].replace("_", " "),
                                     theme_text_color='Custom',
-                                    text_color='white'
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
-                                name.font_size = 45
-                                name.pos_hint = {'center_x': .55, 'center_y': .8}
+                                name.font_size = 30
+                                name.font_name =  'Assets/fonts/roboto.ttf'
+                                name.pos_hint = {'center_x': .7, 'center_y': .73}
                                 layout.add_widget(name)
                                 time = datetime.datetime.fromisoformat(
                                     jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
                                 avail = MDLabel(
                                     text=f'{time.strftime("С %d %b, %a")}',
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
-                                avail.font_size = 35
-                                avail.pos_hint = {'center_x': .55, 'center_y': .6}
+                                avail.font_size = 30
+                                avail.font_name =  'Assets/fonts/roboto.ttf'
+                                avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
                                 layout.add_widget(avail)
                                 address = MDLabel(
                                     text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
                                 address.font_size = 30
-                                address.pos_hint = {'center_x': .55, 'center_y': .4}
+                                address.font_name =  'Assets/fonts/roboto.ttf'
+                                address.pos_hint = {'center_x': .7, 'center_y': .58}
                                 fulladdress = MDLabel(
                                     text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
                                 fulladdress.font_size = 30
-                                fulladdress.pos_hint = {'center_x': .55, 'center_y': .2}
+                                fulladdress.font_name =  'Assets/fonts/roboto.ttf'
+                                fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
+                                cab = MDLabel(
+                                    text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                    theme_text_color='Custom',
+                                    text_color=get_color_from_hex('#D4F5EC'),
+                                )
+                                cab.font_size = 30
+                                cab.font_name =  'Assets/fonts/roboto.ttf'
+                                cab.pos_hint = {'center_x': .7, 'center_y': .28}
+                                layout.add_widget(cab)
                                 layout.add_widget(fulladdress)
                                 layout.add_widget(address)
-                                perenos = MDFillRoundFlatButton(
-                                    text="Выбрать",
-                                    theme_text_color='Custom',
-                                    text_color='white',
-                                )
-                                perenos.vrachnum = i
-                                perenos.zapisvibor = zapisvibor
-                                perenos.resID = jsvrachi["result"][i]['complexResource'][j]['id']
-                                perenos.doctor = 'Napr'
-                                perenos.availRES = jsvrachi["result"][i]['id']
-                                perenos.bind(on_release=self.showdateandtimenew)
-                                perenos.pos_hint = {'center_x': .85, 'center_y': .2}
-                                perenos.font_size = 40
-                                layout.add_widget(perenos)
+                                card.vrachnum = i
+                                card.zapisvibor = zapisvibor
+                                card.resID = jsvrachi["result"][i]['complexResource'][j]['id']
+                                card.doctor = 'Napr'
+                                card.availRES = jsvrachi["result"][i]['id']
+                                card.bind(on_release=self.showdateandtimenew)
                                 card.add_widget(layout)
                                 self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
             else:
@@ -984,80 +1036,75 @@ class OMSLoged(Screen):
                         if 'room' in jsvrachi["result"][i]['complexResource'][j]:
                             c += 1
                 if c == 0:
-                    card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                  md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
-                    layout = RelativeLayout()
-                    label = MDLabel(
-                        text='Перенос не доступен',
-                        theme_text_color='Custom',
-                        text_color='white',
-                        halign='center'
-                    )
-                    label.font_size = 40
-                    label.pos_hint = {'center_x': .5, 'center_y': .5}
-                    layout.add_widget(label)
-                    card.add_widget(layout)
-                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                    layout = RelativeLayout(size_hint=(1, None), height=200)
+                    layout.add_widget(Image(source= 'Assets/omsloged/nozapis.png'))
+                    self.manager.get_screen("perenos").ids.scrollid.add_widget(layout)
                 else:
                     for i in range(len(jsvrachi["result"])):
                         for j in range(len(jsvrachi["result"][i]['complexResource'])):
                             if 'room' in jsvrachi["result"][i]['complexResource'][j]:
-                                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                                card = MDCard(size_hint=(1, None), height=280, md_bg_color = (0,0,0,0))
                                 layout = RelativeLayout()
+                                layout.add_widget(Image(source= 'Assets/omsloged/vrachchoosebutton.png'))
+                                layout.add_widget(Image(source= 'Assets/omsloged/docicons/ldp.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
                                 name = MDLabel(
                                     text=jsvrachi["result"][i]['name'].replace("_", " "),
                                     theme_text_color='Custom',
-                                    text_color='white'
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
-                                name.font_size = 45
-                                name.pos_hint = {'center_x': .55, 'center_y': .8}
+                                name.font_size = 30
+                                name.font_name =  'Assets/fonts/roboto.ttf'
+                                name.pos_hint = {'center_x': .7, 'center_y': .73}
                                 layout.add_widget(name)
                                 time = datetime.datetime.fromisoformat(
                                     jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
                                 avail = MDLabel(
                                     text=f'{time.strftime("С %d %b, %a")}',
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
-                                avail.font_size = 35
-                                avail.pos_hint = {'center_x': .55, 'center_y': .6}
+                                avail.font_size = 30
+                                avail.font_name =  'Assets/fonts/roboto.ttf'
+                                avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
                                 layout.add_widget(avail)
                                 address = MDLabel(
                                     text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
                                 address.font_size = 30
-                                address.pos_hint = {'center_x': .55, 'center_y': .4}
+                                address.font_name =  'Assets/fonts/roboto.ttf'
+                                address.pos_hint = {'center_x': .7, 'center_y': .58}
                                 fulladdress = MDLabel(
                                     text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
                                 )
                                 fulladdress.font_size = 30
-                                fulladdress.pos_hint = {'center_x': .55, 'center_y': .2}
+                                fulladdress.font_name =  'Assets/fonts/roboto.ttf'
+                                fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
+                                cab = MDLabel(
+                                    text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                    theme_text_color='Custom',
+                                    text_color=get_color_from_hex('#D4F5EC'),
+                                )
+                                cab.font_size = 30
+                                cab.font_name =  'Assets/fonts/roboto.ttf'
+                                cab.pos_hint = {'center_x': .7, 'center_y': .28}
+                                layout.add_widget(cab)
                                 layout.add_widget(fulladdress)
                                 layout.add_widget(address)
-                                perenos = MDFillRoundFlatButton(
-                                    text="Выбрать",
-                                    theme_text_color='Custom',
-                                    text_color='white',
-                                )
-                                perenos.vrachnum = i
-                                perenos.zapisvibor = zapisvibor
-                                perenos.resID = jsvrachi["result"][i]['complexResource'][j]['id']
-                                perenos.availRES = jsvrachi["result"][i]['id']
-                                perenos.doctor = False
-                                perenos.bind(on_release=self.showdateandtimenew)
-                                perenos.pos_hint = {'center_x': .85, 'center_y': .2}
-                                perenos.font_size = 40
-                                layout.add_widget(perenos)
+                                card.vrachnum = i
+                                card.zapisvibor = zapisvibor
+                                card.resID = jsvrachi["result"][i]['complexResource'][j]['id']
+                                card.availRES = jsvrachi["result"][i]['id']
+                                card.doctor = False
+                                card.bind(on_release=self.showdateandtimenew)
                                 card.add_widget(layout)
                                 self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
-                self.manager.current = 'perenos'
             self.manager.current = 'perenos'
-        except:
+        except Exception as ex:
+            print(ex)
             self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
             self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
             self.manager.get_screen('timetable').ids.lay.clear_widgets()
@@ -1073,7 +1120,7 @@ class OMSLoged(Screen):
             for i in range(len(jsspec["result"])):
                 choose = MDCard(size_hint=(1, None), height=180, md_bg_color = (0,0,0,0))
                 layout = RelativeLayout()
-                layout.add_widget(Image(source= 'Assets/omsloged/newzapisbutton.png', height = 142, width = 142))
+                layout.add_widget(Image(source= 'Assets/omsloged/newzapisbutton.png'))
                 if 'Офтальмолог' in jsspec['result'][i]["name"].replace("_", " "):
                     layout.add_widget(Image(source= 'Assets/omsloged/docicons/eyes.png', height = 142, width = 142, pos_hint={'center_x':.1 , 'center_y':.49}))
                 elif 'Оториноларинголог' in jsspec['result'][i]["name"].replace("_", " "):
@@ -1149,7 +1196,7 @@ class OMSLoged(Screen):
                         if 'room' in jszapis["result"][i]['complexResource'][j]:
                             choose = MDCard(size_hint=(1, None), height=280, md_bg_color = (0,0,0,0))
                             layout = RelativeLayout()
-                            layout.add_widget(Image(source= 'Assets/omsloged/vrachchoosebutton.png', height = 185, width = 185))
+                            layout.add_widget(Image(source= 'Assets/omsloged/vrachchoosebutton.png'))
                             if 'Офтальмолог' in jszapis['result'][i]["name"].replace("_", " "):
                                 layout.add_widget(Image(source= 'Assets/omsloged/docicons/eyes.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.49}))
                             elif 'Оториноларинголог' in jszapis['result'][i]["name"].replace("_", " "):
@@ -1295,7 +1342,6 @@ class OMSLoged(Screen):
                                                                      "complexResourceId": instance.resID,
                                                                      "specialityId": self.specID, 'referralId': self.refferal}})
                 jsproczapis = proczapis.json()
-                print(jsproczapis)
                 tabs = MDTabs(
                     radius=[10, 10, 0, 0],
                     allow_stretch=True,
@@ -1402,9 +1448,9 @@ class OMSLoged(Screen):
             self.manager.current = 'omserrorunk'
     def priem(self):
         self.manager.current = 'priem'
+
 class OMSAlertScreen(Screen):
     def on_touch_down(self, touch=None):
-        print('touch')
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None

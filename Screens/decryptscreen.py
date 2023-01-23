@@ -21,9 +21,11 @@ from kivymd.uix.dialog import MDDialog
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from kivymd.uix.card import MDCard
+
+
 class Decrypt(Screen):
     def on_touch_down(self, touch=None):
-        print('touch')
+        
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None

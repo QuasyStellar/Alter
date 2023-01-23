@@ -18,9 +18,12 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from kivy.uix.screenmanager import Screen
 import requests
+
+
+
 class Priem(Screen):
 	def on_touch_down(self, touch=None):
-		print('touch')
+		
 		def inactive(*args):
 			self.manager.get_screen('oms').ids.policy.text =""
 			self.manager.get_screen('oms').day = None

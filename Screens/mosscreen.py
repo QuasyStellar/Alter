@@ -19,7 +19,7 @@ from selenium.webdriver.chrome.options import Options
 
 class MOSScreen(Screen):
     def on_touch_down(self, touch=None):
-        print('touch')
+        
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None
@@ -87,6 +87,7 @@ class MOSScreen(Screen):
                     sys.exit()
                 time.sleep(1)
             else:
+                self.presucc()
                 driver.minimize_window()
                 time.sleep(5) 
                 idus = driver.execute_script(
@@ -125,6 +126,10 @@ class MOSScreen(Screen):
             sys.exit()
 
     @mainthread
+    def presucc(self):
+        self.manager.current = 'load'
+
+    @mainthread
     def succ(self, names, sure, age, idus, authtoken, oms, bdates, s, gender):
         self.manager.current = "mosloged"
         self.manager.get_screen("mosloged").ids.authname.text = f'{names} {sure}'
@@ -161,7 +166,7 @@ class MOSScreen(Screen):
                 None
 class HelpScreen(Screen):
     def on_touch_down(self, touch=None):
-        print('touch')
+        
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None

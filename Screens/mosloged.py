@@ -1,5 +1,5 @@
 import datetime
-from kivy.uix.screenmanager import Screen
+from kivymd.uix.screen import MDScreen as Screen
 from kivy.clock import Clock
 from kivy.uix.behaviors import ToggleButtonBehavior
 
@@ -8,7 +8,7 @@ class MOSLoged(Screen):
         self.manager.current = "enter"
 
     def on_touch_down(self, touch=None):
-        print('touch')
+        
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None

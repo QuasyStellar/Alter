@@ -15,15 +15,11 @@ from kivy.utils import get_color_from_hex
 from kivymd.uix.textfield import MDTextField
 import requests
 
-class FadeScrollView(FadingEdgeEffect, ScrollView):
-    pass
-
-
-        
+      
 
 class OMSScreen(Screen):
     def on_touch_down(self, touch=None):
-        print('touch')
+        
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None
@@ -230,7 +226,7 @@ class OMSScreen(Screen):
 
 class OMSErrorScreen(Screen):
     def on_touch_down(self, touch=None):
-        print('touch')
+        
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None
@@ -264,7 +260,7 @@ class OMSErrorScreen(Screen):
 
 class OMSErrorUnkScreen(Screen):
     def on_touch_down(self, touch=None):
-        print('touch')
+        
         def inactive(*args):
             self.manager.get_screen('oms').ids.policy.text =""
             self.manager.get_screen('oms').day = None
