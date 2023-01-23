@@ -28,7 +28,7 @@
 
     MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .367, 'center_y': .575}
+        pos_hint: {'center_x': .358, 'center_y': .575}
         size_hint: .106, .069
         on_release: root.manager.get_screen('loged').zapisi()
         Image:
@@ -36,26 +36,32 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
+            keep_ratio: False
+            allow_stretch: True
     MDTextButton:
         orientation: "vertical"
         pos_hint: {'center_x': .488, 'center_y': .575}
-        size_hint: .1226, .069
+        size_hint: .1226, .0694
         on_release: root.manager.get_screen('loged').prosmotrnapr()
         Image:
             source: 'Assets/mosloged/mynapr.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
+            keep_ratio: False
+            allow_stretch: True
     MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .625, 'center_y': .575}
-        size_hint: .13125, .069
+        pos_hint: {'center_x': .63, 'center_y': .575}
+        size_hint: .13125, .0694
         on_release: root.manager.get_screen('loged').prikreplenia()
         Image:
             source: 'Assets/mosloged/myprik.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
+            keep_ratio: False
+            allow_stretch: True
     MDTextButton:
         orientation: "vertical"
         pos_hint: {'center_x': .5, 'center_y': .7059}
@@ -66,16 +72,20 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
+            keep_ratio: False
+            allow_stretch: True
 
     MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .405, 'center_y': .4267}
-        size_hint: .1886, .152
+        pos_hint: {'center_x': .399, 'center_y': .4267}
+        size_hint: .187, .152
         on_release: root.manager.current = "lkcard"
         Image:
             source: 'Assets/mosloged/lkcardbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
             size: self.parent.size
     MDTextButton:
         orientation: "vertical"
@@ -86,17 +96,21 @@
             source: 'Assets/mosloged/priemmosbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
             size: self.parent.size
     MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .60, 'center_y': .4267}
-        size_hint: .1886, .152
+        pos_hint: {'center_x': .602, 'center_y': .4267}
+        size_hint: .187, .152
         on_release: root.manager.get_screen('decrypt').myanaliz()
         Image:
             source: 'Assets/mosloged/cardanalizbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
+            keep_ratio: False
+            allow_stretch: True
     MDLabel:
         id: time
         bold: True

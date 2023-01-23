@@ -21,7 +21,7 @@ class MyToggleButton(MDFlatButton, MDToggleButton):
         super().__init__(*args, **kwargs)
         self.background_down = get_color_from_hex('#00E4B6')
         self.font_color_normal =  get_color_from_hex('#D4F5EC')
-        self.font_color_down =  get_color_from_hex('#72C3AC')
+        self.font_color_down =  get_color_from_hex('#D4F5EC')
 
     def on_state(self, widget, value):
         sm = MDApp.get_running_app().sm
@@ -57,8 +57,7 @@ class MyToggleButtonNew(MDFlatButton, MDToggleButton):
         super().__init__(*args, **kwargs)
         self.background_down = get_color_from_hex('#00E4B6')
         self.font_color_normal =  get_color_from_hex('#D4F5EC')
-        self.font_color_down =  get_color_from_hex('#72C3AC')
-        self.border = 10
+        self.font_color_down =  get_color_from_hex('#D4F5EC')
 
     def on_state(self, widget, value):
         sm = MDApp.get_running_app().sm

@@ -9,7 +9,6 @@ from kivy.uix.behaviors import ToggleButtonBehavior
 from kivymd.uix.label import MDLabel
 import os
 from kivy.clock import Clock
-from html2image import Html2Image
 from cairosvg import svg2png
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.boxlayout import BoxLayout

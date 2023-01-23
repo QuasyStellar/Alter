@@ -28,36 +28,39 @@
 
     MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .5/1.4, 'center_y': .575}
+        pos_hint: {'center_x': .358, 'center_y': .575}
         size_hint: .106, .069
         on_release: root.manager.get_screen('loged').zapisi()
         Image:
             source: 'Assets/mosloged/myzapis.png'
             center_x: self.parent.center_x
             keep_ratio: False
+            allow_stretch: True
             center_y: self.parent.center_y
             size: self.parent.size
     MDTextButton:
         orientation: "vertical"
         pos_hint: {'center_x': .488, 'center_y': .575}
-        size_hint: .1226, .069
+        size_hint: .1226, .0694
         on_release: root.manager.get_screen('loged').prosmotrnapr()
         Image:
             source: 'Assets/mosloged/mynapr.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             keep_ratio: False
+            allow_stretch: True
             size: self.parent.size
     MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .629, 'center_y': .575}
-        size_hint: .13125, .069
+        pos_hint: {'center_x': .63, 'center_y': .575}
+        size_hint: .13125, .0694
         on_release: root.manager.get_screen('loged').prikreplenia()
         Image:
             source: 'Assets/mosloged/myprik.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
+            allow_stretch: True
             keep_ratio: False
     MDTextButton:
         orientation: "vertical"
@@ -69,18 +72,20 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
+            allow_stretch: True
             keep_ratio: False
 
     MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .398, 'center_y': .4267}
-        size_hint: .1886, .152
+        pos_hint: {'center_x': .399, 'center_y': .4267}
+        size_hint: .187, .152
         on_release: root.manager.current = "omsalert"
         Image:
             source: 'Assets/omsloged/lkcardbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             keep_ratio: False
+            allow_stretch: True
             size: self.parent.size
     MDTextButton:
         orientation: "vertical"
@@ -93,18 +98,20 @@
             source: 'Assets/mosloged/priemmosbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
+            allow_stretch: True
             keep_ratio: False
             size: self.parent.size
     MDTextButton:
         orientation: "vertical"
-        pos_hint: {'center_x': .605, 'center_y': .4267}
-        size_hint: .1886, .152
+        pos_hint: {'center_x': .602, 'center_y': .4267}
+        size_hint: .187, .152
         on_release: root.manager.current = 'omsalert'
         Image:
             source: 'Assets/omsloged/cardanalizbutton.png'
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             size: self.parent.size
+            allow_stretch: True
             keep_ratio: False
     MDLabel:
         id: time

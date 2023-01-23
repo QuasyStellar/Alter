@@ -10,7 +10,6 @@ from kivy.uix.behaviors import ToggleButtonBehavior
 from kivymd.uix.list import OneLineListItem
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.dialog import MDDialog
-from kivymd_extensions.akivymd.uix.datepicker import AKDatePicker
 from kivy.uix.screenmanager import FadeTransition
 from kivy.utils import get_color_from_hex
 from kivymd.uix.textfield import MDTextField
