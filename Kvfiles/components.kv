@@ -16,7 +16,7 @@
     name: 'zapisi'
     Image:
         id: backgr
-        source: 'Assets/omsloged/myzapisi.png'
+        source: 'Assets/omsloged/bg/myzapisi.png'
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
@@ -47,7 +47,7 @@
 <Perenos>:
     name: 'perenos'
     Image:
-        source: 'Assets/omsloged/perenos.png'
+        source: 'Assets/omsloged/bg/perenos.png'
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
@@ -77,7 +77,7 @@
 <Showdate>:
     name: 'timetable'
     Image:
-        source: 'Assets/omsloged/timechoose.png'
+        source: 'Assets/omsloged/bg/timechoose.png'
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
@@ -104,7 +104,7 @@
 <Prikreplenia>:
     name: 'prik'
     Image:
-        source: 'Assets/omsloged/prikbg.png'
+        source: 'Assets/omsloged/bg/prikbg.png'
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
@@ -135,7 +135,7 @@
 <Napravlenia>:
     name: 'napr'
     Image:
-        source: 'Assets/omsloged/mynapr.png'
+        source: 'Assets/omsloged/bg/mynapr.png'
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
@@ -370,3 +370,62 @@
             size_hint_y: None
             height: self.minimum_height
             id: scrollid
+
+<SuccPerenos>
+    name: 'perenossucc'
+    Image:
+        allow_stretch: True
+        keep_ratio: False
+        source: 'Assets/omsloged/bg/succperenos.png'
+    MDTextButton:
+        size_hint: .38, .25
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .12}
+        font_size: dp(25)
+        on_release:
+            root.manager.get_screen('loged').screenback()
+        Image:
+            source: 'Assets/omsscreen/exitbut.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
+
+<SuccOtmena>
+    name: 'otmenasucc'
+    Image:
+        allow_stretch: True
+        keep_ratio: False
+        source: 'Assets/omsloged/bg/succotmena.png'
+    MDTextButton:
+        size_hint: .38, .25
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .12}
+        font_size: dp(25)
+        on_release:
+            root.manager.get_screen('loged').screenback()
+        Image:
+            source: 'Assets/omsscreen/exitbut.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
+<Succ>
+    name: 'succnew'
+    Image:
+        allow_stretch: True
+        keep_ratio: False
+        source: 'Assets/omsloged/bg/succ.png'
+    MDTextButton:
+        size_hint: .38, .25
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .12}
+        font_size: dp(25)
+        on_release:
+            root.manager.get_screen('loged').screenback()
+        Image:
+            source: 'Assets/omsscreen/exitbut.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size

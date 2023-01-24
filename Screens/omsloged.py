@@ -2,6 +2,7 @@ import datetime
 from MyComponents.mycomponents import Tab, MyToggleButton, MyToggleButtonNew
 from kivymd.uix.label import MDLabel
 from kivy.uix.image import Image
+from kivymd.utils import asynckivy
 from kivy.uix.behaviors import ToggleButtonBehavior
 import calendar
 from kivy.clock import Clock
@@ -59,7 +60,6 @@ class OMSLoged(Screen):
     news = None
     types = None
 
-    #
     def screenback(self):
         if self.types == 'oms':
             self.manager.current = 'loged'
@@ -67,43 +67,13 @@ class OMSLoged(Screen):
             self.manager.current = 'mosloged'
 
     def succ(self):
-        if not self.dialogsucc:
-            self.dialogsucc = MDDialog(
-                title="Запись успешно отменена",
-                buttons=[
-                    MDFillRoundFlatButton(
-                        text="ОК",
-                        on_release=lambda _: self.dialogsucc.dismiss(),
-                    )
-                ],
-            )
-        self.dialogsucc.open()
+        self.manager.current = 'otmenasucc'
 
     def succper(self):
-        if not self.dialogsuccper:
-            self.dialogsuccper = MDDialog(
-                title="Запись успешно перенесена",
-                buttons=[
-                    MDFillRoundFlatButton(
-                        text="ОК",
-                        on_release=lambda _: self.dialogsuccper.dismiss(),
-                    )
-                ],
-            )
-        self.dialogsuccper.open()
+        self.manager.current = 'perenossucc'
 
     def newd(self):
-        if not self.news:
-            self.news = MDDialog(
-                title="Вы успешно записаны",
-                buttons=[
-                    MDFillRoundFlatButton(
-                        text="ОК",
-                        on_release=lambda _: self.news.dismiss(),
-                    )
-                ],
-            )
-        self.news.open()
+        self.manager.current = 'succ'
 
     def exits(self):
         self.manager.current = 'enter'
@@ -306,7 +276,7 @@ class OMSLoged(Screen):
                             )
                             timelab.font_size = 30
                             timelab.font_name = 'Assets/fonts/roboto.ttf'
-                            timelab.pos_hint = {'center_x': 1.2, 'center_y': .35}
+                            timelab.pos_hint = {'center_x': 1.2, 'center_y': .38}
                             layout.add_widget(timelab)
                             address = MDLabel(
                                 text=f'{jsps["result"][i]["nameLpu"]}',
@@ -315,7 +285,7 @@ class OMSLoged(Screen):
                             )
                             address.font_size = 30
                             address.font_name = 'Assets/fonts/roboto.ttf'
-                            address.pos_hint = {'center_x': .7, 'center_y': .55}
+                            address.pos_hint = {'center_x': .7, 'center_y': .58}
                             layout.add_widget(address)
                             addressbol = MDLabel(
                                 text=f'{jsps["result"][i]["lpuAddress"]}',
@@ -323,7 +293,7 @@ class OMSLoged(Screen):
                                 text_color=get_color_from_hex('#D4F5EC'),
                             )
                             addressbol.font_size = 30
-                            addressbol.pos_hint = {'center_x': .7, 'center_y': .45}
+                            addressbol.pos_hint = {'center_x': .7, 'center_y': .48}
                             addressbol.font_name = 'Assets/fonts/roboto.ttf'
                             layout.add_widget(addressbol)
                             room = MDLabel(
@@ -333,7 +303,7 @@ class OMSLoged(Screen):
                             )
                             room.font_size = 30
                             room.font_name = 'Assets/fonts/roboto.ttf'
-                            room.pos_hint = {'center_x': .7, 'center_y': .35}
+                            room.pos_hint = {'center_x': .7, 'center_y': .38}
                             layout.add_widget(room)
                             otmena = MDFlatButton(
                                 text='Отмена',
@@ -373,82 +343,159 @@ class OMSLoged(Screen):
                         layout.add_widget(Image(source='Assets/omsloged/zapisperenos.png', keep_ratio=False))
                         layout.add_widget(Image(source='Assets/omsloged/docicons/ldp.png', height=185, width=185,
                                                 pos_hint={'center_x': .1, 'center_y': .6}))
-                        specname = MDLabel(
-                            text=jsps["result"][i]["toLdp"]["ldpTypeName"],
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                        )
-                        specname.font_size = 30
-                        specname.font_name = 'Assets/fonts/roboto.ttf'
-                        specname.pos_hint = {'center_x': .7, 'center_y': .75}
-                        layout.add_widget(specname)
-                        time = datetime.datetime.fromisoformat(jsps["result"][i]["startTime"])
-                        timelab = MDLabel(
-                            text=f'{time.strftime("%a, %d %b в %H:%M")}',
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                        )
-                        timelab.font_size = 30
-                        timelab.font_name = 'Assets/fonts/roboto.ttf'
-                        timelab.pos_hint = {'center_x': 1.2, 'center_y': .45}
-                        layout.add_widget(timelab)
-                        address = MDLabel(
-                            text=f'{jsps["result"][i]["nameLpu"]}',
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                        )
-                        address.font_size = 30
-                        address.font_name = 'Assets/fonts/roboto.ttf'
-                        address.pos_hint = {'center_x': .7, 'center_y': .65}
-                        layout.add_widget(address)
-                        addressbol = MDLabel(
-                            text=f'{jsps["result"][i]["lpuAddress"]}',
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                        )
-                        addressbol.font_size = 30
-                        addressbol.pos_hint = {'center_x': .7, 'center_y': .55}
-                        addressbol.font_name = 'Assets/fonts/roboto.ttf'
-                        layout.add_widget(addressbol)
-                        room = MDLabel(
-                            text=f'Каб. {jsps["result"][i]["roomNumber"]}',
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                        )
-                        room.font_size = 30
-                        room.font_name = 'Assets/fonts/roboto.ttf'
-                        room.pos_hint = {'center_x': .7, 'center_y': .45}
-                        layout.add_widget(room)
-                        otmena = MDFlatButton(
-                            text='Отмена',
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                            size_hint=(.4846, .17),
-                            md_bg_color=(0, 0, 0, 0)
-                        )
-                        otmena.zapisid = jsps["result"][i]["id"]
-                        otmena.bind(on_release=self.otmenas)
-                        otmena.pos_hint = {'center_x': .748, 'center_y': .23}
-                        otmena.font_size = 30
-                        otmena.font_name = 'Assets/fonts/roboto.ttf'
-                        layout.add_widget(otmena)
-                        perenesti = MDFlatButton(
-                            text="Перенести",
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                            size_hint=(.49, .17),
-                            md_bg_color=(0, 0, 0, 0)
-                        )
-                        perenesti.pos_hint = {'center_x': .253, 'center_y': .23}
-                        perenesti.font_size = 30
-                        perenesti.font_name = 'Assets/fonts/roboto.ttf'
-                        perenesti.bind(on_release=self.perenoss)
-                        perenesti.zapisid = i
-                        perenesti.refferal = jsps["result"][i]['referral']['referralId']
-                        layout.add_widget(perenesti)
-                        card.add_widget(layout)
-                        self.manager.get_screen("zapisi").ids.scrollid.add_widget(card)
-            self.manager.get_screen('zapisi').ids.backgr.source = 'Assets/omsloged/myzapisi.png'
+                        if len(jsps["result"][i]["toLdp"]["ldpTypeName"])<=46:
+                            specname = MDLabel(
+                                text=jsps["result"][i]["toLdp"]["ldpTypeName"],
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            specname.font_size = 30
+                            specname.font_name = 'Assets/fonts/roboto.ttf'
+                            specname.pos_hint = {'center_x': .7, 'center_y': .75}
+                            layout.add_widget(specname)
+                            time = datetime.datetime.fromisoformat(jsps["result"][i]["startTime"])
+                            timelab = MDLabel(
+                                text=f'{time.strftime("%a, %d %b в %H:%M")}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            timelab.font_size = 30
+                            timelab.font_name = 'Assets/fonts/roboto.ttf'
+                            timelab.pos_hint = {'center_x': 1.2, 'center_y': .45}
+                            layout.add_widget(timelab)
+                            address = MDLabel(
+                                text=f'{jsps["result"][i]["nameLpu"]}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            address.font_size = 30
+                            address.font_name = 'Assets/fonts/roboto.ttf'
+                            address.pos_hint = {'center_x': .7, 'center_y': .65}
+                            layout.add_widget(address)
+                            addressbol = MDLabel(
+                                text=f'{jsps["result"][i]["lpuAddress"]}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            addressbol.font_size = 30
+                            addressbol.pos_hint = {'center_x': .7, 'center_y': .55}
+                            addressbol.font_name = 'Assets/fonts/roboto.ttf'
+                            layout.add_widget(addressbol)
+                            room = MDLabel(
+                                text=f'Каб. {jsps["result"][i]["roomNumber"]}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            room.font_size = 30
+                            room.font_name = 'Assets/fonts/roboto.ttf'
+                            room.pos_hint = {'center_x': .7, 'center_y': .45}
+                            layout.add_widget(room)
+                            otmena = MDFlatButton(
+                                text='Отмена',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint=(.4846, .17),
+                                md_bg_color=(0, 0, 0, 0)
+                            )
+                            otmena.zapisid = jsps["result"][i]["id"]
+                            otmena.bind(on_release=self.otmenas)
+                            otmena.pos_hint = {'center_x': .748, 'center_y': .23}
+                            otmena.font_size = 30
+                            otmena.font_name = 'Assets/fonts/roboto.ttf'
+                            layout.add_widget(otmena)
+                            perenesti = MDFlatButton(
+                                text="Перенести",
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint=(.49, .17),
+                                md_bg_color=(0, 0, 0, 0)
+                            )
+                            perenesti.pos_hint = {'center_x': .253, 'center_y': .23}
+                            perenesti.font_size = 30
+                            perenesti.font_name = 'Assets/fonts/roboto.ttf'
+                            perenesti.bind(on_release=self.perenoss)
+                            perenesti.zapisid = i
+                            perenesti.refferal = jsps["result"][i]['referral']['referralId']
+                            layout.add_widget(perenesti)
+                            card.add_widget(layout)
+                            self.manager.get_screen("zapisi").ids.scrollid.add_widget(card)
+                        else:
+                            specname = MDLabel(
+                                text=jsps["result"][i]["toLdp"]["ldpTypeName"],
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            specname.font_size = 30
+                            specname.font_name = 'Assets/fonts/roboto.ttf'
+                            specname.pos_hint = {'center_x': .7, 'center_y': .75}
+                            layout.add_widget(specname)
+                            time = datetime.datetime.fromisoformat(jsps["result"][i]["startTime"])
+                            timelab = MDLabel(
+                                text=f'{time.strftime("%a, %d %b в %H:%M")}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            timelab.font_size = 30
+                            timelab.font_name = 'Assets/fonts/roboto.ttf'
+                            timelab.pos_hint = {'center_x': 1.2, 'center_y': .38}
+                            layout.add_widget(timelab)
+                            address = MDLabel(
+                                text=f'{jsps["result"][i]["nameLpu"]}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            address.font_size = 30
+                            address.font_name = 'Assets/fonts/roboto.ttf'
+                            address.pos_hint = {'center_x': .7, 'center_y': .58}
+                            layout.add_widget(address)
+                            addressbol = MDLabel(
+                                text=f'{jsps["result"][i]["lpuAddress"]}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            addressbol.font_size = 30
+                            addressbol.pos_hint = {'center_x': .7, 'center_y': .48}
+                            addressbol.font_name = 'Assets/fonts/roboto.ttf'
+                            layout.add_widget(addressbol)
+                            room = MDLabel(
+                                text=f'Каб. {jsps["result"][i]["roomNumber"]}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            room.font_size = 30
+                            room.font_name = 'Assets/fonts/roboto.ttf'
+                            room.pos_hint = {'center_x': .7, 'center_y': .38}
+                            layout.add_widget(room)
+                            otmena = MDFlatButton(
+                                text='Отмена',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint=(.4846, .17),
+                                md_bg_color=(0, 0, 0, 0)
+                            )
+                            otmena.zapisid = jsps["result"][i]["id"]
+                            otmena.bind(on_release=self.otmenas)
+                            otmena.pos_hint = {'center_x': .748, 'center_y': .23}
+                            otmena.font_size = 30
+                            otmena.font_name = 'Assets/fonts/roboto.ttf'
+                            layout.add_widget(otmena)
+                            perenesti = MDFlatButton(
+                                text="Перенести",
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint=(.49, .17),
+                                md_bg_color=(0, 0, 0, 0)
+                            )
+                            perenesti.pos_hint = {'center_x': .253, 'center_y': .23}
+                            perenesti.font_size = 30
+                            perenesti.font_name = 'Assets/fonts/roboto.ttf'
+                            perenesti.bind(on_release=self.perenoss)
+                            perenesti.zapisid = i
+                            perenesti.refferal = jsps["result"][i]['referral']['referralId']
+                            layout.add_widget(perenesti)
+                            card.add_widget(layout)
+                            self.manager.get_screen("zapisi").ids.scrollid.add_widget(card)
+            self.manager.get_screen('zapisi').ids.backgr.source = 'Assets/omsloged/bg/myzapisi.png'
             self.manager.get_screen('zapisi').ids.backgr.reload()
             self.manager.current = 'zapisi'
             self.manager.get_screen('perenos').precurrent = 'zapisi'
@@ -549,59 +596,113 @@ class OMSLoged(Screen):
                                     layout.add_widget(
                                         Image(source='Assets/omsloged/docicons/docdefault.png', height=185, width=185,
                                               pos_hint={'center_x': .1, 'center_y': .5}))
-                                name = MDLabel(
-                                    text=jsvrachi["result"][i]['name'].replace("_", " "),
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                name.font_size = 30
-                                name.font_name = 'Assets/fonts/roboto.ttf'
-                                name.pos_hint = {'center_x': .7, 'center_y': .73}
-                                layout.add_widget(name)
-                                time = datetime.datetime.fromisoformat(
-                                    jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
-                                avail = MDLabel(
-                                    text=f'{time.strftime("С %d %b, %a")}',
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                avail.font_size = 30
-                                avail.font_name = 'Assets/fonts/roboto.ttf'
-                                avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
-                                layout.add_widget(avail)
-                                address = MDLabel(
-                                    text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                address.font_size = 30
-                                address.font_name = 'Assets/fonts/roboto.ttf'
-                                address.pos_hint = {'center_x': .7, 'center_y': .58}
-                                fulladdress = MDLabel(
-                                    text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                fulladdress.font_size = 30
-                                fulladdress.font_name = 'Assets/fonts/roboto.ttf'
-                                fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
-                                cab = MDLabel(
-                                    text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                cab.font_size = 30
-                                cab.font_name = 'Assets/fonts/roboto.ttf'
-                                cab.pos_hint = {'center_x': .7, 'center_y': .28}
-                                layout.add_widget(cab)
-                                layout.add_widget(fulladdress)
-                                layout.add_widget(address)
-                                card.vrachnum = i
-                                card.zapisvibor = zapisvibor
-                                card.bind(on_release=self.showdateandtime)
-                                card.add_widget(layout)
-                                self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
-            else:
+                                if len(jsvrachi["result"][i]['name'].replace("_", " "))<=46:
+                                    name = MDLabel(
+                                        text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    name.font_size = 30
+                                    name.font_name = 'Assets/fonts/roboto.ttf'
+                                    name.pos_hint = {'center_x': .7, 'center_y': .73}
+                                    layout.add_widget(name)
+                                    time = datetime.datetime.fromisoformat(
+                                        jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                                    avail = MDLabel(
+                                        text=f'{time.strftime("С %d %b, %a")}',
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    avail.font_size = 30
+                                    avail.font_name = 'Assets/fonts/roboto.ttf'
+                                    avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
+                                    layout.add_widget(avail)
+                                    address = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    address.font_size = 30
+                                    address.font_name = 'Assets/fonts/roboto.ttf'
+                                    address.pos_hint = {'center_x': .7, 'center_y': .58}
+                                    fulladdress = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    fulladdress.font_size = 30
+                                    fulladdress.font_name = 'Assets/fonts/roboto.ttf'
+                                    fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
+                                    cab = MDLabel(
+                                        text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    cab.font_size = 30
+                                    cab.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab.pos_hint = {'center_x': .7, 'center_y': .28}
+                                    layout.add_widget(cab)
+                                    layout.add_widget(fulladdress)
+                                    layout.add_widget(address)
+                                    card.vrachnum = i
+                                    card.zapisvibor = zapisvibor
+                                    card.bind(on_release=self.showdateandtime)
+                                    card.add_widget(layout)
+                                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                                else:
+                                    name = MDLabel(
+                                        text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    name.font_size = 30
+                                    name.font_name = 'Assets/fonts/roboto.ttf'
+                                    name.pos_hint = {'center_x': .7, 'center_y': .73}
+                                    layout.add_widget(name)
+                                    time = datetime.datetime.fromisoformat(
+                                        jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                                    avail = MDLabel(
+                                        text=f'{time.strftime("С %d %b, %a")}',
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    avail.font_size = 30
+                                    avail.font_name = 'Assets/fonts/roboto.ttf'
+                                    avail.pos_hint = {'center_x': 1.3, 'center_y': .20}
+                                    layout.add_widget(avail)
+                                    address = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    address.font_size = 30
+                                    address.font_name = 'Assets/fonts/roboto.ttf'
+                                    address.pos_hint = {'center_x': .7, 'center_y': .50}
+                                    fulladdress = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    fulladdress.font_size = 30
+                                    fulladdress.font_name = 'Assets/fonts/roboto.ttf'
+                                    fulladdress.pos_hint = {'center_x': .7, 'center_y': .35}
+                                    cab = MDLabel(
+                                        text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    cab.font_size = 30
+                                    cab.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab.pos_hint = {'center_x': .7, 'center_y': .20}
+                                    layout.add_widget(cab)
+                                    layout.add_widget(fulladdress)
+                                    layout.add_widget(address)
+                                    card.vrachnum = i
+                                    card.zapisvibor = zapisvibor
+                                    card.bind(on_release=self.showdateandtime)
+                                    card.add_widget(layout)
+                                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+            else:                       
                 self.appID = jsspisok["result"][zapisvibor]['id']
                 self.recpID = jsspisok["result"][zapisvibor]["toLdp"]['ldpTypeId']
                 self.refferal = instance.refferal
@@ -629,58 +730,112 @@ class OMSLoged(Screen):
                                 layout.add_widget(
                                     Image(source='Assets/omsloged/docicons/ldp.png', height=185, width=185,
                                           pos_hint={'center_x': .1, 'center_y': .5}))
-                                name = MDLabel(
-                                    text=jsvrachi["result"][i]['name'].replace("_", " "),
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                name.font_size = 30
-                                name.pos_hint = {'center_x': .7, 'center_y': .73}
-                                name.font_name = 'Assets/fonts/roboto.ttf'
-                                layout.add_widget(name)
-                                time = datetime.datetime.fromisoformat(
-                                    jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
-                                avail = MDLabel(
-                                    text=f'{time.strftime("С %d %b, %a")}',
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                avail.font_size = 30
-                                avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
-                                avail.font_name = 'Assets/fonts/roboto.ttf'
-                                cab = MDLabel(
-                                    text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                cab.font_size = 30
-                                cab.font_name = 'Assets/fonts/roboto.ttf'
-                                cab.pos_hint = {'center_x': .7, 'center_y': .28}
-                                layout.add_widget(cab)
-                                layout.add_widget(avail)
-                                address = MDLabel(
-                                    text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                address.font_size = 30
-                                address.pos_hint = {'center_x': .7, 'center_y': .58}
-                                address.font_name = 'Assets/fonts/roboto.ttf'
-                                fulladdress = MDLabel(
-                                    text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                fulladdress.font_size = 30
-                                fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
-                                fulladdress.font_name = 'Assets/fonts/roboto.ttf'
-                                layout.add_widget(fulladdress)
-                                layout.add_widget(address)
-                                card.vrachnum = i
-                                card.zapisvibor = zapisvibor
-                                card.bind(on_release=self.showdateandtime)
-                                card.add_widget(layout)
-                                self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                                if len(jsvrachi["result"][i]['name'].replace("_", " "))<=46:
+                                    name = MDLabel(
+                                        text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    name.font_size = 30
+                                    name.pos_hint = {'center_x': .7, 'center_y': .73}
+                                    name.font_name = 'Assets/fonts/roboto.ttf'
+                                    layout.add_widget(name)
+                                    time = datetime.datetime.fromisoformat(
+                                        jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                                    avail = MDLabel(
+                                        text=f'{time.strftime("С %d %b, %a")}',
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    avail.font_size = 30
+                                    avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
+                                    avail.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab = MDLabel(
+                                        text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    cab.font_size = 30
+                                    cab.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab.pos_hint = {'center_x': .7, 'center_y': .28}
+                                    layout.add_widget(cab)
+                                    layout.add_widget(avail)
+                                    address = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    address.font_size = 30
+                                    address.pos_hint = {'center_x': .7, 'center_y': .58}
+                                    address.font_name = 'Assets/fonts/roboto.ttf'
+                                    fulladdress = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    fulladdress.font_size = 30
+                                    fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
+                                    fulladdress.font_name = 'Assets/fonts/roboto.ttf'
+                                    layout.add_widget(fulladdress)
+                                    layout.add_widget(address)
+                                    card.vrachnum = i
+                                    card.zapisvibor = zapisvibor
+                                    card.bind(on_release=self.showdateandtime)
+                                    card.add_widget(layout)
+                                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                                else:
+                                    name = MDLabel(
+                                        text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    name.font_size = 30
+                                    name.pos_hint = {'center_x': .7, 'center_y': .73}
+                                    name.font_name = 'Assets/fonts/roboto.ttf'
+                                    layout.add_widget(name)
+                                    time = datetime.datetime.fromisoformat(
+                                        jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                                    avail = MDLabel(
+                                        text=f'{time.strftime("С %d %b, %a")}',
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    avail.font_size = 30
+                                    avail.pos_hint = {'center_x': 1.3, 'center_y': .20}
+                                    avail.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab = MDLabel(
+                                        text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    cab.font_size = 30
+                                    cab.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab.pos_hint = {'center_x': .7, 'center_y': .20}
+                                    layout.add_widget(cab)
+                                    layout.add_widget(avail)
+                                    address = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    address.font_size = 30
+                                    address.pos_hint = {'center_x': .7, 'center_y': .50}
+                                    address.font_name = 'Assets/fonts/roboto.ttf'
+                                    fulladdress = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    fulladdress.font_size = 30
+                                    fulladdress.pos_hint = {'center_x': .7, 'center_y': .35}
+                                    fulladdress.font_name = 'Assets/fonts/roboto.ttf'
+                                    layout.add_widget(fulladdress)
+                                    layout.add_widget(address)
+                                    card.vrachnum = i
+                                    card.zapisvibor = zapisvibor
+                                    card.bind(on_release=self.showdateandtime)
+                                    card.add_widget(layout)
+                                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
             self.manager.current = 'perenos'
         except Exception as ex:
             print(ex)
@@ -1247,61 +1402,118 @@ class OMSLoged(Screen):
                                     layout.add_widget(
                                         Image(source='Assets/omsloged/docicons/docdefault.png', height=185, width=185,
                                               pos_hint={'center_x': .1, 'center_y': .5}))
-                                name = MDLabel(
-                                    text=jsvrachi["result"][i]['name'].replace("_", " "),
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                name.font_size = 30
-                                name.font_name = 'Assets/fonts/roboto.ttf'
-                                name.pos_hint = {'center_x': .7, 'center_y': .73}
-                                layout.add_widget(name)
-                                time = datetime.datetime.fromisoformat(
-                                    jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
-                                avail = MDLabel(
-                                    text=f'{time.strftime("С %d %b, %a")}',
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                avail.font_size = 30
-                                avail.font_name = 'Assets/fonts/roboto.ttf'
-                                avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
-                                layout.add_widget(avail)
-                                address = MDLabel(
-                                    text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                address.font_size = 30
-                                address.font_name = 'Assets/fonts/roboto.ttf'
-                                address.pos_hint = {'center_x': .7, 'center_y': .58}
-                                fulladdress = MDLabel(
-                                    text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                fulladdress.font_size = 30
-                                fulladdress.font_name = 'Assets/fonts/roboto.ttf'
-                                fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
-                                cab = MDLabel(
-                                    text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                cab.font_size = 30
-                                cab.font_name = 'Assets/fonts/roboto.ttf'
-                                cab.pos_hint = {'center_x': .7, 'center_y': .28}
-                                layout.add_widget(cab)
-                                layout.add_widget(fulladdress)
-                                layout.add_widget(address)
-                                card.vrachnum = i
-                                card.zapisvibor = zapisvibor
-                                card.resID = jsvrachi["result"][i]['complexResource'][j]['id']
-                                card.doctor = 'Napr'
-                                card.availRES = jsvrachi["result"][i]['id']
-                                card.bind(on_release=self.showdateandtimenew)
-                                card.add_widget(layout)
-                                self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                                if len(jsvrachi["result"][i]['name'].replace("_", " "))<=46:
+                                    name = MDLabel(
+                                        text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    name.font_size = 30
+                                    name.font_name = 'Assets/fonts/roboto.ttf'
+                                    name.pos_hint = {'center_x': .7, 'center_y': .73}
+                                    layout.add_widget(name)
+                                    time = datetime.datetime.fromisoformat(
+                                        jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                                    avail = MDLabel(
+                                        text=f'{time.strftime("С %d %b, %a")}',
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    avail.font_size = 30
+                                    avail.font_name = 'Assets/fonts/roboto.ttf'
+                                    avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
+                                    layout.add_widget(avail)
+                                    address = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    address.font_size = 30
+                                    address.font_name = 'Assets/fonts/roboto.ttf'
+                                    address.pos_hint = {'center_x': .7, 'center_y': .58}
+                                    fulladdress = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    fulladdress.font_size = 30
+                                    fulladdress.font_name = 'Assets/fonts/roboto.ttf'
+                                    fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
+                                    cab = MDLabel(
+                                        text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    cab.font_size = 30
+                                    cab.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab.pos_hint = {'center_x': .7, 'center_y': .28}
+                                    layout.add_widget(cab)
+                                    layout.add_widget(fulladdress)
+                                    layout.add_widget(address)
+                                    card.vrachnum = i
+                                    card.zapisvibor = zapisvibor
+                                    card.resID = jsvrachi["result"][i]['complexResource'][j]['id']
+                                    card.doctor = 'Napr'
+                                    card.availRES = jsvrachi["result"][i]['id']
+                                    card.bind(on_release=self.showdateandtimenew)
+                                    card.add_widget(layout)
+                                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                                else:
+                                    name = MDLabel(
+                                        text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    name.font_size = 30
+                                    name.font_name = 'Assets/fonts/roboto.ttf'
+                                    name.pos_hint = {'center_x': .7, 'center_y': .73}
+                                    layout.add_widget(name)
+                                    time = datetime.datetime.fromisoformat(
+                                        jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                                    avail = MDLabel(
+                                        text=f'{time.strftime("С %d %b, %a")}',
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    avail.font_size = 30
+                                    avail.font_name = 'Assets/fonts/roboto.ttf'
+                                    avail.pos_hint = {'center_x': 1.3, 'center_y': .2}
+                                    layout.add_widget(avail)
+                                    address = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    address.font_size = 30
+                                    address.font_name = 'Assets/fonts/roboto.ttf'
+                                    address.pos_hint = {'center_x': .7, 'center_y': .5}
+                                    fulladdress = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    fulladdress.font_size = 30
+                                    fulladdress.font_name = 'Assets/fonts/roboto.ttf'
+                                    fulladdress.pos_hint = {'center_x': .7, 'center_y': .35}
+                                    cab = MDLabel(
+                                        text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    cab.font_size = 30
+                                    cab.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab.pos_hint = {'center_x': .7, 'center_y': .2}
+                                    layout.add_widget(cab)
+                                    layout.add_widget(fulladdress)
+                                    layout.add_widget(address)
+                                    card.vrachnum = i
+                                    card.zapisvibor = zapisvibor
+                                    card.resID = jsvrachi["result"][i]['complexResource'][j]['id']
+                                    card.doctor = 'Napr'
+                                    card.availRES = jsvrachi["result"][i]['id']
+                                    card.bind(on_release=self.showdateandtimenew)
+                                    card.add_widget(layout)
+                                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
             else:
                 self.refferal = instance.refferal
                 zapis = requests.post('https://emias.info/api/emc/appointment-eip/v1/?getDoctorsInfo',
@@ -1336,61 +1548,118 @@ class OMSLoged(Screen):
                                 layout.add_widget(
                                     Image(source='Assets/omsloged/docicons/ldp.png', height=185, width=185,
                                           pos_hint={'center_x': .1, 'center_y': .5}))
-                                name = MDLabel(
-                                    text=jsvrachi["result"][i]['name'].replace("_", " "),
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                name.font_size = 30
-                                name.font_name = 'Assets/fonts/roboto.ttf'
-                                name.pos_hint = {'center_x': .7, 'center_y': .73}
-                                layout.add_widget(name)
-                                time = datetime.datetime.fromisoformat(
-                                    jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
-                                avail = MDLabel(
-                                    text=f'{time.strftime("С %d %b, %a")}',
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                avail.font_size = 30
-                                avail.font_name = 'Assets/fonts/roboto.ttf'
-                                avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
-                                layout.add_widget(avail)
-                                address = MDLabel(
-                                    text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                address.font_size = 30
-                                address.font_name = 'Assets/fonts/roboto.ttf'
-                                address.pos_hint = {'center_x': .7, 'center_y': .58}
-                                fulladdress = MDLabel(
-                                    text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                fulladdress.font_size = 30
-                                fulladdress.font_name = 'Assets/fonts/roboto.ttf'
-                                fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
-                                cab = MDLabel(
-                                    text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
-                                    theme_text_color='Custom',
-                                    text_color=get_color_from_hex('#D4F5EC'),
-                                )
-                                cab.font_size = 30
-                                cab.font_name = 'Assets/fonts/roboto.ttf'
-                                cab.pos_hint = {'center_x': .7, 'center_y': .28}
-                                layout.add_widget(cab)
-                                layout.add_widget(fulladdress)
-                                layout.add_widget(address)
-                                card.vrachnum = i
-                                card.zapisvibor = zapisvibor
-                                card.resID = jsvrachi["result"][i]['complexResource'][j]['id']
-                                card.availRES = jsvrachi["result"][i]['id']
-                                card.doctor = False
-                                card.bind(on_release=self.showdateandtimenew)
-                                card.add_widget(layout)
-                                self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                                if len(jsvrachi["result"][i]['name'].replace("_", " "))<=46:
+                                    name = MDLabel(
+                                        text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    name.font_size = 30
+                                    name.font_name = 'Assets/fonts/roboto.ttf'
+                                    name.pos_hint = {'center_x': .7, 'center_y': .73}
+                                    layout.add_widget(name)
+                                    time = datetime.datetime.fromisoformat(
+                                        jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                                    avail = MDLabel(
+                                        text=f'{time.strftime("С %d %b, %a")}',
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    avail.font_size = 30
+                                    avail.font_name = 'Assets/fonts/roboto.ttf'
+                                    avail.pos_hint = {'center_x': 1.3, 'center_y': .28}
+                                    layout.add_widget(avail)
+                                    address = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    address.font_size = 30
+                                    address.font_name = 'Assets/fonts/roboto.ttf'
+                                    address.pos_hint = {'center_x': .7, 'center_y': .58}
+                                    fulladdress = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    fulladdress.font_size = 30
+                                    fulladdress.font_name = 'Assets/fonts/roboto.ttf'
+                                    fulladdress.pos_hint = {'center_x': .7, 'center_y': .43}
+                                    cab = MDLabel(
+                                        text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    cab.font_size = 30
+                                    cab.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab.pos_hint = {'center_x': .7, 'center_y': .28}
+                                    layout.add_widget(cab)
+                                    layout.add_widget(fulladdress)
+                                    layout.add_widget(address)
+                                    card.vrachnum = i
+                                    card.zapisvibor = zapisvibor
+                                    card.resID = jsvrachi["result"][i]['complexResource'][j]['id']
+                                    card.availRES = jsvrachi["result"][i]['id']
+                                    card.doctor = False
+                                    card.bind(on_release=self.showdateandtimenew)
+                                    card.add_widget(layout)
+                                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
+                                else:
+                                    name = MDLabel(
+                                        text=jsvrachi["result"][i]['name'].replace("_", " "),
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    name.font_size = 30
+                                    name.font_name = 'Assets/fonts/roboto.ttf'
+                                    name.pos_hint = {'center_x': .7, 'center_y': .73}
+                                    layout.add_widget(name)
+                                    time = datetime.datetime.fromisoformat(
+                                        jsvrachi["result"][i]['complexResource'][j]['room']['availabilityDate'])
+                                    avail = MDLabel(
+                                        text=f'{time.strftime("С %d %b, %a")}',
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    avail.font_size = 30
+                                    avail.font_name = 'Assets/fonts/roboto.ttf'
+                                    avail.pos_hint = {'center_x': 1.3, 'center_y': .2}
+                                    layout.add_widget(avail)
+                                    address = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['lpuShortName'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    address.font_size = 30
+                                    address.font_name = 'Assets/fonts/roboto.ttf'
+                                    address.pos_hint = {'center_x': .7, 'center_y': .5}
+                                    fulladdress = MDLabel(
+                                        text=jsvrachi["result"][i]['complexResource'][j]['room']['defaultAddress'],
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    fulladdress.font_size = 30
+                                    fulladdress.font_name = 'Assets/fonts/roboto.ttf'
+                                    fulladdress.pos_hint = {'center_x': .7, 'center_y': .35}
+                                    cab = MDLabel(
+                                        text=f"Кабинет {jsvrachi['result'][i]['complexResource'][j]['room']['number']}",
+                                        theme_text_color='Custom',
+                                        text_color=get_color_from_hex('#D4F5EC'),
+                                    )
+                                    cab.font_size = 30
+                                    cab.font_name = 'Assets/fonts/roboto.ttf'
+                                    cab.pos_hint = {'center_x': .7, 'center_y': .2}
+                                    layout.add_widget(cab)
+                                    layout.add_widget(fulladdress)
+                                    layout.add_widget(address)
+                                    card.vrachnum = i
+                                    card.zapisvibor = zapisvibor
+                                    card.resID = jsvrachi["result"][i]['complexResource'][j]['id']
+                                    card.availRES = jsvrachi["result"][i]['id']
+                                    card.doctor = False
+                                    card.bind(on_release=self.showdateandtimenew)
+                                    card.add_widget(layout)
+                                    self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
             self.manager.current = 'perenos'
         except Exception as ex:
             print(ex)
@@ -1819,4 +2088,113 @@ class OMSAlertScreen(Screen):
         if touch != None:
             return super(Screen, self).on_touch_down(touch)
 
-    pass
+class SuccOtmena(Screen):
+    def on_touch_down(self, touch=None):
+        def inactive(*args):
+            self.manager.get_screen('oms').ids.policy.text = ""
+            self.manager.get_screen('oms').day = None
+            self.manager.get_screen('oms').year = None
+            self.manager.get_screen('oms').month = None
+            self.manager.get_screen('oms').manager.current = 'enter'
+            self.manager.get_screen('oms').ids.counts.text_color = 'white'
+            self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
+            self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
+            self.manager.get_screen('timetable').ids.lay.clear_widgets()
+            try:
+                if self.manager.get_screen('timetable').children[0].check == True:
+                    self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
+            except:
+                pass
+            self.manager.get_screen('prik').ids.lay.clear_widgets()
+            self.manager.get_screen('napr').ids.scrollid.clear_widgets()
+            x = ToggleButtonBehavior.get_widgets('x')
+            for i in x:
+                i.state = 'normal'
+            y = ToggleButtonBehavior.get_widgets('y')
+            for i in y:
+                i.state = 'normal'
+            z = ToggleButtonBehavior.get_widgets('z')
+            for i in z:
+                i.state = 'normal'
+            self.manager.get_screen('mos').check(flag=True)
+            self.manager.current = 'afk'
+
+        if self.manager.get_screen('enter').timer is not None:
+            self.manager.get_screen('enter').timer.cancel()
+        self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
+        if touch != None:
+            return super(Screen, self).on_touch_down(touch)
+
+class SuccPerenos(Screen):
+    def on_touch_down(self, touch=None):
+        def inactive(*args):
+            self.manager.get_screen('oms').ids.policy.text = ""
+            self.manager.get_screen('oms').day = None
+            self.manager.get_screen('oms').year = None
+            self.manager.get_screen('oms').month = None
+            self.manager.get_screen('oms').manager.current = 'enter'
+            self.manager.get_screen('oms').ids.counts.text_color = 'white'
+            self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
+            self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
+            self.manager.get_screen('timetable').ids.lay.clear_widgets()
+            try:
+                if self.manager.get_screen('timetable').children[0].check == True:
+                    self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
+            except:
+                pass
+            self.manager.get_screen('prik').ids.lay.clear_widgets()
+            self.manager.get_screen('napr').ids.scrollid.clear_widgets()
+            x = ToggleButtonBehavior.get_widgets('x')
+            for i in x:
+                i.state = 'normal'
+            y = ToggleButtonBehavior.get_widgets('y')
+            for i in y:
+                i.state = 'normal'
+            z = ToggleButtonBehavior.get_widgets('z')
+            for i in z:
+                i.state = 'normal'
+            self.manager.get_screen('mos').check(flag=True)
+            self.manager.current = 'afk'
+
+        if self.manager.get_screen('enter').timer is not None:
+            self.manager.get_screen('enter').timer.cancel()
+        self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
+        if touch != None:
+            return super(Screen, self).on_touch_down(touch)
+
+class Succ(Screen):
+    def on_touch_down(self, touch=None):
+        def inactive(*args):
+            self.manager.get_screen('oms').ids.policy.text = ""
+            self.manager.get_screen('oms').day = None
+            self.manager.get_screen('oms').year = None
+            self.manager.get_screen('oms').month = None
+            self.manager.get_screen('oms').manager.current = 'enter'
+            self.manager.get_screen('oms').ids.counts.text_color = 'white'
+            self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
+            self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
+            self.manager.get_screen('timetable').ids.lay.clear_widgets()
+            try:
+                if self.manager.get_screen('timetable').children[0].check == True:
+                    self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
+            except:
+                pass
+            self.manager.get_screen('prik').ids.lay.clear_widgets()
+            self.manager.get_screen('napr').ids.scrollid.clear_widgets()
+            x = ToggleButtonBehavior.get_widgets('x')
+            for i in x:
+                i.state = 'normal'
+            y = ToggleButtonBehavior.get_widgets('y')
+            for i in y:
+                i.state = 'normal'
+            z = ToggleButtonBehavior.get_widgets('z')
+            for i in z:
+                i.state = 'normal'
+            self.manager.get_screen('mos').check(flag=True)
+            self.manager.current = 'afk'
+
+        if self.manager.get_screen('enter').timer is not None:
+            self.manager.get_screen('enter').timer.cancel()
+        self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
+        if touch != None:
+            return super(Screen, self).on_touch_down(touch)
