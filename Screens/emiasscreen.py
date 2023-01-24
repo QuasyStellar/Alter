@@ -19,7 +19,7 @@ class EmiasScreen(Screen):
                 if self.manager.get_screen('timetable').children[0].check == True:
                         self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
             except:
-                None
+                pass
             self.manager.get_screen('prik').ids.lay.clear_widgets()
             self.manager.get_screen('napr').ids.scrollid.clear_widgets()
             x = ToggleButtonBehavior.get_widgets('x')

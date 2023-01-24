@@ -34,7 +34,7 @@ class OMSScreen(Screen):
                 if self.manager.get_screen('timetable').children[0].check == True:
                         self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
             except:
-                None
+                pass
             self.manager.get_screen('prik').ids.lay.clear_widgets()
             self.manager.get_screen('napr').ids.scrollid.clear_widgets()
             x = ToggleButtonBehavior.get_widgets('x')
@@ -168,13 +168,13 @@ class OMSScreen(Screen):
 
     def omslogin(self):
         if len(self.ids.policy.text) < 16 or len(self.ids.policy.text) > 16:
-            None
+            pass
         elif self.day !=None and self.month !=None and self.year !=None:
             bdate = f'{self.year}-{self.month}-{self.day}'
             self.omsfunc(self.ids.policy.text, bdate)
             self.manager.current = "load"
         else:
-            None
+            pass
 
     def cou(self):
         self.ids.counts.text = f'{len(self.ids.policy.text)}/16'
@@ -238,7 +238,7 @@ class OMSErrorScreen(Screen):
                 if self.manager.get_screen('timetable').children[0].check == True:
                         self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
             except:
-                None
+                pass
             x = ToggleButtonBehavior.get_widgets('x')
             for i in x:
                 i.state = 'normal'
@@ -272,7 +272,7 @@ class OMSErrorUnkScreen(Screen):
                 if self.manager.get_screen('timetable').children[0].check == True:
                         self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
             except:
-                None
+                pass
             x = ToggleButtonBehavior.get_widgets('x')
             for i in x:
                 i.state = 'normal'

@@ -40,7 +40,7 @@ class Decrypt(Screen):
                 if self.manager.get_screen('timetable').children[0].check == True:
                         self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
             except:
-                None
+                pass
             self.manager.get_screen('prik').ids.lay.clear_widgets()
             self.manager.get_screen('napr').ids.scrollid.clear_widgets()
             x = ToggleButtonBehavior.get_widgets('x')
@@ -72,7 +72,7 @@ class Decrypt(Screen):
             try:
                 text +=f"[size=30]{report['interpretations'][i]['suggestions']}[/size]\n"
             except:
-                None
+                pass
         lab = MDLabel(
             text =text,
             markup= True,
@@ -538,7 +538,6 @@ class Decrypt(Screen):
                                 mush = 'Обнаружено в большом количестве'
                                 mushcode = '8qM2SZXflJ8IRKhuEBRMsQ=='
                             break
-                        break
                     else:
                         mush = 'Не обнаружено'
                         mushcode = 'XmXOg59dJnz/v9XelUDt6g=='

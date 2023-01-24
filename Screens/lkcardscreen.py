@@ -36,7 +36,7 @@ class LKCard(Screen):
                 if self.manager.get_screen('timetable').children[0].check == True:
                         self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
             except:
-                None
+                pass
             self.manager.get_screen('prik').ids.lay.clear_widgets()
             self.manager.get_screen('napr').ids.scrollid.clear_widgets()
             x = ToggleButtonBehavior.get_widgets('x')
@@ -332,7 +332,7 @@ class LKCard(Screen):
             self.manager.current = 'history'
 
         def myboln(*args):
-            None
+            pass
 
         def myspravki(*args):
             spravki = self.s.get(
