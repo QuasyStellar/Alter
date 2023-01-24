@@ -854,52 +854,100 @@ class OMSLoged(Screen):
                         layout = RelativeLayout()
                         layout.add_widget(Image(source= 'Assets/omsloged/vrachchoosebutton.png'))
                         layout.add_widget(Image(source= 'Assets/omsloged/docicons/ldp.png', height = 185, width = 185, pos_hint={'center_x':.1 , 'center_y':.5}))
-                        name = MDLabel(
-                            text=jsnp["result"][i]["toLdp"]["ldpTypeName"].replace("_", " "),
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                            size_hint_x=.8
-                        )
-                        name.font_size = 30
-                        name.font_name =  'Assets/fonts/roboto.ttf'
-                        name.pos_hint = {'center_x': .6, 'center_y': .73}
-                        layout.add_widget(name)
-                        time = datetime.datetime.fromisoformat(jsnp["result"][i]["startTime"])
-                        avail = MDLabel(
-                            text=f'{time.strftime("Доступно с %d %b")}',
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                        )
-                        avail.font_size = 30
-                        avail.font_name =  'Assets/fonts/roboto.ttf'
-                        avail.pos_hint = {'center_x': .7, 'center_y': .58}
-                        layout.add_widget(avail)
-                        endtime = datetime.datetime.fromisoformat(jsnp["result"][i]["endTime"])
-                        end = MDLabel(
-                            text=f'{endtime.strftime("До %d %b")}',
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                        )
-                        end.font_size = 30
-                        end.font_name =  'Assets/fonts/roboto.ttf'
-                        end.pos_hint = {'center_x': .7, 'center_y': .43}
-                        layout.add_widget(end)
-                        last = MDLabel(
-                            text=f'Осталось {(endtime-datetime.datetime.now()).days+1} дня',
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                        )
-                        last.font_name =  'Assets/fonts/roboto.ttf'
-                        last.font_size = 30
-                        last.pos_hint = {'center_x': .7, 'center_y': .28}
-                        layout.add_widget(last)
-                        card.zapisid = i
-                        card.refferal = jsnp["result"][i]['id']
-                        card.recpID =  jsnp["result"][i]["toLdp"]['ldpTypeId']
-                        card.doctor = False
-                        card.add_widget(layout)
-                        card.bind(on_release=self.naprav)
-                        self.manager.get_screen("napr").ids.scrollid.add_widget(card)
+                        if len(jsnp["result"][i]["toLdp"]["ldpTypeName"].replace("_", " "))<=46:
+                            name = MDLabel(
+                                text=jsnp["result"][i]["toLdp"]["ldpTypeName"].replace("_", " "),
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint_x=.8
+                            )
+                            name.font_size = 30
+                            name.font_name =  'Assets/fonts/roboto.ttf'
+                            name.pos_hint = {'center_x': .6, 'center_y': .73}
+                            layout.add_widget(name)
+                            time = datetime.datetime.fromisoformat(jsnp["result"][i]["startTime"])
+                            avail = MDLabel(
+                                text=f'{time.strftime("Доступно с %d %b")}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            avail.font_size = 30
+                            avail.font_name =  'Assets/fonts/roboto.ttf'
+                            avail.pos_hint = {'center_x': .7, 'center_y': .58}
+                            layout.add_widget(avail)
+                            endtime = datetime.datetime.fromisoformat(jsnp["result"][i]["endTime"])
+                            end = MDLabel(
+                                text=f'{endtime.strftime("До %d %b")}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            end.font_size = 30
+                            end.font_name =  'Assets/fonts/roboto.ttf'
+                            end.pos_hint = {'center_x': .7, 'center_y': .43}
+                            layout.add_widget(end)
+                            last = MDLabel(
+                                text=f'Осталось {(endtime-datetime.datetime.now()).days+1} дня',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            last.font_name =  'Assets/fonts/roboto.ttf'
+                            last.font_size = 30
+                            last.pos_hint = {'center_x': .7, 'center_y': .28}
+                            layout.add_widget(last)
+                            card.zapisid = i
+                            card.refferal = jsnp["result"][i]['id']
+                            card.recpID =  jsnp["result"][i]["toLdp"]['ldpTypeId']
+                            card.doctor = False
+                            card.add_widget(layout)
+                            card.bind(on_release=self.naprav)
+                            self.manager.get_screen("napr").ids.scrollid.add_widget(card)
+                        else:
+                            name = MDLabel(
+                                text=jsnp["result"][i]["toLdp"]["ldpTypeName"].replace("_", " "),
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint_x=.8
+                            )
+                            name.font_size = 30
+                            name.font_name = 'Assets/fonts/roboto.ttf'
+                            name.pos_hint = {'center_x': .6, 'center_y': .73}
+                            layout.add_widget(name)
+                            time = datetime.datetime.fromisoformat(jsnp["result"][i]["startTime"])
+                            avail = MDLabel(
+                                text=f'{time.strftime("Доступно с %d %b")}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            avail.font_size = 30
+                            avail.font_name = 'Assets/fonts/roboto.ttf'
+                            avail.pos_hint = {'center_x': .7, 'center_y': .50}
+                            layout.add_widget(avail)
+                            endtime = datetime.datetime.fromisoformat(jsnp["result"][i]["endTime"])
+                            end = MDLabel(
+                                text=f'{endtime.strftime("До %d %b")}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            end.font_size = 30
+                            end.font_name = 'Assets/fonts/roboto.ttf'
+                            end.pos_hint = {'center_x': .7, 'center_y': .35}
+                            layout.add_widget(end)
+                            last = MDLabel(
+                                text=f'Осталось {(endtime - datetime.datetime.now()).days + 1} дня',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                            )
+                            last.font_name = 'Assets/fonts/roboto.ttf'
+                            last.font_size = 30
+                            last.pos_hint = {'center_x': .7, 'center_y': .20}
+                            layout.add_widget(last)
+                            card.zapisid = i
+                            card.refferal = jsnp["result"][i]['id']
+                            card.recpID = jsnp["result"][i]["toLdp"]['ldpTypeId']
+                            card.doctor = False
+                            card.add_widget(layout)
+                            card.bind(on_release=self.naprav)
+                            self.manager.get_screen("napr").ids.scrollid.add_widget(card)
             self.manager.current = 'napr'
             self.manager.get_screen('perenos').precurrent = 'napr'
         except Exception as ex:

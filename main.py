@@ -31,10 +31,10 @@ from kivymd.uix.screenmanager import MDScreenManager as ScreenManager
 from kivymd.uix.screen import MDScreen as Screen
 from os import listdir
 import locale
-locale.setlocale(
-    category=locale.LC_ALL,
-    locale="Russian"
-    )
+# locale.setlocale(
+#     category=locale.LC_ALL,
+#     locale="Russian"
+#     )
 
 
 #Window.maximize()
