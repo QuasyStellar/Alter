@@ -241,7 +241,7 @@ class OMSLoged(Screen):
                             perenesti = MDFlatButton(
                                 text="Перенести",
                                 theme_text_color='Custom',
-                                text_color='white',
+                                text_color=get_color_from_hex('#D4F5EC'),
                                 size_hint=(.49, .17),
                                 md_bg_color=(0, 0, 0, 0)
                             )
@@ -1717,7 +1717,7 @@ class OMSLoged(Screen):
                 layout.add_widget(name)
                 choose.add_widget(layout)
                 self.manager.get_screen("zapisi").ids.scrollid.add_widget(choose)
-            self.manager.get_screen('zapisi').ids.backgr.source = 'Assets/omsloged/newzapis.png'
+            self.manager.get_screen('zapisi').ids.backgr.source = 'Assets/omsloged/bg/newzapis.png'
             self.manager.get_screen('zapisi').ids.backgr.reload()
             self.manager.current = 'zapisi'
             self.manager.get_screen('perenos').precurrent = 'zapisi'

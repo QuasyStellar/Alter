@@ -9,6 +9,8 @@ import requests
 from kivy.uix.behaviors import ToggleButtonBehavior
 import json
 from kivy.uix.screenmanager import Screen, SlideTransition
+from kivy.utils import get_color_from_hex
+from kivymd.uix.button import MDFillRoundFlatButton, MDIconButton, MDFlatButton
 from kivy.uix.image import Image
 from kivy.properties import DictProperty, ObjectProperty
 from kivymd.uix.label import MDLabel
@@ -85,14 +87,8 @@ class Decrypt(Screen):
         scrollview.height = 800
 
         scrollview.add_widget(lab)
-        but = MDRaisedButton(
-            text="Выйти",
-            on_release=lambda _: self.dialog.dismiss(),
-            size_hint=(None, None)
-        )
-        but.height = 150
-        but.width = 200
-        but.font_size = 30
+        but = MDCard(size_hint=(.2, .15),md_bg_color=(0,0,0,0), on_release=lambda _: self.dialog.dismiss(),)
+        but.add_widget(Image(source= 'Assets/exitbutton.png', keep_ratio=False))
         self.dialog = MDDialog(
             type='custom',
             content_cls=scrollview,
@@ -142,52 +138,90 @@ class Decrypt(Screen):
                        headers={'X-Access-JWT': self.authtoken})
         jsanaliz = analiz.json()
         for i in range(len(jsanaliz['documents'])):
-            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                      md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+            card = MDCard(size_hint=(1, None), height=330, md_bg_color=(0, 0, 0, 0))
             layout = RelativeLayout()
+            layout.add_widget(Image(source='Assets/omsloged/zapisperenos.png', keep_ratio=False))
             title = MDLabel(
                 text=f"{jsanaliz['documents'][i]['title']}",
                 theme_text_color='Custom',
-                text_color='white',
+                text_color=get_color_from_hex('#D4F5EC'),
+                halign = 'center'
             )
-            title.font_size = 45
-            title.pos_hint = {'center_x': .55, 'center_y': .8}
+            title.font_size = 40
+            title.font_name = 'Assets/fonts/roboto.ttf'
+            title.pos_hint = {'center_x': .5, 'center_y': .7}
             layout.add_widget(title)
             time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
             timelab = MDLabel(
                 text=f'{time.strftime("%a, %d %b %Y")}',
                 theme_text_color='Custom',
-                text_color='white',
+                text_color=get_color_from_hex('#D4F5EC'),
+                halign = 'center'
             )
-            timelab.font_size = 35
-            timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+            timelab.font_size = 30
+            timelab.font_name = 'Assets/fonts/roboto.ttf'
+            timelab.pos_hint = {'center_x': .5, 'center_y': .45}
             if 'ОАК' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ крови' in jsanaliz['documents'][i]['title'] or ('кров' in jsanaliz['documents'][i]['title'] and 'общ' in jsanaliz['documents'][i]['title']) or 'Клинический анализ крови' in jsanaliz['documents'][i]['title']:
-                but = MDRaisedButton(
-                    text="Расшифровать анализ",
-                    on_release=self.OKAKLK,
+                dec = MDFlatButton(
+                    text='Расшифровать',
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    size_hint=(.4846, .17),
+                    md_bg_color=(0, 0, 0, 0)
                 )
-                but.pos_hint={'center_x': .7, 'center_y': .25}
-                but.docid = jsanaliz['documents'][i]['documentId']
-                but.date = jsanaliz['documents'][i]['date']
-                layout.add_widget(but)
+                dec.docid = jsanaliz['documents'][i]['documentId']
+                dec.date = jsanaliz['documents'][i]['date']
+                dec.bind(on_release=self.OKAKLK,)
+                dec.pos_hint = {'center_x': .748, 'center_y': .23}
+                dec.font_size = 30
+                dec.font_name = 'Assets/fonts/roboto.ttf'
+                look = MDFlatButton(
+                    text="Просмотр",
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    size_hint=(.49, .17),
+                    md_bg_color=(0, 0, 0, 0)
+                )
+                look.pos_hint = {'center_x': .253, 'center_y': .23}
+                look.font_size = 30
+                look.font_name = 'Assets/fonts/roboto.ttf'
+                look.docid = jsanaliz['documents'][i]['documentId']
+                look.bind(on_release=self.manager.get_screen('lkcard').documentview)
+                layout.add_widget(look)
+                layout.add_widget(dec)
                 layout.add_widget(timelab)
                 card.add_widget(layout)
-                card.docid = jsanaliz['documents'][i]['documentId']
-                card.bind(on_release=self.manager.get_screen('lkcard').documentview)
                 self.ids.scrollid.add_widget(card)
             elif 'ОАМ' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ мочи' in jsanaliz['documents'][i]['title'] or 'Клинический анализ мочи' in jsanaliz['documents'][i]['title'] or ('моч' in jsanaliz['documents'][i]['title'] and 'анализ' in jsanaliz['documents'][i]['title']):
-                but = MDRaisedButton(
-                    text="Расшифровать анализ",
-                    on_release=self.OAMLK,
+                dec = MDFlatButton(
+                    text='Расшифровать',
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    size_hint=(.4846, .17),
+                    md_bg_color=(0, 0, 0, 0)
                 )
-                but.pos_hint={'center_x': .7, 'center_y': .25}
-                but.docid = jsanaliz['documents'][i]['documentId']
-                but.date = jsanaliz['documents'][i]['date']
-                layout.add_widget(but)
+                dec.docid = jsanaliz['documents'][i]['documentId']
+                dec.date = jsanaliz['documents'][i]['date']
+                dec.bind(on_release=self.OKAKLK,)
+                dec.pos_hint = {'center_x': .748, 'center_y': .23}
+                dec.font_size = 30
+                dec.font_name = 'Assets/fonts/roboto.ttf'
+                look = MDFlatButton(
+                    text="Просмотр",
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    size_hint=(.49, .17),
+                    md_bg_color=(0, 0, 0, 0)
+                )
+                look.pos_hint = {'center_x': .253, 'center_y': .23}
+                look.font_size = 30
+                look.font_name = 'Assets/fonts/roboto.ttf'
+                look.docid = jsanaliz['documents'][i]['documentId']
+                look.bind(on_release=self.manager.get_screen('lkcard').documentview)
+                layout.add_widget(look)
+                layout.add_widget(dec)
                 layout.add_widget(timelab)
                 card.add_widget(layout)
-                card.docid = jsanaliz['documents'][i]['documentId']
-                card.bind(on_release=self.manager.get_screen('lkcard').documentview)
                 self.ids.scrollid.add_widget(card)
         self.manager.current = 'decrypt'
     def OKAK(self, html, age, gender, date):

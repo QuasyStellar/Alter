@@ -9,6 +9,7 @@ from kivy.uix.behaviors import ToggleButtonBehavior
 from kivymd.uix.label import MDLabel
 import os
 from kivy.clock import Clock
+from kivy.utils import get_color_from_hex
 from cairosvg import svg2png
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -72,12 +73,15 @@ class LKCard(Screen):
         but = MDRaisedButton(
             text="Выйти",
             on_release=lambda _: self.dialog.dismiss(),
-            size_hint=(None, None)
+            size_hint=(None, None),
+            theme_text_color='Custom',
+            line_width = 3,
+            line_color = get_color_from_hex('#2E4547'),
+            text_color=get_color_from_hex('#D4F5EC'),
+            md_bg_color = get_color_from_hex('#51857A')
         )
         ima.height = ima.texture_size[1]
         lay.height = ima.height
-        but.height = 150
-        but.width = 200
         but.font_size = 30
         lay.add_widget(ima)
         scrollview.add_widget(lay)
