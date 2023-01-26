@@ -56,6 +56,7 @@ class MOSScreen(Screen):
             return super(Screen, self).on_touch_down(touch)
 
     def mosfunc(self, event, width, height):
+        self.manager.current = 'mos'
         t = threading.Thread(
             target=self.open_moslogin, args=[event, width, height], daemon=True
         )
@@ -121,6 +122,7 @@ class MOSScreen(Screen):
                 self.succ(names, sure, age, idus, authtoken, oms, bdates, s, gender)
                 driver.quit()
         except Exception as ex:
+            print(ex)
             self.mosfunc(event, width, height)
             driver.quit()
             sys.exit()

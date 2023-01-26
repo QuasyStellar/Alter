@@ -65,40 +65,52 @@ class Decrypt(Screen):
             
     dialogerror = None
     def report(self, report):
-        dialog = None
-        scrollview = ScrollView(size_hint=(.8, None))
-        text = ""
-        for i in range(len(report['interpretations'])):
-            text += f"[b][size=40]{report['interpretations'][i]['title']}[/size][/b]\n\n"
-            text+= f"[size=20]{report['interpretations'][i]['detail']}[/size]\n\n"
-            try:
-                text +=f"[size=30]{report['interpretations'][i]['suggestions']}[/size]\n"
-            except:
-                pass
-        lab = MDLabel(
-            text =text,
-            markup= True,
-            adaptive_height=True
+        try:
+            dialog = None
+            scrollview = ScrollView(size_hint=(.8, None))
+            text = ""
+            for i in range(len(report['interpretations'])):
+                text += f"[b][size=40]{report['interpretations'][i]['title']}[/size][/b]\n\n"
+                text+= f"[size=20]{report['interpretations'][i]['detail']}[/size]\n\n"
+                try:
+                    text +=f"[size=30]{report['interpretations'][i]['suggestions']}[/size]\n"
+                except:
+                    pass
+            lab = MDLabel(
+                text =text,
+                markup= True,
+                adaptive_height=True
+                )
+
+            lab.size_hint_y = None        
+            lab.text_size= lab.width, None        
+            lab.height = lab.texture_size[1]
+            scrollview.height = 800
+
+            scrollview.add_widget(lab)
+            but = MDCard(size_hint=(.2, .15),md_bg_color=(0,0,0,0), on_release=lambda _: self.dialog.dismiss(),)
+            but.add_widget(Image(source= 'Assets/exitbutton.png', keep_ratio=False))
+            self.dialog = MDDialog(
+                type='custom',
+                content_cls=scrollview,
+                size_hint_x=.5,
+                elevation=0,
+                buttons=[
+                    but,
+                ]
             )
-
-        lab.size_hint_y = None        
-        lab.text_size= lab.width, None        
-        lab.height = lab.texture_size[1]
-        scrollview.height = 800
-
-        scrollview.add_widget(lab)
-        but = MDCard(size_hint=(.2, .15),md_bg_color=(0,0,0,0), on_release=lambda _: self.dialog.dismiss(),)
-        but.add_widget(Image(source= 'Assets/exitbutton.png', keep_ratio=False))
-        self.dialog = MDDialog(
-            type='custom',
-            content_cls=scrollview,
-            size_hint_x=.5,
-            elevation=0,
-            buttons=[
-                but,
-            ]
-        )
-        self.dialog.open()
+            self.dialog.open()
+        except:
+            self.manager.current = 'omserrorunk'
+            self.manager.get_screen('privview').ids.scrollid.clear_widgets()
+            self.manager.get_screen('history').ids.scrollid.clear_widgets()
+            self.manager.get_screen('anamn').ids.scrollid.clear_widgets()
+            self.manager.get_screen('decrypt').ids.scrollid.clear_widgets()
+            self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
+            self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
+            self.manager.get_screen('timetable').ids.lay.clear_widgets()
+            self.manager.get_screen('prik').ids.lay.clear_widgets()
+            self.manager.get_screen('napr').ids.scrollid.clear_widgets()
 
     def error_dialog(self):
         if not self.dialogerror:
@@ -114,116 +126,152 @@ class Decrypt(Screen):
             )
         self.dialogerror.open()
     def OKAKLK(self, instance):
-        prosmotr = self.s.get(
-            f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
-            headers={'X-Access-JWT': self.authtoken})
-        jspros = prosmotr.json()
         try:
-            html = jspros['documentHtml'].replace('\n', '')
+            prosmotr = self.s.get(
+                f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
+                headers={'X-Access-JWT': self.authtoken})
+            jspros = prosmotr.json()
+            try:
+                html = jspros['documentHtml'].replace('\n', '')
+            except:
+                self.OKAKLK(instance)
+            self.OKAK(html, self.age, self.gender, instance.date)
         except:
-            self.OKAKLK(instance)
-        self.OKAK(html, self.age, self.gender, instance.date)
+            self.manager.current = 'omserrorunk'
+            self.manager.get_screen('privview').ids.scrollid.clear_widgets()
+            self.manager.get_screen('history').ids.scrollid.clear_widgets()
+            self.manager.get_screen('anamn').ids.scrollid.clear_widgets()
+            self.manager.get_screen('decrypt').ids.scrollid.clear_widgets()
+            self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
+            self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
+            self.manager.get_screen('timetable').ids.lay.clear_widgets()
+            self.manager.get_screen('prik').ids.lay.clear_widgets()
+            self.manager.get_screen('napr').ids.scrollid.clear_widgets()
     def OAMLK(self, instance):
-        prosmotr = self.s.get(
-            f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
-            headers={'X-Access-JWT': self.authtoken})
-        jspros = prosmotr.json()
         try:
-            html = jspros['documentHtml'].replace('\n', '')
+            prosmotr = self.s.get(
+                f'https://lk.emias.mos.ru/api/2/document?ehrId={self.idus}&documentId={instance.docid}',
+                headers={'X-Access-JWT': self.authtoken})
+            jspros = prosmotr.json()
+            try:
+                html = jspros['documentHtml'].replace('\n', '')
+            except:
+                self.OAMLK(instance)
+            self.OAM(html, self.age, self.gender, instance.date)
         except:
-            self.OAMLK(instance)
-        self.OAM(html, self.age, self.gender, instance.date)
+            self.manager.current = 'omserrorunk'
+            self.manager.get_screen('privview').ids.scrollid.clear_widgets()
+            self.manager.get_screen('history').ids.scrollid.clear_widgets()
+            self.manager.get_screen('anamn').ids.scrollid.clear_widgets()
+            self.manager.get_screen('decrypt').ids.scrollid.clear_widgets()
+            self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
+            self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
+            self.manager.get_screen('timetable').ids.lay.clear_widgets()
+            self.manager.get_screen('prik').ids.lay.clear_widgets()
+            self.manager.get_screen('napr').ids.scrollid.clear_widgets()
     def myanaliz(self):
-        analiz = self.s.get(f'https://lk.emias.mos.ru/api/1/documents/analyzes?ehrId={self.idus}&shortDateFilter=all_time',
+        try:
+            analiz = self.s.get(f'https://lk.emias.mos.ru/api/1/documents/analyzes?ehrId={self.idus}&shortDateFilter=all_time',
                        headers={'X-Access-JWT': self.authtoken})
-        jsanaliz = analiz.json()
-        for i in range(len(jsanaliz['documents'])):
-            card = MDCard(size_hint=(1, None), height=330, md_bg_color=(0, 0, 0, 0))
-            layout = RelativeLayout()
-            layout.add_widget(Image(source='Assets/omsloged/zapisperenos.png', keep_ratio=False))
-            title = MDLabel(
-                text=f"{jsanaliz['documents'][i]['title']}",
-                theme_text_color='Custom',
-                text_color=get_color_from_hex('#D4F5EC'),
-                halign = 'center'
-            )
-            title.font_size = 40
-            title.font_name = 'Assets/fonts/roboto.ttf'
-            title.pos_hint = {'center_x': .5, 'center_y': .7}
-            layout.add_widget(title)
-            time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
-            timelab = MDLabel(
-                text=f'{time.strftime("%a, %d %b %Y")}',
-                theme_text_color='Custom',
-                text_color=get_color_from_hex('#D4F5EC'),
-                halign = 'center'
-            )
-            timelab.font_size = 30
-            timelab.font_name = 'Assets/fonts/roboto.ttf'
-            timelab.pos_hint = {'center_x': .5, 'center_y': .45}
-            if 'ОАК' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ крови' in jsanaliz['documents'][i]['title'] or ('кров' in jsanaliz['documents'][i]['title'] and 'общ' in jsanaliz['documents'][i]['title']) or 'Клинический анализ крови' in jsanaliz['documents'][i]['title']:
-                dec = MDFlatButton(
-                    text='Расшифровать',
+            jsanaliz = analiz.json()
+            for i in range(len(jsanaliz['documents'])):
+                card = MDCard(size_hint=(1, None), height=330, md_bg_color=(0, 0, 0, 0))
+                layout = RelativeLayout()
+                layout.add_widget(Image(source='Assets/omsloged/zapisperenos.png', keep_ratio=False))
+                title = MDLabel(
+                    text=f"{jsanaliz['documents'][i]['title']}",
                     theme_text_color='Custom',
                     text_color=get_color_from_hex('#D4F5EC'),
-                    size_hint=(.4846, .17),
-                    md_bg_color=(0, 0, 0, 0)
+                    halign = 'center'
                 )
-                dec.docid = jsanaliz['documents'][i]['documentId']
-                dec.date = jsanaliz['documents'][i]['date']
-                dec.bind(on_release=self.OKAKLK,)
-                dec.pos_hint = {'center_x': .748, 'center_y': .23}
-                dec.font_size = 30
-                dec.font_name = 'Assets/fonts/roboto.ttf'
-                look = MDFlatButton(
-                    text="Просмотр",
+                title.font_size = 40
+                title.font_name = 'Assets/fonts/roboto.ttf'
+                title.pos_hint = {'center_x': .5, 'center_y': .7}
+                layout.add_widget(title)
+                time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
+                timelab = MDLabel(
+                    text=f'{time.strftime("%a, %d %b %Y")}',
                     theme_text_color='Custom',
                     text_color=get_color_from_hex('#D4F5EC'),
-                    size_hint=(.49, .17),
-                    md_bg_color=(0, 0, 0, 0)
+                    halign = 'center'
                 )
-                look.pos_hint = {'center_x': .253, 'center_y': .23}
-                look.font_size = 30
-                look.font_name = 'Assets/fonts/roboto.ttf'
-                look.docid = jsanaliz['documents'][i]['documentId']
-                look.bind(on_release=self.manager.get_screen('lkcard').documentview)
-                layout.add_widget(look)
-                layout.add_widget(dec)
-                layout.add_widget(timelab)
-                card.add_widget(layout)
-                self.ids.scrollid.add_widget(card)
-            elif 'ОАМ' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ мочи' in jsanaliz['documents'][i]['title'] or 'Клинический анализ мочи' in jsanaliz['documents'][i]['title'] or ('моч' in jsanaliz['documents'][i]['title'] and 'анализ' in jsanaliz['documents'][i]['title']):
-                dec = MDFlatButton(
-                    text='Расшифровать',
-                    theme_text_color='Custom',
-                    text_color=get_color_from_hex('#D4F5EC'),
-                    size_hint=(.4846, .17),
-                    md_bg_color=(0, 0, 0, 0)
-                )
-                dec.docid = jsanaliz['documents'][i]['documentId']
-                dec.date = jsanaliz['documents'][i]['date']
-                dec.bind(on_release=self.OKAKLK,)
-                dec.pos_hint = {'center_x': .748, 'center_y': .23}
-                dec.font_size = 30
-                dec.font_name = 'Assets/fonts/roboto.ttf'
-                look = MDFlatButton(
-                    text="Просмотр",
-                    theme_text_color='Custom',
-                    text_color=get_color_from_hex('#D4F5EC'),
-                    size_hint=(.49, .17),
-                    md_bg_color=(0, 0, 0, 0)
-                )
-                look.pos_hint = {'center_x': .253, 'center_y': .23}
-                look.font_size = 30
-                look.font_name = 'Assets/fonts/roboto.ttf'
-                look.docid = jsanaliz['documents'][i]['documentId']
-                look.bind(on_release=self.manager.get_screen('lkcard').documentview)
-                layout.add_widget(look)
-                layout.add_widget(dec)
-                layout.add_widget(timelab)
-                card.add_widget(layout)
-                self.ids.scrollid.add_widget(card)
-        self.manager.current = 'decrypt'
+                timelab.font_size = 30
+                timelab.font_name = 'Assets/fonts/roboto.ttf'
+                timelab.pos_hint = {'center_x': .5, 'center_y': .45}
+                if 'ОАК' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ крови' in jsanaliz['documents'][i]['title'] or ('кров' in jsanaliz['documents'][i]['title'] and 'общ' in jsanaliz['documents'][i]['title']) or 'Клинический анализ крови' in jsanaliz['documents'][i]['title']:
+                    dec = MDFlatButton(
+                        text='Расшифровать',
+                        theme_text_color='Custom',
+                        text_color=get_color_from_hex('#D4F5EC'),
+                        size_hint=(.4846, .17),
+                        md_bg_color=(0, 0, 0, 0)
+                    )
+                    dec.docid = jsanaliz['documents'][i]['documentId']
+                    dec.date = jsanaliz['documents'][i]['date']
+                    dec.bind(on_release=self.OKAKLK,)
+                    dec.pos_hint = {'center_x': .748, 'center_y': .23}
+                    dec.font_size = 30
+                    dec.font_name = 'Assets/fonts/roboto.ttf'
+                    look = MDFlatButton(
+                        text="Просмотр",
+                        theme_text_color='Custom',
+                        text_color=get_color_from_hex('#D4F5EC'),
+                        size_hint=(.49, .17),
+                        md_bg_color=(0, 0, 0, 0)
+                    )
+                    look.pos_hint = {'center_x': .253, 'center_y': .23}
+                    look.font_size = 30
+                    look.font_name = 'Assets/fonts/roboto.ttf'
+                    look.docid = jsanaliz['documents'][i]['documentId']
+                    look.bind(on_release=self.manager.get_screen('lkcard').documentview)
+                    layout.add_widget(look)
+                    layout.add_widget(dec)
+                    layout.add_widget(timelab)
+                    card.add_widget(layout)
+                    self.ids.scrollid.add_widget(card)
+                elif 'ОАМ' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ мочи' in jsanaliz['documents'][i]['title'] or 'Клинический анализ мочи' in jsanaliz['documents'][i]['title'] or ('моч' in jsanaliz['documents'][i]['title'] and 'анализ' in jsanaliz['documents'][i]['title']):
+                    dec = MDFlatButton(
+                        text='Расшифровать',
+                        theme_text_color='Custom',
+                        text_color=get_color_from_hex('#D4F5EC'),
+                        size_hint=(.4846, .17),
+                        md_bg_color=(0, 0, 0, 0)
+                    )
+                    dec.docid = jsanaliz['documents'][i]['documentId']
+                    dec.date = jsanaliz['documents'][i]['date']
+                    dec.bind(on_release=self.OKAKLK,)
+                    dec.pos_hint = {'center_x': .748, 'center_y': .23}
+                    dec.font_size = 30
+                    dec.font_name = 'Assets/fonts/roboto.ttf'
+                    look = MDFlatButton(
+                        text="Просмотр",
+                        theme_text_color='Custom',
+                        text_color=get_color_from_hex('#D4F5EC'),
+                        size_hint=(.49, .17),
+                        md_bg_color=(0, 0, 0, 0)
+                    )
+                    look.pos_hint = {'center_x': .253, 'center_y': .23}
+                    look.font_size = 30
+                    look.font_name = 'Assets/fonts/roboto.ttf'
+                    look.docid = jsanaliz['documents'][i]['documentId']
+                    look.bind(on_release=self.manager.get_screen('lkcard').documentview)
+                    layout.add_widget(look)
+                    layout.add_widget(dec)
+                    layout.add_widget(timelab)
+                    card.add_widget(layout)
+                    self.ids.scrollid.add_widget(card)
+            self.manager.current = 'decrypt'
+        except:
+            self.manager.current = 'omserrorunk'
+            self.manager.get_screen('privview').ids.scrollid.clear_widgets()
+            self.manager.get_screen('history').ids.scrollid.clear_widgets()
+            self.manager.get_screen('anamn').ids.scrollid.clear_widgets()
+            self.manager.get_screen('decrypt').ids.scrollid.clear_widgets()
+            self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
+            self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
+            self.manager.get_screen('timetable').ids.lay.clear_widgets()
+            self.manager.get_screen('prik').ids.lay.clear_widgets()
+            self.manager.get_screen('napr').ids.scrollid.clear_widgets()
     def OKAK(self, html, age, gender, date):
         try:
             today = datetime.date.today()
