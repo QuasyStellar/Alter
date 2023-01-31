@@ -48,7 +48,7 @@
             text_color: get_color_from_hex("#72C3AC")
             font_size: 30
         MDTextButton:
-            size_hint: .35, .093
+            size_hint: .34, .093
             halign: 'center'
             pos_hint: {'center_x': .596, 'center_y': .335}
             on_release:
@@ -58,6 +58,7 @@
                 center_x: self.parent.center_x
                 center_y: self.parent.center_y
                 allow_stretch: True
+                keep_ratio: False
                 size: self.parent.size
         MDCard:
             md_bg_color: 0,0,0,0

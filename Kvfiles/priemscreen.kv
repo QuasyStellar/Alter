@@ -5,10 +5,8 @@
         allow_stretch: True
         keep_ratio: False
 	MDTextButton:
-        orientation: "vertical"
         pos_hint: {'center_x': .583, 'center_y': .174}
-        size_hint: .21, .125
-        radius: [30]
+        size_hint: .21, .13
         on_release: root.exits()
         Image:
             source: 'Assets/priemscreen/exitbut.png'
@@ -18,10 +16,8 @@
             keep_ratio: False
             allow_stretch: True
     MDTextButton:
-        size_hint: .271, .125
-        halign: 'center'
+        size_hint: .271, .13
         pos_hint: {'center_x': .838, 'center_y': .174}
-        font_size: dp(25)
         on_release: root.helzy()
         Image:
             source: 'Assets/priemscreen/startbut.png'

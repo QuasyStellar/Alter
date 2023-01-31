@@ -5,10 +5,9 @@
         allow_stretch: True
         keep_ratio: False
     MDTextButton:
-        size_hint: .28, .25
+        size_hint: .28, .13
         halign: 'center'
         pos_hint: {'center_x': .6, 'center_y': .12}
-        font_size: dp(25)
         on_release:
             root.manager.transition.direction = "down"
             root.manager.current = "help"
@@ -18,12 +17,12 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
+            keep_ratio: False
             size: self.parent.size
     MDTextButton:
-        size_hint: .18, .25
+        size_hint: .18, .13
         halign: 'center'
         pos_hint: {'center_x': .36, 'center_y': .12}
-        font_size: dp(25)
         on_release:
             root.manager.transition.direction = "down"
             root.manager.current = "enter"
@@ -33,6 +32,7 @@
             center_x: self.parent.center_x
             center_y: self.parent.center_y
             allow_stretch: True
+            keep_ratio: False
             size: self.parent.size
     MDLabel:
         id: time
