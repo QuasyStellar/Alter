@@ -1,41 +1,38 @@
 import datetime
-from kivy.uix.image import Image
-from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
-from kivy.properties import DictProperty, ObjectProperty
+import os
+
+from cairosvg import svg2png
 from kivy.clock import Clock
 from kivy.uix.behaviors import ToggleButtonBehavior
-from kivymd.uix.label import MDLabel
-import os
-from kivy.clock import Clock
-from kivy.utils import get_color_from_hex
-from cairosvg import svg2png
+from kivy.uix.image import Image
 from kivy.uix.relativelayout import RelativeLayout
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.scrollview import ScrollView
 from kivy.uix.screenmanager import Screen
+from kivy.uix.scrollview import ScrollView
+from kivy.utils import get_color_from_hex
 from kivymd.uix.button import MDRaisedButton
-from kivymd.uix.dialog import MDDialog
 from kivymd.uix.card import MDCard
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.label import MDLabel
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 
 
 class LKCard(Screen):
     def on_touch_down(self, touch=None):
-        
+
         def inactive(*args):
-            self.manager.get_screen('oms').ids.policy.text =""
+            self.manager.get_screen('oms').ids.policy.text = ""
             self.manager.get_screen('oms').day = None
             self.manager.get_screen('oms').year = None
             self.manager.get_screen('oms').month = None
             self.manager.get_screen('oms').manager.current = 'enter'
-            self.manager.get_screen('oms').ids.counts.text_color ='white'
+            self.manager.get_screen('oms').ids.counts.text_color = 'white'
             self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
             self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
             self.manager.get_screen('timetable').ids.lay.clear_widgets()
             try:
                 if self.manager.get_screen('timetable').children[0].check == True:
-                        self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
+                    self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
             except:
                 pass
             self.manager.get_screen('prik').ids.lay.clear_widgets()
@@ -55,9 +52,9 @@ class LKCard(Screen):
         if self.manager.get_screen('enter').timer is not None:
             self.manager.get_screen('enter').timer.cancel()
         self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
-        if touch !=None:
+        if touch != None:
             return super(Screen, self).on_touch_down(touch)
-            
+
     def show_document(self):
         try:
             dialog = None
@@ -75,10 +72,10 @@ class LKCard(Screen):
                 on_release=lambda _: self.dialog.dismiss(),
                 size_hint=(None, None),
                 theme_text_color='Custom',
-                line_width = 3,
-                line_color = get_color_from_hex('#2E4547'),
+                line_width=3,
+                line_color=get_color_from_hex('#2E4547'),
                 text_color=get_color_from_hex('#D4F5EC'),
-                md_bg_color = get_color_from_hex('#51857A')
+                md_bg_color=get_color_from_hex('#51857A')
             )
             ima.height = ima.texture_size[1]
             lay.height = ima.height
@@ -116,24 +113,25 @@ class LKCard(Screen):
             jspros = prosmotr.json()
             try:
                 html = jspros['documentHtml']
-                print(html)
+                html = html.replace('<span>Отклонение от нормы</span>',
+                                    '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
+                html = html.replace('<span>отклонение от нормы</span>',
+                                    '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
+                html = html.replace('<span>норма</span>', '<span style="color: green">НОРМА</span>')
+                html = html.replace('<span>Норма</span>', '<span style="color: green">НОРМА</span>')
+                Html_file = open("document.html", "w", encoding="utf-8")
+                Html_file.write(html)
+                Html_file.close()
+                options = Options()
+                options.headless = True
+                options.add_argument("--width=1000")
+                driver = webdriver.Firefox(options=options)
+                driver.get(f'file://{os.path.abspath("document.html")}')
+                driver.get_full_page_screenshot_as_file('document.png')
+                driver.close()
+                self.show_document()
             except:
                 self.documentview(instance)
-            html = html.replace('<span>Отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
-            html = html.replace('<span>отклонение от нормы</span>', '<span style="color: red">ОТКЛОНЕНИЕ ОТ НОРМЫ</span>')
-            html = html.replace('<span>норма</span>', '<span style="color: green">НОРМА</span>')
-            html = html.replace('<span>Норма</span>', '<span style="color: green">НОРМА</span>')
-            Html_file= open("document.html","w", encoding="utf-8")
-            Html_file.write(html)
-            Html_file.close()
-            options = Options()
-            options.headless = True
-            options.add_argument("--width=1000")
-            driver = webdriver.Firefox(options=options)
-            driver.get(f'file://{os.path.abspath("document.html")}')
-            driver.get_full_page_screenshot_as_file('document.png')
-            driver.close()
-            self.show_document()
         except:
             self.manager.current = 'omserrorunk'
             self.manager.get_screen('privview').ids.scrollid.clear_widgets()
@@ -161,7 +159,8 @@ class LKCard(Screen):
                     if date[0:4] == instance.year:
                         flag = False
                         try:
-                            if 'doctorSpecialization' in jsanam['documents'][i] and jsanam['documents'][i]['doctorSpecialization'] != None:
+                            if 'doctorSpecialization' in jsanam['documents'][i] and jsanam['documents'][i][
+                                'doctorSpecialization'] != None:
                                 doctorspec = MDLabel(
                                     text=f"{jsanam['documents'][i]['doctorSpecialization']}",
                                     theme_text_color='Custom',
@@ -200,7 +199,8 @@ class LKCard(Screen):
                             doctorname.font_size = 45
                             doctorname.pos_hint = {'center_x': .55, 'center_y': .4}
                             layout.add_widget(doctorname)
-                        if 'appointmentDate' in jsanam['documents'][i] and jsanam['documents'][i]['appointmentDate'] != None:
+                        if 'appointmentDate' in jsanam['documents'][i] and jsanam['documents'][i][
+                            'appointmentDate'] != None:
                             time = datetime.datetime.fromisoformat(jsanam['documents'][i]['appointmentDate'])
                             timelab = MDLabel(
                                 text=f'{time.strftime("%a, %d %b %Y")}',
@@ -456,8 +456,9 @@ class LKCard(Screen):
                 self.manager.current = 'history'
 
             def myrecepies(*args):
-                recepies = self.s.get(f'https://lk.emias.mos.ru/api/2/receipt?ehrId={self.idus}&shortDateFilter=all_time',
-                                      headers={'X-Access-JWT': self.authtoken})
+                recepies = self.s.get(
+                    f'https://lk.emias.mos.ru/api/2/receipt?ehrId={self.idus}&shortDateFilter=all_time',
+                    headers={'X-Access-JWT': self.authtoken})
                 jsrec = recepies.json()
                 for i in range(len(jsrec['receipts'])):
                     layout = RelativeLayout()

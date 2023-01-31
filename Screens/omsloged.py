@@ -1,21 +1,20 @@
 import datetime
-from MyComponents.mycomponents import Tab, MyToggleButton, MyToggleButtonNew
-from kivymd.uix.label import MDLabel
-from kivy.uix.image import Image
-from kivymd.utils import asynckivy
-from kivy.uix.behaviors import ToggleButtonBehavior
-import calendar
-from kivy.clock import Clock
-from kivy.utils import get_color_from_hex
-from kivy.uix.relativelayout import RelativeLayout
-from kivymd.uix.stacklayout import MDStackLayout as StackLayout
-from kivy.uix.scrollview import ScrollView
-from kivymd.uix.tab import MDTabs
-from kivy.uix.screenmanager import Screen
-from kivymd.uix.button import MDFillRoundFlatButton, MDIconButton, MDFlatButton
-from kivymd.uix.dialog import MDDialog
+
 import requests
+from kivy.clock import Clock
+from kivy.uix.behaviors import ToggleButtonBehavior
+from kivy.uix.image import Image
+from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.screenmanager import Screen
+from kivy.uix.scrollview import ScrollView
+from kivy.utils import get_color_from_hex
+from kivymd.uix.button import MDFlatButton
 from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
+from kivymd.uix.stacklayout import MDStackLayout as StackLayout
+from kivymd.uix.tab import MDTabs
+
+from MyComponents.mycomponents import Tab, MyToggleButtonNew
 
 
 class OMSLoged(Screen):
@@ -343,7 +342,7 @@ class OMSLoged(Screen):
                         layout.add_widget(Image(source='Assets/omsloged/zapisperenos.png', keep_ratio=False))
                         layout.add_widget(Image(source='Assets/omsloged/docicons/ldp.png', height=185, width=185,
                                                 pos_hint={'center_x': .1, 'center_y': .6}))
-                        if len(jsps["result"][i]["toLdp"]["ldpTypeName"])<=46:
+                        if len(jsps["result"][i]["toLdp"]["ldpTypeName"]) <= 46:
                             specname = MDLabel(
                                 text=jsps["result"][i]["toLdp"]["ldpTypeName"],
                                 theme_text_color='Custom',
@@ -596,7 +595,7 @@ class OMSLoged(Screen):
                                     layout.add_widget(
                                         Image(source='Assets/omsloged/docicons/docdefault.png', height=185, width=185,
                                               pos_hint={'center_x': .1, 'center_y': .5}))
-                                if len(jsvrachi["result"][i]['name'].replace("_", " "))<=46:
+                                if len(jsvrachi["result"][i]['name'].replace("_", " ")) <= 46:
                                     name = MDLabel(
                                         text=jsvrachi["result"][i]['name'].replace("_", " "),
                                         theme_text_color='Custom',
@@ -702,7 +701,7 @@ class OMSLoged(Screen):
                                     card.bind(on_release=self.showdateandtime)
                                     card.add_widget(layout)
                                     self.manager.get_screen("perenos").ids.scrollid.add_widget(card)
-            else:                       
+            else:
                 self.appID = jsspisok["result"][zapisvibor]['id']
                 self.recpID = jsspisok["result"][zapisvibor]["toLdp"]['ldpTypeId']
                 self.refferal = instance.refferal
@@ -730,7 +729,7 @@ class OMSLoged(Screen):
                                 layout.add_widget(
                                     Image(source='Assets/omsloged/docicons/ldp.png', height=185, width=185,
                                           pos_hint={'center_x': .1, 'center_y': .5}))
-                                if len(jsvrachi["result"][i]['name'].replace("_", " "))<=46:
+                                if len(jsvrachi["result"][i]['name'].replace("_", " ")) <= 46:
                                     name = MDLabel(
                                         text=jsvrachi["result"][i]['name'].replace("_", " "),
                                         theme_text_color='Custom',
@@ -1402,7 +1401,7 @@ class OMSLoged(Screen):
                                     layout.add_widget(
                                         Image(source='Assets/omsloged/docicons/docdefault.png', height=185, width=185,
                                               pos_hint={'center_x': .1, 'center_y': .5}))
-                                if len(jsvrachi["result"][i]['name'].replace("_", " "))<=46:
+                                if len(jsvrachi["result"][i]['name'].replace("_", " ")) <= 46:
                                     name = MDLabel(
                                         text=jsvrachi["result"][i]['name'].replace("_", " "),
                                         theme_text_color='Custom',
@@ -1548,7 +1547,7 @@ class OMSLoged(Screen):
                                 layout.add_widget(
                                     Image(source='Assets/omsloged/docicons/ldp.png', height=185, width=185,
                                           pos_hint={'center_x': .1, 'center_y': .5}))
-                                if len(jsvrachi["result"][i]['name'].replace("_", " "))<=46:
+                                if len(jsvrachi["result"][i]['name'].replace("_", " ")) <= 46:
                                     name = MDLabel(
                                         text=jsvrachi["result"][i]['name'].replace("_", " "),
                                         theme_text_color='Custom',
@@ -2088,6 +2087,7 @@ class OMSAlertScreen(Screen):
         if touch != None:
             return super(Screen, self).on_touch_down(touch)
 
+
 class SuccOtmena(Screen):
     def on_touch_down(self, touch=None):
         def inactive(*args):
@@ -2125,6 +2125,7 @@ class SuccOtmena(Screen):
         if touch != None:
             return super(Screen, self).on_touch_down(touch)
 
+
 class SuccPerenos(Screen):
     def on_touch_down(self, touch=None):
         def inactive(*args):
@@ -2161,6 +2162,7 @@ class SuccPerenos(Screen):
         self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
         if touch != None:
             return super(Screen, self).on_touch_down(touch)
+
 
 class Succ(Screen):
     def on_touch_down(self, touch=None):

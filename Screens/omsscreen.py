@@ -1,21 +1,12 @@
 import sys
-from kivy.properties import DictProperty, ObjectProperty
 import threading
-from kivy.clock import Clock, mainthread
-from kivymd.uix.screen import MDScreen as Screen
-from kivymd.uix.button import MDFillRoundFlatButton
-from kivymd.effects.fadingedge.fadingedge import FadingEdgeEffect
-from kivy.uix.behaviors import ToggleButtonBehavior
-from kivy.uix.behaviors import ToggleButtonBehavior
-from kivymd.uix.list import OneLineListItem
-from kivy.uix.scrollview import ScrollView
-from kivymd.uix.dialog import MDDialog
-from kivy.uix.screenmanager import FadeTransition
-from kivy.utils import get_color_from_hex
-from kivymd.uix.textfield import MDTextField
-import requests
 
-      
+import requests
+from kivy.clock import Clock, mainthread
+from kivy.uix.behaviors import ToggleButtonBehavior
+from kivy.utils import get_color_from_hex
+from kivymd.uix.screen import MDScreen as Screen
+
 
 class OMSScreen(Screen):
     def on_touch_down(self, touch=None):

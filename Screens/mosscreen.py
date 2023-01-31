@@ -1,38 +1,34 @@
-import sys
-import time
 import datetime
-from kivy.properties import DictProperty, ObjectProperty
-import threading
-from kivy.clock import Clock, mainthread
-from kivy.uix.screenmanager import Screen
-from kivy.uix.behaviors import ToggleButtonBehavior
-from kivymd.uix.button import MDFillRoundFlatButton
-from kivymd.uix.dialog import MDDialog
-import requests
 import json
+import sys
+import threading
+import time
 from threading import Event
+
+import requests
+from kivy.clock import Clock, mainthread
+from kivy.uix.behaviors import ToggleButtonBehavior
+from kivy.uix.screenmanager import Screen
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
+
 
 class MOSScreen(Screen):
     def on_touch_down(self, touch=None):
-        
+
         def inactive(*args):
-            self.manager.get_screen('oms').ids.policy.text =""
+            self.manager.get_screen('oms').ids.policy.text = ""
             self.manager.get_screen('oms').day = None
             self.manager.get_screen('oms').year = None
             self.manager.get_screen('oms').month = None
             self.manager.get_screen('oms').manager.current = 'enter'
-            self.manager.get_screen('oms').ids.counts.text_color ='white'
+            self.manager.get_screen('oms').ids.counts.text_color = 'white'
             self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
             self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
             self.manager.get_screen('timetable').ids.lay.clear_widgets()
             try:
                 if self.manager.get_screen('timetable').children[0].check == True:
-                        self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
+                    self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
             except:
                 pass
             self.manager.get_screen('prik').ids.lay.clear_widgets()
@@ -52,7 +48,7 @@ class MOSScreen(Screen):
         if self.manager.get_screen('enter').timer is not None:
             self.manager.get_screen('enter').timer.cancel()
         self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
-        if touch !=None:
+        if touch != None:
             return super(Screen, self).on_touch_down(touch)
 
     def mosfunc(self, event, width, height):
@@ -65,13 +61,15 @@ class MOSScreen(Screen):
 
     def open_moslogin(self, event, width, height):
         chrome_options = Options()
-        chrome_options.add_argument("--app=https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
-       	chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        chrome_options.add_argument(
+            "--app=https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Dlk.emias.mos.ru%26scope%3Dopenid%2Bprofile%2Bcontacts%26redirect_uri%3Dhttps%3A%2F%2Flk.emias.mos.ru%2Fauth")
+        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
         chrome_options.add_experimental_option('useAutomationExtension', False)
-        chrome_options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
+        chrome_options.add_argument(
+            "user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
         chrome_options.add_argument(f"window-size={width},{height}")
-        chrome_options.add_argument(f'window-position={int(width*0.56)},{int(height*0.05)}')
-        print(f'{int(width/0.1)},{int(height/0.1)}')
+        chrome_options.add_argument(f'window-position={int(width * 0.56)},{int(height * 0.05)}')
+        print(f'{int(width / 0.1)},{int(height / 0.1)}')
         chrome_options.add_experimental_option('prefs', {
             'credentials_enable_service': False,
             'profile': {
@@ -82,7 +80,7 @@ class MOSScreen(Screen):
             options=chrome_options
         )
         try:
-            while driver.current_url !="https://lk.emias.mos.ru/medical-records":
+            while driver.current_url != "https://lk.emias.mos.ru/medical-records":
                 if event.is_set():
                     driver.quit()
                     sys.exit()
@@ -90,7 +88,7 @@ class MOSScreen(Screen):
             else:
                 self.presucc()
                 driver.minimize_window()
-                time.sleep(5) 
+                time.sleep(5)
                 idus = driver.execute_script(
                     "return window.sessionStorage.getItem('profile/currentProfileId')"
                 ).replace('"', "")
@@ -108,7 +106,7 @@ class MOSScreen(Screen):
                     gender = 0
                 else:
                     gender = 1
-                sure = jsdata["profile"]['middleName'] +" "+jsdata["profile"]['lastName']
+                sure = jsdata["profile"]['middleName'] + " " + jsdata["profile"]['lastName']
                 times = datetime.datetime.strptime(bdates, "%Y-%m-%d")
                 year = times.strftime("%Y")
                 month = times.strftime('%m')
@@ -154,6 +152,7 @@ class MOSScreen(Screen):
         self.manager.get_screen('loged').bdates = bdates
         self.manager.get_screen('loged').types = 'mos'
         self.manager.get_screen('priem').cur = 'mosloged'
+
     def back(self):
         self.manager.current = "enter"
 
@@ -166,16 +165,18 @@ class MOSScreen(Screen):
                 self.event.set()
             except:
                 pass
+
+
 class HelpScreen(Screen):
     def on_touch_down(self, touch=None):
-        
+
         def inactive(*args):
-            self.manager.get_screen('oms').ids.policy.text =""
+            self.manager.get_screen('oms').ids.policy.text = ""
             self.manager.get_screen('oms').day = None
             self.manager.get_screen('oms').year = None
             self.manager.get_screen('oms').month = None
             self.manager.get_screen('oms').manager.current = 'enter'
-            self.manager.get_screen('oms').ids.counts.text_color ='white'
+            self.manager.get_screen('oms').ids.counts.text_color = 'white'
             self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
             self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
             self.manager.get_screen('timetable').ids.lay.clear_widgets()
@@ -198,6 +199,7 @@ class HelpScreen(Screen):
         if self.manager.get_screen('enter').timer is not None:
             self.manager.get_screen('enter').timer.cancel()
         self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
-        if touch !=None:
+        if touch != None:
             return super(Screen, self).on_touch_down(touch)
+
     pass

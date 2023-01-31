@@ -44,19 +44,22 @@ for kv in listdir('Kvfiles'):
 class Loading(Screen):
     pass
 
+
 class AFK(Screen):
-    pass 
+    pass
+
 
 class MyToggleButton(MDFlatButton, MDToggleButton):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.background_down = get_color_from_hex('51857A')
-        self.font_color_normal =  get_color_from_hex('D4F5EC')
-        self.font_color_down =  get_color_from_hex('72C3AC')
+        self.font_color_normal = get_color_from_hex('D4F5EC')
+        self.font_color_down = get_color_from_hex('72C3AC')
 
 
 class AlterApp(MDApp):
     sm = None
+
     def build(self):
         self.sm = ScreenManager()
         sm = self.sm
@@ -89,39 +92,39 @@ class AlterApp(MDApp):
         sm.add_widget(Priem(name='priem'))
         sm.add_widget(Decrypt(name='decrypt'))
         Clock.schedule_interval(sm.get_screen('enter').update, 2)
-        for i in range(1,32):
-            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('D4F5EC'), theme_text_color='Custom', font_style='H4', on_press = sm.get_screen('oms').days, md_bg_color = get_color_from_hex('32494B'), size_hint = (1, .2), group="x")
+        for i in range(1, 32):
+            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('D4F5EC'),
+                                 theme_text_color='Custom', font_style='H4', on_press=sm.get_screen('oms').days,
+                                 md_bg_color=get_color_from_hex('32494B'), size_hint=(1, .2), group="x")
             twl.date = i
             sm.get_screen('oms').ids.container1.add_widget(twl)
-        months=[
-        'Январь',
-        'Февраль',
-        'Март',
-        'Апрель',
-        'Май',
-        'Июнь',
-        'Июль',
-        'Август',
-        'Сентябрь',
-        'Октябрь',
-        'Ноябрь',
-        'Декабрь'
+        months = [
+            'Январь',
+            'Февраль',
+            'Март',
+            'Апрель',
+            'Май',
+            'Июнь',
+            'Июль',
+            'Август',
+            'Сентябрь',
+            'Октябрь',
+            'Ноябрь',
+            'Декабрь'
         ]
         for i in months:
-            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('D4F5EC'), theme_text_color='Custom', font_style='H4', on_press = sm.get_screen('oms').months, md_bg_color = get_color_from_hex('32494B'), size_hint = (1, .2), group="y")
+            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('D4F5EC'),
+                                 theme_text_color='Custom', font_style='H4', on_press=sm.get_screen('oms').months,
+                                 md_bg_color=get_color_from_hex('32494B'), size_hint=(1, .2), group="y")
             twl.month = i
             sm.get_screen('oms').ids.container2.add_widget(twl)
-        for i in reversed(range(1900, datetime.datetime.now().year+1)):
-            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('D4F5EC'), theme_text_color='Custom', font_style='H4', on_press = sm.get_screen('oms').years, md_bg_color = get_color_from_hex('32494B'), size_hint = (1, .2), group="z")
+        for i in reversed(range(1900, datetime.datetime.now().year + 1)):
+            twl = MyToggleButton(halign="center", text=f'{i}', text_color=get_color_from_hex('D4F5EC'),
+                                 theme_text_color='Custom', font_style='H4', on_press=sm.get_screen('oms').years,
+                                 md_bg_color=get_color_from_hex('32494B'), size_hint=(1, .2), group="z")
             twl.year = i
             sm.get_screen('oms').ids.container3.add_widget(twl)
         return sm
-        
-
-    
-
-
-        
 
 
 if __name__ == '__main__':

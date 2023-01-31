@@ -1,34 +1,33 @@
-from kivymd.uix.dialog import MDDialog
-from kivy.uix.screenmanager import Screen, FadeTransition, ScreenManager
-from kivymd.uix.button import MDFillRoundFlatButton
-from kivy.uix.image import Image
-from kivy.clock import Clock
-from kivy.uix.behaviors import ToggleButtonBehavior
-from kivy.core.window import Window
-from kivy.uix.relativelayout import RelativeLayout
 import datetime
+
+from kivy.clock import Clock
+from kivy.core.window import Window
+from kivy.uix.behaviors import ToggleButtonBehavior
+from kivy.uix.screenmanager import Screen, FadeTransition
+
 
 class ENTERScreen(Screen):
     dialogs = None
     timer = None
+
     def on_touch_down(self, touch=None):
-        
+
         def inactive(*args):
-            self.manager.get_screen('oms').ids.policy.text =""
+            self.manager.get_screen('oms').ids.policy.text = ""
             self.manager.get_screen('oms').day = None
             self.manager.get_screen('oms').year = None
             self.manager.get_screen('oms').month = None
             self.manager.get_screen('oms').manager.current = 'enter'
-            self.manager.get_screen('oms').ids.counts.text_color ='white'
+            self.manager.get_screen('oms').ids.counts.text_color = 'white'
             self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
             self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
             self.manager.get_screen('timetable').ids.lay.clear_widgets()
             try:
                 if self.manager.get_screen('timetable').children[0].check == True:
-                        self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
+                    self.manager.get_screen('timetable').remove_widget(self.manager.get_screen('timetable').children[0])
             except:
                 pass
-                
+
             self.manager.get_screen('prik').ids.lay.clear_widgets()
             self.manager.get_screen('napr').ids.scrollid.clear_widgets()
             x = ToggleButtonBehavior.get_widgets('x')
@@ -46,7 +45,7 @@ class ENTERScreen(Screen):
         if self.manager.get_screen('enter').timer is not None:
             self.manager.get_screen('enter').timer.cancel()
         self.manager.get_screen('enter').timer = Clock.schedule_once(inactive, 300)
-        if touch !=None:
+        if touch != None:
             return super(Screen, self).on_touch_down(touch)
 
     def oms(self):
@@ -56,11 +55,13 @@ class ENTERScreen(Screen):
     def mos(self):
         self.manager.transition = FadeTransition()
         self.manager.current = "mos"
-        self.manager.get_screen('mos').widths = int(Window.size[0]*0.476)
-        self.manager.get_screen('mos').heights = int(Window.size[1]*0.75)
+        self.manager.get_screen('mos').widths = int(Window.size[0] * 0.476)
+        self.manager.get_screen('mos').heights = int(Window.size[1] * 0.75)
         self.manager.get_screen('mos').check()
+
     def show_alert_dialog_info(self):
         self.manager.current = 'alert'
+
     def update(self, *args):
         today = datetime.datetime.now()
         dt = datetime.datetime.today()
@@ -104,4 +105,5 @@ class ENTERScreen(Screen):
         self.manager.get_screen('omserror').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
         self.manager.get_screen('omserrorunk').ids.time.text = f'[color=#D4F5EC]{time}[/color]'
         self.manager.get_screen('omserrorunk').ids.week.text = f'[color=#D4F5EC]{week}, {days} {months}[/color]'
+
     pass
