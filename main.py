@@ -30,10 +30,10 @@ from Screens.privivkiscreen import Privivki, PrivivkiView
 from Screens.showdatescreen import Showdate
 from Screens.zapisiscreen import Zapisi
 
-# locale.setlocale(
-#     category=locale.LC_ALL,
-#     locale="Russian"
-#     )
+locale.setlocale(
+    category=locale.LC_ALL,
+    locale="Russian"
+    )
 
 Window.size = (1920, 1080)
 
