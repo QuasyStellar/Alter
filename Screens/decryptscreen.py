@@ -1,28 +1,22 @@
-import os
 import datetime
+import json
 import re
-import sys
+
 import pandas as pd
+import requests
 from bs4 import BeautifulSoup
 from kivy.clock import Clock
-import requests
 from kivy.uix.behaviors import ToggleButtonBehavior
-import json
-from kivy.uix.screenmanager import Screen, SlideTransition
-from kivy.utils import get_color_from_hex
-from kivymd.uix.button import MDFillRoundFlatButton, MDIconButton, MDFlatButton
 from kivy.uix.image import Image
-from kivy.properties import DictProperty, ObjectProperty
-from kivymd.uix.label import MDLabel
 from kivy.uix.relativelayout import RelativeLayout
-from kivymd.uix.button import MDFillRoundFlatButton
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
-from kivymd.uix.button import MDRaisedButton
-from kivymd.uix.dialog import MDDialog
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from kivy.utils import get_color_from_hex
+from kivymd.uix.button import MDFillRoundFlatButton
+from kivymd.uix.button import MDFlatButton
 from kivymd.uix.card import MDCard
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.label import MDLabel
 
 
 class Decrypt(Screen):
@@ -133,9 +127,9 @@ class Decrypt(Screen):
             jspros = prosmotr.json()
             try:
                 html = jspros['documentHtml'].replace('\n', '')
+                self.OKAK(html, self.age, self.gender, instance.date)
             except:
                 self.OKAKLK(instance)
-            self.OKAK(html, self.age, self.gender, instance.date)
         except:
             self.manager.current = 'omserrorunk'
             self.manager.get_screen('privview').ids.scrollid.clear_widgets()
@@ -155,9 +149,9 @@ class Decrypt(Screen):
             jspros = prosmotr.json()
             try:
                 html = jspros['documentHtml'].replace('\n', '')
+                self.OAM(html, self.age, self.gender, instance.date)
             except:
                 self.OAMLK(instance)
-            self.OAM(html, self.age, self.gender, instance.date)
         except:
             self.manager.current = 'omserrorunk'
             self.manager.get_screen('privview').ids.scrollid.clear_widgets()
@@ -303,7 +297,7 @@ class Decrypt(Screen):
             wbc = None
             rbc = None
             hgb = None
-            htc = None
+            hct = None
             mcv = None
             mch = None
             mchc = None
@@ -549,6 +543,7 @@ class Decrypt(Screen):
                             protein = 'Обнаружено'
                             proteincode = '8qM2SZXflJ8IRKhuEBRMsQ=='
                         break
+
                     if 'Билирубин' in jsanaliz[i]['Тест'] or 'билирубин' in jsanaliz[i]['Тест'] or 'BILT' in jsanaliz[i]['Тест']:
                         if 'не обнаружено' in jsanaliz[i]['Результат'] or 'Не обнаружено' in jsanaliz[i]['Результат'] or 'Отриц' in jsanaliz[i]['Результат'] or 'отриц' in jsanaliz[i]['Результат'] or '0' in jsanaliz[i]['Результат'] or 'норм' in jsanaliz[i]['Результат'] or 'Норм' in jsanaliz[i]['Результат']:
                             bili = 'Не обнаружено'

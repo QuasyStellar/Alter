@@ -1,40 +1,39 @@
+import datetime
+from os import listdir
+
 from kivy.clock import Clock
+from kivy.core.window import Window
+from kivy.lang import Builder
+from kivy.utils import get_color_from_hex
+from kivymd.app import MDApp
+from kivymd.uix.behaviors.toggle_behavior import MDToggleButton
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.screen import MDScreen as Screen
+from kivymd.uix.screenmanager import MDScreenManager as ScreenManager
+
+from Screens.alertscreen import Alert
+from Screens.anamnesscreen import AnamnesView
+from Screens.decryptscreen import Decrypt
+from Screens.emiasscreen import EmiasScreen
 from Screens.enterscreen import ENTERScreen
-from Screens.mosscreen import MOSScreen, HelpScreen
-from Screens.omsscreen import OMSScreen, OMSErrorScreen, OMSErrorUnkScreen
+from Screens.historyscreen import History
 from Screens.lkcardscreen import LKCard
 from Screens.mosloged import MOSLoged
-from kivy.utils import get_color_from_hex
+from Screens.mosscreen import MOSScreen, HelpScreen
+from Screens.napravleniascreen import Napravlenia
 from Screens.omsloged import OMSLoged, OMSAlertScreen, SuccOtmena, Succ, SuccPerenos
-from Screens.privivkiscreen import Privivki, PrivivkiView
-from Screens.priemscreen import Priem
-from Screens.zapisiscreen import Zapisi
-from Screens.anamnesscreen import AnamnesView
-from Screens.napravleniascreen  import Napravlenia
-from Screens.prikrepleniascreen import Prikreplenia
-from Screens.historyscreen import History
-from Screens.alertscreen import Alert
-import datetime
-from Screens.emiasscreen import EmiasScreen
-from kivy.uix.scrollview import ScrollView
-from Screens.showdatescreen import Showdate
+from Screens.omsscreen import OMSScreen, OMSErrorScreen, OMSErrorUnkScreen
 from Screens.perenoszapisscreen import Perenos
-from Screens.decryptscreen import Decrypt
-from kivymd.effects.fadingedge.fadingedge import FadingEdgeEffect
-from kivymd.uix.button import MDFlatButton
-from kivymd.uix.behaviors.toggle_behavior import MDToggleButton
-from kivy.uix.behaviors import ToggleButtonBehavior
-from kivy.lang import Builder
-from kivymd.app import MDApp
-from kivy.core.window import Window
-from kivymd.uix.screenmanager import MDScreenManager as ScreenManager
-from kivymd.uix.screen import MDScreen as Screen
-from os import listdir
-import locale
-locale.setlocale(
-    category=locale.LC_ALL,
-    locale="Russian"
-    )
+from Screens.priemscreen import Priem
+from Screens.prikrepleniascreen import Prikreplenia
+from Screens.privivkiscreen import Privivki, PrivivkiView
+from Screens.showdatescreen import Showdate
+from Screens.zapisiscreen import Zapisi
+
+# locale.setlocale(
+#     category=locale.LC_ALL,
+#     locale="Russian"
+#     )
 
 Window.size = (1920, 1080)
 
@@ -127,4 +126,3 @@ class AlterApp(MDApp):
 
 if __name__ == '__main__':
     AlterApp().run()
-# 5494499745000410 
