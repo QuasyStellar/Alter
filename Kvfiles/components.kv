@@ -166,6 +166,10 @@
             id: scrollid
 <LKCard>:
     name: 'lkcard'
+    Image:
+        source: 'Assets/lkcardscreen/lkcardbg.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
@@ -178,91 +182,129 @@
             center_y: self.parent.center_y
             allow_stretch: True
             size: self.parent.size
-    MDCard:
-        size_hint: .6, .8
-        md_bg_color: 170/255,170/255,170/255,1
-        pos_hint: {'center_x': .5, 'center_y': .5}
-        radius: [30]
-        RelativeLayout:
-            MDFillRoundFlatButton:
-                id: 1
-                text: "мои тесты на covid-19"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .35, 'center_y': .8}
-                font_size: dp(30)
-                on_release: root.view(1)
-            MDFillRoundFlatButton:
-                id: 2
-                text: "мои прививки"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .70, 'center_y': .8}
-                font_size: dp(30)
-                on_release: root.manager.current = 'priv'
-            MDFillRoundFlatButton:
-                id: 3
-                text: "мои приемы в поликлинике"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .35, 'center_y': .65}
-                font_size: dp(30)
-                on_release: root.view(3)
-            MDFillRoundFlatButton:
-                id: 4
-                text: "мои анализы"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .70, 'center_y': .65}
-                font_size: dp(30)
-                on_release: root.view(4)
-            MDFillRoundFlatButton:
-                id: 5
-                text: "мои исследования"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .35, 'center_y': .5}
-                font_size: dp(30)
-                on_release: root.view(5)
-            MDFillRoundFlatButton:
-                id: 6
-                text: "мои больничные"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .70, 'center_y': .5}
-                font_size: dp(30)
-                on_release: root.view(6)
-            MDFillRoundFlatButton:
-                id: 7
-                text: "мои справки и мед. заключения"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .35, 'center_y': .35}
-                font_size: dp(30)
-                on_release: root.view(7)
-            MDFillRoundFlatButton:
-                id: 8
-                text: "мои выписки из стационара"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .70, 'center_y': .35}
-                font_size: dp(30)
-                on_release: root.view(8)
-            MDFillRoundFlatButton:
-                id: 9
-                text: "мои рецепты"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .35, 'center_y': .2}
-                font_size: dp(30)
-                on_release: root.view(9)
-            MDFillRoundFlatButton:
-                id: 10
-                text: "скорая помощь"
-                size_hint: .35, .13
-                pos_hint: {'center_x': .70, 'center_y': .2}
-                font_size: dp(30)
-                on_release: root.view(10)
+    MDTextButton:
+        pos_hint: {'center_x': .36, 'center_y': .73}
+        size_hint: .241, .12
+        on_release: root.view(1)
+        Image:
+            source: 'Assets/lkcardscreen/cov19.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .63, 'center_y': .73}
+        size_hint: .241, .12
+        on_release: root.manager.current = 'priv'
+        Image:
+            source: 'Assets/lkcardscreen/priv.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .36, 'center_y': .58}
+        size_hint: .241, .12
+        on_release: root.view(3)
+        Image:
+            source: 'Assets/lkcardscreen/priem.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .63, 'center_y': .58}
+        size_hint: .241, .12
+        on_release: root.view(4)
+        Image:
+            source: 'Assets/lkcardscreen/analiz.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .36, 'center_y': .43}
+        size_hint: .241, .12
+        on_release: root.view(5)
+        Image:
+            source: 'Assets/lkcardscreen/ldp.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .63, 'center_y': .43}
+        size_hint: .241, .12
+        on_release: root.view(6)
+        Image:
+            source: 'Assets/lkcardscreen/boln.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .36, 'center_y': .28}
+        size_hint: .241, .12
+        on_release: root.view(7)
+        Image:
+            source: 'Assets/lkcardscreen/spravk.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .63, 'center_y': .28}
+        size_hint: .241, .12
+        on_release: root.view(8)
+        Image:
+            source: 'Assets/lkcardscreen/stac.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .36, 'center_y': .13}
+        size_hint: .241, .12
+        on_release: root.view(9)
+        Image:
+            source: 'Assets/lkcardscreen/recep.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .63, 'center_y': .13}
+        size_hint: .241, .12
+        on_release: root.view(10)
+        Image:
+            source: 'Assets/lkcardscreen/emerg.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
 <History>:
     name: 'history'
+    Image:
+        source: 'Assets/lkcardscreen/medkarta.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
         pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
-            root.manager.get_screen('loged').screenback()
+            root.manager.current = 'lkcard'
             root.ids.scrollid.clear_widgets()
         Image:
             source: 'Assets/exitbutton.png'
@@ -283,6 +325,10 @@
             id: scrollid
 <AnamnesView>
     name: 'anamn'
+    Image:
+        source: 'Assets/lkcardscreen/medkarta.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
@@ -310,6 +356,10 @@
             id: scrollid
 <Privivki>:
     name: 'priv'
+    Image:
+        source: 'Assets/lkcardscreen/medkarta.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
@@ -323,36 +373,44 @@
             center_y: self.parent.center_y
             allow_stretch: True
             size: self.parent.size
-    MDCard:
-        size_hint: .8, .8
-        md_bg_color: 170/255,170/255,170/255,1
-        pos_hint: {'center_x': .5, 'center_y': .5}
-        radius: [30]
-        RelativeLayout:
-            MDFillRoundFlatButton:
-                id: 2
-                text: "Профилактические прививки"
-                size_hint: .8, .3
-                pos_hint: {'center_x': .5, 'center_y': .75}
-                font_size: dp(30)
-                on_release: root.prof()
-            MDFillRoundFlatButton:
-                id: 2
-                text: "Иммунодиагностические прививки"
-                size_hint: .8, .3
-                pos_hint: {'center_x': .5, 'center_y': .25}
-                font_size: dp(30)
-                on_release: root.immuno()
+    MDTextButton:
+        pos_hint: {'center_x': .5, 'center_y': .6}
+        size_hint: .533, .2
+        on_release: root.prof()
+        Image:
+            source: 'Assets/lkcardscreen/profpriv.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+    MDTextButton:
+        pos_hint: {'center_x': .5, 'center_y': .35}
+        size_hint: .533, .2
+        on_release: root.immuno()
+        Image:
+            source: 'Assets/lkcardscreen/immunpriv.png'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            keep_ratio: False
+            allow_stretch: True
+            size: self.parent.size
+
+        
 <PrivivkiView>
     name: 'privview'
+    Image:
+        source: 'Assets/lkcardscreen/medkarta.png'
+        allow_stretch: True
+        keep_ratio: False
     MDTextButton:
         size_hint: .2, .15
         halign: 'center'
         pos_hint: {'center_x': .89, 'center_y': .08}
         font_size: dp(25)
         on_release:
-            root.manager.current = 'priv'
             root.ids.scrollid.clear_widgets()
+            root.manager.current = 'priv'
         Image:
             source: 'Assets/exitbutton.png'
             center_x: self.parent.center_x
