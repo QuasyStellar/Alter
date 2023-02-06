@@ -183,7 +183,10 @@ class Decrypt(Screen):
                     text_color=get_color_from_hex('#D4F5EC'),
                     halign='center'
                 )
-                title.font_size = 40
+                if len(jsanaliz['documents'][i]['title'])<88:
+                    title.font_size = 40
+                else:
+                    title.font_size = 30
                 title.font_name = 'Assets/fonts/roboto.ttf'
                 title.pos_hint = {'center_x': .5, 'center_y': .7}
                 layout.add_widget(title)
