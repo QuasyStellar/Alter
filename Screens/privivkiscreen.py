@@ -127,21 +127,21 @@ class Privivki(Screen):
                     text_color=get_color_from_hex('#D4F5EC'),
                     halign='center'
                 )
-                timelab.font_size = 40
+                timelab.font_size = 30
                 timelab.font_name = 'Assets/fonts/roboto.ttf'
-                timelab.pos_hint = {'center_x': .5, 'center_y': .65}
+                timelab.pos_hint = {'center_x': .5, 'center_y': .2}
                 age = MDLabel(
                     theme_text_color='Custom',
                     text_color=get_color_from_hex('#D4F5EC'),
                     halign='center'
                 )
-                if jsvac['doneList'][i]['age'] == 0:
+                if jsvac['doneList'][i]['age'] == '0':
                     age.text = 'Возраст: <1'
                 else:
                     age.text = f"Возраст: {jsvac['doneList'][i]['age']}"
                 age.font_size = 40
                 age.font_name = 'Assets/fonts/roboto.ttf'
-                age.pos_hint = {'center_x': .5, 'center_y': .3}
+                age.pos_hint = {'center_x': .5, 'center_y': .5}
                 layout.add_widget(age)
                 layout.add_widget(timelab)
                 card.add_widget(layout)
@@ -176,30 +176,31 @@ class Privivki(Screen):
                     text_color=get_color_from_hex('#D4F5EC'),
                     halign='center'
                 )
-                timelab.font_size = 40
+                timelab.font_size = 30
                 timelab.font_name = 'Assets/fonts/roboto.ttf'
-                timelab.pos_hint = {'center_x': .5, 'center_y': .65}
+                timelab.pos_hint = {'center_x': .5, 'center_y': .2}
                 age = MDLabel(
                     theme_text_color='Custom',
                     text_color=get_color_from_hex('#D4F5EC'),
                     halign='center'
                 )
                 age.font_size = 40
-                if jsvac['doneList'][i]['age'] == 0:
+                if jsvac['doneList'][i]['age'] == '0':
                     age.text = 'Возраст: <1'
                 else:
                     age.text = f"Возраст: {jsvac['doneList'][i]['age']}"
                 age.font_name = 'Assets/fonts/roboto.ttf'
-                age.pos_hint = {'center_x': .5, 'center_y': .3}
+                age.pos_hint = {'center_x': .5, 'center_y': .4}
                 layout.add_widget(age)
                 result = MDLabel(
-                    text=f"{jsvac['tubList'][i]['tubResultList'][0]['reactionKind']}",
+                    text=f"Реакция: {jsvac['tubList'][i]['tubResultList'][0]['reactionKind']}",
                     theme_text_color='Custom',
                     text_color=get_color_from_hex('#D4F5EC'),
                     halign='center'
                 )
                 result.font_size = 40
-                result.pos_hint = {'center_x': .5, 'center_y': .4}
+                result.font_name = 'Assets/fonts/roboto.ttf'
+                result.pos_hint = {'center_x': .5, 'center_y': .6}
                 layout.add_widget(result)
                 layout.add_widget(timelab)
                 card.add_widget(layout)

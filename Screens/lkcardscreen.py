@@ -262,8 +262,11 @@ class LKCard(Screen):
                         card.bind(on_release=self.documentview)
                         card.add_widget(layout)
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                    self.manager.get_screen('history').ids.historyscreen.source = 'Assets/lkcardscreen/bg/covid19.png'
+                    self.manager.get_screen('history').ids.historyscreen.reload()
                     self.manager.current = 'history'
-                except:
+                except Exception as ex:
+                    print(ex)
                     self.criterr()
 
             def myanamnes(*args):
@@ -296,6 +299,8 @@ class LKCard(Screen):
                         card.bind(on_release=self.historyanamnes)
                         card.year = i[0:4]
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                    self.manager.get_screen('history').ids.historyscreen.source = 'Assets/lkcardscreen/bg/priem.png'
+                    self.manager.get_screen('history').ids.historyscreen.reload()
                     self.manager.current = 'history'
                 except:
                     self.criterr()
@@ -461,6 +466,8 @@ class LKCard(Screen):
                             card.docid = jsanaliz['documents'][i]['documentId']
                             card.bind(on_release=self.documentview)
                             self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                    self.manager.get_screen('history').ids.historyscreen.source = 'Assets/lkcardscreen/bg/analiz.png'
+                    self.manager.get_screen('history').ids.historyscreen.reload()
                     self.manager.current = 'history'
                 except Exception as ex:
                     print(ex)
@@ -508,8 +515,11 @@ class LKCard(Screen):
                         card.docid = jsldp['documents'][i]['documentId']
                         card.bind(on_release=self.documentview)
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                    self.manager.get_screen('history').ids.historyscreen.source = 'Assets/lkcardscreen/bg/ldp.png'
+                    self.manager.get_screen('history').ids.historyscreen.reload()
                     self.manager.current = 'history'
-                except:
+                except Exception as ex:
+                    print(ex)
                     self.criterr()
 
             def myboln(*args):
@@ -532,11 +542,8 @@ class LKCard(Screen):
                                 text_color=get_color_from_hex('#D4F5EC'),
                                 halign='center'
                             )
-                            title.font_name = 'Assets/fonts/roboto.ttf'
-                            if len(jssp['certificates095'][i]['educationalName']) < 88:
+                            if len(jssp['certificates095'][i]['educationalName'])>1:
                                 title.font_size = 40
-                            else:
-                                title.font_size = 30
                         except:
                             title = MDLabel(
                                 text=f"Справка",
@@ -544,9 +551,9 @@ class LKCard(Screen):
                                 text_color=get_color_from_hex('#D4F5EC'),
                                 halign='center'
                             )
-                            title.font_size = 40
+                        title.font_size = 40
                         title.font_name = 'Assets/fonts/roboto.ttf'
-                        title.pos_hint = {'center_x': .5, 'center_y': .7}
+                        title.pos_hint = {'center_x': .5, 'center_y': .8}
                         layout.add_widget(title)
                         doctorname = MDLabel(
                             text=f"{jssp['certificates095'][i]['medicalEmployeeName']}",
@@ -554,9 +561,9 @@ class LKCard(Screen):
                             text_color=get_color_from_hex('#D4F5EC'),
                             halign='center'
                         )
-                        doctorname.font_size = 30
+                        doctorname.font_size = 35
                         doctorname.font_name = 'Assets/fonts/roboto.ttf'
-                        doctorname.pos_hint = {'center_x': .5, 'center_y': .3}
+                        doctorname.pos_hint = {'center_x': .5, 'center_y': .42}
                         layout.add_widget(doctorname)
                         doctorspec = MDLabel(
                             text=f"{jssp['certificates095'][i]['medicalEmployeeSpeciality']}",
@@ -564,9 +571,9 @@ class LKCard(Screen):
                             text_color=get_color_from_hex('#D4F5EC'),
                             halign='center'
                         )
-                        doctorspec.font_size = 30
+                        doctorspec.font_size = 35
                         doctorspec.font_name = 'Assets/fonts/roboto.ttf'
-                        doctorspec.pos_hint = {'center_x': .5, 'center_y': .6}
+                        doctorspec.pos_hint = {'center_x': .5, 'center_y': .62}
                         layout.add_widget(doctorspec)
                         mu = MDLabel(
                             text=f"{jssp['certificates095'][i]['muName']}",
@@ -574,14 +581,16 @@ class LKCard(Screen):
                             text_color=get_color_from_hex('#D4F5EC'),
                             halign='center'
                         )
-                        mu.font_size = 30
+                        mu.font_size = 35
                         mu.font_name = 'Assets/fonts/roboto.ttf'
-                        mu.pos_hint = {'center_x': .5, 'center_y': .2}
+                        mu.pos_hint = {'center_x': .5, 'center_y': .22}
                         layout.add_widget(mu)
                         card.docid = jssp['certificates095'][i]['documentId']
                         card.bind(on_release=self.documentview)
                         card.add_widget(layout)
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                    self.manager.get_screen('history').ids.historyscreen.source = 'Assets/lkcardscreen/bg/spravk.png'
+                    self.manager.get_screen('history').ids.historyscreen.reload()
                     self.manager.current = 'history'
                 except Exception as ex:
                     print(ex)
@@ -626,6 +635,8 @@ class LKCard(Screen):
                         card.docid = jsstac['documents'][i]['documentId']
                         card.bind(on_release=self.documentview)
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                    self.manager.get_screen('history').ids.historyscreen.source = 'Assets/lkcardscreen/bg/vipiski.png'
+                    self.manager.get_screen('history').ids.historyscreen.reload()
                     self.manager.current = 'history'
                 except:
                     self.criterr()
@@ -637,42 +648,36 @@ class LKCard(Screen):
                         headers={'X-Access-JWT': self.authtoken})
                     jsrec = recepies.json()
                     for i in range(len(jsrec['receipts'])):
+                        card = MDCard(size_hint=(1, None), height=280, md_bg_color=(0, 0, 0, 0))
                         layout = RelativeLayout()
+                        layout.add_widget(Image(source='Assets/omsloged/vrachchoosebutton.png'))
                         if jsrec['receipts'][i]['prescriptionStatus'] == 'expired':
                             doctorspec = MDLabel(
                                 text=f"Cтатус: Просрочен",
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                halign='center'
                             )
-                            doctorspec.font_size = 30
+                            doctorspec.font_size = 35
                             doctorspec.font_name = 'Assets/fonts/roboto.ttf'
-                            doctorspec.pos_hint = {'center_x': .5, 'center_y': .8}
+                            doctorspec.pos_hint = {'center_x': .55, 'center_y': .62}
                             layout.add_widget(doctorspec)
                         else:
                             doctorspec = MDLabel(
                                 text=f"Cтатус: Действует",
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                halign='center'
                             )
-                            doctorspec.font_size = 30
+                            doctorspec.font_size = 35
                             doctorspec.font_name = 'Assets/fonts/roboto.ttf'
-                            doctorspec.pos_hint = {'center_x': .5, 'center_y': .8}
+                            doctorspec.pos_hint = {'center_x': .55, 'center_y': .62}
                             layout.add_widget(doctorspec)
-                        card = MDCard(size_hint=(1, None), height=280, md_bg_color=(0, 0, 0, 0))
-                        layout.add_widget(Image(source='Assets/omsloged/vrachchoosebutton.png'))
                         title = MDLabel(
                             text=f"{jsrec['receipts'][i]['medicineName']}",
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            halign='center'
                         )
-                        if len(jsrec['receipts'][i]['medicineName']) < 88:
-                            title.font_size = 40
-                        else:
-                            title.font_size = 30
-                        title.pos_hint = {'center_x': .5, 'center_y': .6}
+                        title.font_size = 40
+                        title.pos_hint = {'center_x': .55, 'center_y': .8}
                         title.font_name = 'Assets/fonts/roboto.ttf'
                         layout.add_widget(title)
                         time = datetime.datetime.fromisoformat(jsrec['receipts'][i]['prescriptionDate'])
@@ -680,22 +685,20 @@ class LKCard(Screen):
                             text=f'{time.strftime("Выписан %d %b %Y")}',
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            halign='center'
                         )
-                        timelab.font_size = 30
+                        timelab.font_size = 35
                         timelab.font_name = 'Assets/fonts/roboto.ttf'
-                        timelab.pos_hint = {'center_x': .5, 'center_y': .4}
+                        timelab.pos_hint = {'center_x': .55, 'center_y': .42}
                         layout.add_widget(timelab)
                         times = datetime.datetime.fromisoformat(jsrec['receipts'][i]['expirationDate'])
                         timelabs = MDLabel(
                             text=f'{times.strftime("Истечет %d %b %Y")}',
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            halign='center'
                         )
-                        timelabs.font_size = 30
+                        timelabs.font_size = 35
                         timelabs.font_name = 'Assets/fonts/roboto.ttf'
-                        timelabs.pos_hint = {'center_x': .5, 'center_y': .2}
+                        timelabs.pos_hint = {'center_x': .55, 'center_y': .22}
                         prosmotr = self.s.get(
                             f"https://lk.emias.mos.ru/api/3/receipt/details?ehrId={self.idus}&prescriptionNumber={jsrec['receipts'][i]['prescriptionNumber']}",
                             headers={'X-Access-JWT': self.authtoken})
@@ -715,8 +718,11 @@ class LKCard(Screen):
                         layout.add_widget(timelabs)
                         card.add_widget(layout)
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                    self.manager.get_screen('history').ids.historyscreen.source = 'Assets/lkcardscreen/bg/recepies.png'
+                    self.manager.get_screen('history').ids.historyscreen.reload()
                     self.manager.current = 'history'
-                except:
+                except Exception as ex:
+                    print(ex)
                     self.criterr()
 
             def myemergency(*args):
@@ -732,27 +738,31 @@ class LKCard(Screen):
                         title = MDLabel(
                             text=f"{jsemg['documents'][i]['diagnosis']}",
                             theme_text_color='Custom',
-                            text_color='white',
+                            text_color=get_color_from_hex('#D4F5EC'),
+                            halign='center'
                         )
-                        title.font_size = 30
+                        title.font_size = 45
                         title.font_name = 'Assets/fonts/roboto.ttf'
-                        title.pos_hint = {'center_x': .55, 'center_y': .8}
+                        title.pos_hint = {'center_x': .5, 'center_y': .7}
                         layout.add_widget(title)
                         timeclean = jsemg['documents'][i]['callDate']
                         time = datetime.datetime.strptime(timeclean[0:16], "%Y-%m-%dT%H:%M")
                         timelab = MDLabel(
                             text=f'{time.strftime("%a, %d %b %Y")}',
                             theme_text_color='Custom',
-                            text_color='white',
+                            text_color=get_color_from_hex('#D4F5EC'),
+                            halign='center'
                         )
                         timelab.font_size = 30
                         timelab.font_name = 'Assets/fonts/roboto.ttf'
-                        timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                        timelab.pos_hint = {'center_x': .5, 'center_y': .2}
                         layout.add_widget(timelab)
                         card.add_widget(layout)
                         card.docid = jsemg['documents'][i]['documentId']
                         card.bind(on_release=self.documentview)
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                    self.manager.get_screen('history').ids.historyscreen.source = 'Assets/lkcardscreen/bg/emerg.png'
+                    self.manager.get_screen('history').ids.historyscreen.reload()
                     self.manager.current = 'history'
                 except:
                     self.criterr()
