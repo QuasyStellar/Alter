@@ -29,6 +29,7 @@ class LKCard(Screen):
         self.manager.get_screen('timetable').ids.lay.clear_widgets()
         self.manager.get_screen('prik').ids.lay.clear_widgets()
         self.manager.get_screen('napr').ids.scrollid.clear_widgets()
+
     def on_touch_down(self, touch=None):
 
         def inactive(*args):
@@ -105,7 +106,7 @@ class LKCard(Screen):
             )
             self.dialog.open()
         except:
-            criterr()
+            self.criterr()
 
     def documentview(self, instance):
         try:
@@ -135,7 +136,7 @@ class LKCard(Screen):
             except:
                 self.documentview(instance)
         except:
-            criterr()
+            self.criterr()
 
     def historyanamnes(self, instance):
         try:
@@ -218,7 +219,7 @@ class LKCard(Screen):
                         self.manager.get_screen("anamn").ids.scrollid.add_widget(card)
                     self.manager.current = 'anamn'
         except:
-            criterr()
+            self.criterr()
 
     def view(self, id):
         try:
@@ -262,7 +263,7 @@ class LKCard(Screen):
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
                 except:
-                    criterr()
+                    self.criterr()
 
             def myanamnes(*args):
                 try:
@@ -296,7 +297,7 @@ class LKCard(Screen):
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
                 except:
-                    criterr()
+                    self.criterr()
 
             def myanaliz(*args):
                 try:
@@ -338,7 +339,7 @@ class LKCard(Screen):
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
                 except:
-                    criterr()
+                    self.criterr()
 
             def myldp(*args):
                 try:
@@ -380,7 +381,7 @@ class LKCard(Screen):
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
                 except:
-                    criterr()
+                    self.criterr()
 
             def myboln(*args):
                 pass
@@ -454,7 +455,7 @@ class LKCard(Screen):
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
                 except:
-                    criterr()
+                    self.criterr()
 
             def mystacionar(*args):
                 try:
@@ -479,7 +480,8 @@ class LKCard(Screen):
                         title.font_name = 'Assets/fonts/roboto.ttf'
                         title.pos_hint = {'center_x': .5, 'center_y': .6}
                         layout.add_widget(title)
-                        time = datetime.datetime.strptime(jsstac['documents'][i]['dischargeDate'], "%Y-%m-%dT%H:%M:%S%z")
+                        time = datetime.datetime.strptime(jsstac['documents'][i]['dischargeDate'],
+                                                          "%Y-%m-%dT%H:%M:%S%z")
                         timelab = MDLabel(
                             text=f'{time.strftime("%a, %d %b %Y")}',
                             theme_text_color='Custom',
@@ -496,7 +498,7 @@ class LKCard(Screen):
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
                 except:
-                    criterr()
+                    self.criterr()
 
             def myrecepies(*args):
                 try:
@@ -585,7 +587,7 @@ class LKCard(Screen):
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
                 except:
-                    criterr()
+                    self.criterr()
 
             def myemergency(*args):
                 try:
@@ -621,7 +623,7 @@ class LKCard(Screen):
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
                 except:
-                    criterr()
+                    self.criterr()
 
             if id == 1:
                 Clock.schedule_once(covidtest)
@@ -642,4 +644,4 @@ class LKCard(Screen):
             elif id == 10:
                 Clock.schedule_once(myemergency)
         except:
-            criterr()
+            self.criterr()
