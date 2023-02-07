@@ -9,7 +9,7 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
 from kivy.utils import get_color_from_hex
-from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.button import MDRaisedButton, MDFlatButton
 from kivymd.uix.card import MDCard
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.label import MDLabel
@@ -145,9 +145,9 @@ class LKCard(Screen):
                 headers={'X-Access-JWT': self.authtoken})
             jsanam = anamnes.json()
             for i in range(len(jsanam['documents'])):
-                card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                              md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                card = MDCard(size_hint=(1, None), height=280, md_bg_color=(0, 0, 0, 0))
                 layout = RelativeLayout()
+                layout.add_widget(Image(source='Assets/omsloged/vrachchoosebutton.png'))
                 if 'appointmentDate' in jsanam['documents'][i]:
                     date = jsanam['documents'][i]['appointmentDate']
                     if date[0:4] == instance.year:
@@ -158,20 +158,24 @@ class LKCard(Screen):
                                 doctorspec = MDLabel(
                                     text=f"{jsanam['documents'][i]['doctorSpecialization']}",
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
+                                    halign='center'
                                 )
-                                doctorspec.font_size = 45
-                                doctorspec.pos_hint = {'center_x': .55, 'center_y': .8}
+                                doctorspec.font_size = 40
+                                doctorspec.font_name = 'Assets/fonts/roboto.ttf'
+                                doctorspec.pos_hint = {'center_x': .5, 'center_y': .8}
                                 layout.add_widget(doctorspec)
                         except:
                             if 'title' in jsanam['documents'][i] and jsanam['documents'][i]['title'] != None:
                                 title = MDLabel(
                                     text=f"{jsanam['documents'][i]['title']}",
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
+                                    halign='center'
                                 )
-                                title.font_size = 45
-                                title.pos_hint = {'center_x': .55, 'center_y': .8}
+                                title.font_size = 40
+                                title.font_name = 'Assets/fonts/roboto.ttf'
+                                title.pos_hint = {'center_x': .5, 'center_y': .6}
                                 layout.add_widget(title)
                                 flag = True
                         if flag == False:
@@ -179,19 +183,23 @@ class LKCard(Screen):
                                 title = MDLabel(
                                     text=f"{jsanam['documents'][i]['title']}",
                                     theme_text_color='Custom',
-                                    text_color='white',
+                                    text_color=get_color_from_hex('#D4F5EC'),
+                                    halign='center'
                                 )
-                                title.font_size = 45
-                                title.pos_hint = {'center_x': .55, 'center_y': .6}
+                                title.font_size = 40
+                                title.font_name = 'Assets/fonts/roboto.ttf'
+                                title.pos_hint = {'center_x': .5, 'center_y': .6}
                                 layout.add_widget(title)
                         if 'doctorName' in jsanam['documents'][i] and jsanam['documents'][i]['doctorName'] != None:
                             doctorname = MDLabel(
                                 text=f"{jsanam['documents'][i]['doctorName']}",
                                 theme_text_color='Custom',
-                                text_color='white',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                halign='center'
                             )
-                            doctorname.font_size = 45
-                            doctorname.pos_hint = {'center_x': .55, 'center_y': .4}
+                            doctorname.font_name = 'Assets/fonts/roboto.ttf'
+                            doctorname.font_size = 40
+                            doctorname.pos_hint = {'center_x': .5, 'center_y': .4}
                             layout.add_widget(doctorname)
                         if 'appointmentDate' in jsanam['documents'][i] and jsanam['documents'][i][
                             'appointmentDate'] != None:
@@ -199,20 +207,13 @@ class LKCard(Screen):
                             timelab = MDLabel(
                                 text=f'{time.strftime("%a, %d %b %Y")}',
                                 theme_text_color='Custom',
-                                text_color='white',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                halign='center'
                             )
-                            timelab.font_size = 35
-                            timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
+                            timelab.font_size = 30
+                            timelab.font_name = 'Assets/fonts/roboto.ttf'
+                            timelab.pos_hint = {'center_x': .5, 'center_y': .2}
                             layout.add_widget(timelab)
-                        if 'organisation' in jsanam['documents'][i] and jsanam['documents'][i]['organisation'] != None:
-                            address = MDLabel(
-                                text=jsanam['documents'][i]['organisation'],
-                                theme_text_color='Custom',
-                                text_color='white',
-                            )
-                            address.font_size = 30
-                            address.pos_hint = {'center_x': .55, 'center_y': .2}
-                            layout.add_widget(address)
                         card.add_widget(layout)
                         card.docid = jsanam["documents"][i]["documentId"]
                         card.bind(on_release=self.documentview)
@@ -306,39 +307,167 @@ class LKCard(Screen):
                         headers={'X-Access-JWT': self.authtoken})
                     jsanaliz = analiz.json()
                     for i in range(len(jsanaliz['documents'])):
-                        card = MDCard(size_hint=(1, None), height=280, md_bg_color=(0, 0, 0, 0))
-                        layout = RelativeLayout()
-                        layout.add_widget(Image(source='Assets/omsloged/vrachchoosebutton.png'))
-                        title = MDLabel(
-                            text=f"{jsanaliz['documents'][i]['title']}",
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                            halign='center'
-                        )
-                        title.font_name = 'Assets/fonts/roboto.ttf'
-                        if len(jsanaliz['documents'][i]['title']) < 88:
-                            title.font_size = 40
+                        if 'ОАК' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ крови' in \
+                                jsanaliz['documents'][i]['title'] or (
+                                'кров' in jsanaliz['documents'][i]['title'] and 'общ' in jsanaliz['documents'][i][
+                            'title']) or 'Клинический анализ крови' in jsanaliz['documents'][i]['title']:
+                            card = MDCard(size_hint=(1, None), height=330, md_bg_color=(0, 0, 0, 0))
+                            layout = RelativeLayout()
+                            layout.add_widget(Image(source='Assets/omsloged/zapisperenos.png', keep_ratio=False))
+                            title = MDLabel(
+                                text=f"{jsanaliz['documents'][i]['title']}",
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                halign='center'
+                            )
+                            if len(jsanaliz['documents'][i]['title']) < 88:
+                                title.font_size = 40
+                            else:
+                                title.font_size = 30
+                            title.font_name = 'Assets/fonts/roboto.ttf'
+                            title.pos_hint = {'center_x': .5, 'center_y': .7}
+                            layout.add_widget(title)
+                            time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
+                            timelab = MDLabel(
+                                text=f'{time.strftime("%a, %d %b %Y")}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                halign='center'
+                            )
+                            timelab.font_size = 30
+                            timelab.font_name = 'Assets/fonts/roboto.ttf'
+                            timelab.pos_hint = {'center_x': .5, 'center_y': .45}
+                            dec = MDFlatButton(
+                                text='Расшифровать',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint=(.4846, .17),
+                                md_bg_color=(0, 0, 0, 0)
+                            )
+                            dec.docid = jsanaliz['documents'][i]['documentId']
+                            dec.date = jsanaliz['documents'][i]['date']
+                            dec.bind(on_release=self.manager.get_screen('decrypt').OKAKLK, )
+                            dec.pos_hint = {'center_x': .748, 'center_y': .23}
+                            dec.font_size = 30
+                            dec.font_name = 'Assets/fonts/roboto.ttf'
+                            look = MDFlatButton(
+                                text="Просмотр",
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint=(.49, .17),
+                                md_bg_color=(0, 0, 0, 0)
+                            )
+                            look.pos_hint = {'center_x': .253, 'center_y': .23}
+                            look.font_size = 30
+                            look.font_name = 'Assets/fonts/roboto.ttf'
+                            look.docid = jsanaliz['documents'][i]['documentId']
+                            look.bind(on_release=self.manager.get_screen('lkcard').documentview)
+                            layout.add_widget(look)
+                            layout.add_widget(dec)
+                            layout.add_widget(timelab)
+                            card.add_widget(layout)
+                            self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                        elif 'ОАМ' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ мочи' in \
+                                jsanaliz['documents'][i]['title'] or 'Клинический анализ мочи' in \
+                                jsanaliz['documents'][i][
+                                    'title'] or (
+                                'моч' in jsanaliz['documents'][i]['title'] and 'анализ' in jsanaliz['documents'][i][
+                            'title']):
+                            card = MDCard(size_hint=(1, None), height=330, md_bg_color=(0, 0, 0, 0))
+                            layout = RelativeLayout()
+                            layout.add_widget(Image(source='Assets/omsloged/zapisperenos.png', keep_ratio=False))
+                            title = MDLabel(
+                                text=f"{jsanaliz['documents'][i]['title']}",
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                halign='center'
+                            )
+                            if len(jsanaliz['documents'][i]['title']) < 88:
+                                title.font_size = 40
+                            else:
+                                title.font_size = 30
+                            title.font_name = 'Assets/fonts/roboto.ttf'
+                            title.pos_hint = {'center_x': .5, 'center_y': .7}
+                            layout.add_widget(title)
+                            time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
+                            timelab = MDLabel(
+                                text=f'{time.strftime("%a, %d %b %Y")}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                halign='center'
+                            )
+                            timelab.font_size = 30
+                            timelab.font_name = 'Assets/fonts/roboto.ttf'
+                            timelab.pos_hint = {'center_x': .5, 'center_y': .45}
+                            dec = MDFlatButton(
+                                text='Расшифровать',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint=(.4846, .17),
+                                md_bg_color=(0, 0, 0, 0)
+                            )
+                            dec.docid = jsanaliz['documents'][i]['documentId']
+                            dec.date = jsanaliz['documents'][i]['date']
+                            dec.bind(on_release=self.manager.get_screen('decrypt').OKAKLK, )
+                            dec.pos_hint = {'center_x': .748, 'center_y': .23}
+                            dec.font_size = 30
+                            dec.font_name = 'Assets/fonts/roboto.ttf'
+                            look = MDFlatButton(
+                                text="Просмотр",
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                size_hint=(.49, .17),
+                                md_bg_color=(0, 0, 0, 0)
+                            )
+                            look.pos_hint = {'center_x': .253, 'center_y': .23}
+                            look.font_size = 30
+                            look.font_name = 'Assets/fonts/roboto.ttf'
+                            look.docid = jsanaliz['documents'][i]['documentId']
+                            look.bind(on_release=self.manager.get_screen('lkcard').documentview)
+                            layout.add_widget(look)
+                            layout.add_widget(dec)
+                            layout.add_widget(timelab)
+                            card.add_widget(layout)
+                            self.manager.get_screen("history").ids.scrollid.add_widget(card)
                         else:
-                            title.font_size = 30
-                        title.pos_hint = {'center_x': .5, 'center_y': .6}
-                        layout.add_widget(title)
-                        time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
-                        timelab = MDLabel(
-                            text=f'{time.strftime("%a, %d %b %Y")}',
-                            theme_text_color='Custom',
-                            text_color=get_color_from_hex('#D4F5EC'),
-                            halign='center'
-                        )
-                        timelab.font_size = 30
-                        timelab.font_name = 'Assets/fonts/roboto.ttf'
-                        timelab.pos_hint = {'center_x': .5, 'center_y': .2}
-                        layout.add_widget(timelab)
-                        card.add_widget(layout)
-                        card.docid = jsanaliz['documents'][i]['documentId']
-                        card.bind(on_release=self.documentview)
-                        self.manager.get_screen("history").ids.scrollid.add_widget(card)
+                            card = MDCard(size_hint=(1, None), height=280, md_bg_color=(0, 0, 0, 0))
+                            layout = RelativeLayout()
+                            layout.add_widget(Image(source='Assets/omsloged/vrachchoosebutton.png'))
+                            title = MDLabel(
+                                text=f"{jsanaliz['documents'][i]['title']}",
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                halign='center'
+                            )
+                            title.font_name = 'Assets/fonts/roboto.ttf'
+                            if len(jsanaliz['documents'][i]['title']) < 88:
+                                title.font_size = 40
+                            else:
+                                title.font_size = 30
+                            title.pos_hint = {'center_x': .5, 'center_y': .6}
+                            layout.add_widget(title)
+                            time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
+                            timelab = MDLabel(
+                                text=f'{time.strftime("%a, %d %b %Y")}',
+                                theme_text_color='Custom',
+                                text_color=get_color_from_hex('#D4F5EC'),
+                                halign='center'
+                            )
+                            timelab.font_size = 30
+                            timelab.font_name = 'Assets/fonts/roboto.ttf'
+                            timelab.pos_hint = {'center_x': .5, 'center_y': .2}
+                            layout.add_widget(timelab)
+                            card.add_widget(layout)
+                            card.docid = jsanaliz['documents'][i]['documentId']
+                            card.bind(on_release=self.documentview)
+                            self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
-                except:
+                except Exception as ex:
+                    print(ex)
+                    analiz = self.s.get(
+                        f'https://lk.emias.mos.ru/api/1/documents/analyzes?ehrId={self.idus}&shortDateFilter=all_time',
+                        headers={'X-Access-JWT': self.authtoken})
+                    print(analiz.json())
                     self.criterr()
 
             def myldp(*args):
@@ -454,7 +583,8 @@ class LKCard(Screen):
                         card.add_widget(layout)
                         self.manager.get_screen("history").ids.scrollid.add_widget(card)
                     self.manager.current = 'history'
-                except:
+                except Exception as ex:
+                    print(ex)
                     self.criterr()
 
             def mystacionar(*args):
@@ -596,15 +726,16 @@ class LKCard(Screen):
                         headers={'X-Access-JWT': self.authtoken})
                     jsemg = emergency.json()
                     for i in range(len(jsemg['documents'])):
-                        card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                                      md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
+                        card = MDCard(size_hint=(1, None), height=280, md_bg_color=(0, 0, 0, 0))
                         layout = RelativeLayout()
+                        layout.add_widget(Image(source='Assets/omsloged/vrachchoosebutton.png'))
                         title = MDLabel(
                             text=f"{jsemg['documents'][i]['diagnosis']}",
                             theme_text_color='Custom',
                             text_color='white',
                         )
-                        title.font_size = 45
+                        title.font_size = 30
+                        title.font_name = 'Assets/fonts/roboto.ttf'
                         title.pos_hint = {'center_x': .55, 'center_y': .8}
                         layout.add_widget(title)
                         timeclean = jsemg['documents'][i]['callDate']
@@ -614,7 +745,8 @@ class LKCard(Screen):
                             theme_text_color='Custom',
                             text_color='white',
                         )
-                        timelab.font_size = 35
+                        timelab.font_size = 30
+                        timelab.font_name = 'Assets/fonts/roboto.ttf'
                         timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
                         layout.add_widget(timelab)
                         card.add_widget(layout)

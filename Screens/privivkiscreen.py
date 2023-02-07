@@ -2,8 +2,10 @@ import datetime
 
 from kivy.clock import Clock
 from kivy.uix.behaviors import ToggleButtonBehavior
+from kivy.uix.image import Image
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.screenmanager import Screen
+from kivy.utils import get_color_from_hex
 from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
 
@@ -50,6 +52,18 @@ class PrivivkiView(Screen):
 
 
 class Privivki(Screen):
+    def criterr(self):
+        self.manager.current = 'omserrorunk'
+        self.manager.get_screen('privview').ids.scrollid.clear_widgets()
+        self.manager.get_screen('history').ids.scrollid.clear_widgets()
+        self.manager.get_screen('anamn').ids.scrollid.clear_widgets()
+        self.manager.get_screen('decrypt').ids.scrollid.clear_widgets()
+        self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
+        self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
+        self.manager.get_screen('timetable').ids.lay.clear_widgets()
+        self.manager.get_screen('prik').ids.lay.clear_widgets()
+        self.manager.get_screen('napr').ids.scrollid.clear_widgets()
+
     def on_touch_down(self, touch=None):
 
         def inactive(*args):
@@ -88,83 +102,108 @@ class Privivki(Screen):
             return super(Screen, self).on_touch_down(touch)
 
     def prof(self):
-        vacin = self.s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={self.idus}",
+        try:
+            vacin = self.s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={self.idus}",
                            headers={'X-Access-JWT': self.authtoken})
-        jsvac = vacin.json()
-        for i in range(len(jsvac['doneList'])):
-            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
-            layout = RelativeLayout()
-            title = MDLabel(
-                text=f"{jsvac['doneList'][i]['infectionList'][0]['infectionName']}",
-                theme_text_color='Custom',
-                text_color='white',
-            )
-            title.font_size = 45
-            title.pos_hint = {'center_x': .55, 'center_y': .8}
-            layout.add_widget(title)
-            time = datetime.datetime.fromisoformat(jsvac['doneList'][i]['dateVaccination'])
-            timelab = MDLabel(
-                text=f'{time.strftime("%a, %d %b %Y")}',
-                theme_text_color='Custom',
-                text_color='white',
-            )
-            timelab.font_size = 35
-            timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
-            age = MDLabel(
-                text=f"{jsvac['doneList'][i]['age']}",
-                theme_text_color='Custom',
-                text_color='white',
-            )
-            age.font_size = 45
-            age.pos_hint = {'center_x': 1.2, 'center_y': .3}
-            layout.add_widget(age)
-            layout.add_widget(timelab)
-            card.add_widget(layout)
-            self.manager.get_screen("privview").ids.scrollid.add_widget(card)
-        self.manager.current = 'privview'
+            jsvac = vacin.json()
+            for i in range(len(jsvac['doneList'])):
+                card = MDCard(size_hint=(1, None), height=280, md_bg_color=(0, 0, 0, 0))
+                layout = RelativeLayout()
+                layout.add_widget(Image(source='Assets/omsloged/vrachchoosebutton.png'))
+                title = MDLabel(
+                    text=f"{jsvac['doneList'][i]['infectionList'][0]['infectionName']}",
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    halign='center'
+                )
+                title.font_size = 40
+                title.font_name = 'Assets/fonts/roboto.ttf'
+                title.pos_hint = {'center_x': .5, 'center_y': .8}
+                layout.add_widget(title)
+                time = datetime.datetime.fromisoformat(jsvac['doneList'][i]['dateVaccination'])
+                timelab = MDLabel(
+                    text=f'{time.strftime("%a, %d %b %Y")}',
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    halign='center'
+                )
+                timelab.font_size = 40
+                timelab.font_name = 'Assets/fonts/roboto.ttf'
+                timelab.pos_hint = {'center_x': .5, 'center_y': .65}
+                age = MDLabel(
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    halign='center'
+                )
+                if jsvac['doneList'][i]['age'] == 0:
+                    age.text = 'Возраст: <1'
+                else:
+                    age.text = f"Возраст: {jsvac['doneList'][i]['age']}"
+                age.font_size = 40
+                age.font_name = 'Assets/fonts/roboto.ttf'
+                age.pos_hint = {'center_x': .5, 'center_y': .3}
+                layout.add_widget(age)
+                layout.add_widget(timelab)
+                card.add_widget(layout)
+                self.manager.get_screen("privview").ids.scrollid.add_widget(card)
+            self.manager.current = 'privview'
+        except:
+            self.criterr()
 
     def immuno(self):
-        vacin = self.s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={self.idus}",
-                           headers={'X-Access-JWT': self.authtoken})
-        jsvac = vacin.json()
-        for i in range(len(jsvac['tubList'])):
-            card = MDCard(orientation='vertical', size_hint=(1, None), height=300,
-                          md_bg_color=(29 / 255, 89 / 255, 242 / 255, 1), radius=[30])
-            layout = RelativeLayout()
-            title = MDLabel(
-                text=f"{jsvac['tubList'][i]['infectionList'][0]['infectionName']}",
-                theme_text_color='Custom',
-                text_color='white',
-            )
-            title.font_size = 45
-            title.pos_hint = {'center_x': .55, 'center_y': .8}
-            layout.add_widget(title)
-            time = datetime.datetime.fromisoformat(jsvac['tubList'][i]['dateVaccination'])
-            timelab = MDLabel(
-                text=f'{time.strftime("%a, %d %b %Y")}',
-                theme_text_color='Custom',
-                text_color='white',
-            )
-            timelab.font_size = 35
-            timelab.pos_hint = {'center_x': 1.2, 'center_y': .65}
-            age = MDLabel(
-                text=f"{jsvac['tubList'][i]['age']}",
-                theme_text_color='Custom',
-                text_color='white',
-            )
-            age.font_size = 45
-            age.pos_hint = {'center_x': 1.2, 'center_y': .3}
-            layout.add_widget(age)
-            result = MDLabel(
-                text=f"{jsvac['tubList'][i]['tubResultList'][0]['reactionKind']}",
-                theme_text_color='Custom',
-                text_color='white',
-            )
-            result.font_size = 45
-            result.pos_hint = {'center_x': .55, 'center_y': .4}
-            layout.add_widget(result)
-            layout.add_widget(timelab)
-            card.add_widget(layout)
-            self.manager.get_screen("privview").ids.scrollid.add_widget(card)
-        self.manager.current = 'privview'
+        try:
+            vacin = self.s.get(f"https://lk.emias.mos.ru/api/3/vaccinations?ehrId={self.idus}",
+                               headers={'X-Access-JWT': self.authtoken})
+            jsvac = vacin.json()
+            for i in range(len(jsvac['tubList'])):
+                card = MDCard(size_hint=(1, None), height=280, md_bg_color=(0, 0, 0, 0))
+                layout = RelativeLayout()
+                layout.add_widget(Image(source='Assets/omsloged/vrachchoosebutton.png'))
+                title = MDLabel(
+                    text=f"{jsvac['tubList'][i]['infectionList'][0]['infectionName']}",
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    halign='center'
+                )
+                title.font_size = 40
+                title.font_name = 'Assets/fonts/roboto.ttf'
+                title.pos_hint = {'center_x': .5, 'center_y': .8}
+                layout.add_widget(title)
+                time = datetime.datetime.fromisoformat(jsvac['tubList'][i]['dateVaccination'])
+                timelab = MDLabel(
+                    text=f'{time.strftime("%a, %d %b %Y")}',
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    halign='center'
+                )
+                timelab.font_size = 40
+                timelab.font_name = 'Assets/fonts/roboto.ttf'
+                timelab.pos_hint = {'center_x': .5, 'center_y': .65}
+                age = MDLabel(
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    halign='center'
+                )
+                age.font_size = 40
+                if jsvac['doneList'][i]['age'] == 0:
+                    age.text = 'Возраст: <1'
+                else:
+                    age.text = f"Возраст: {jsvac['doneList'][i]['age']}"
+                age.font_name = 'Assets/fonts/roboto.ttf'
+                age.pos_hint = {'center_x': .5, 'center_y': .3}
+                layout.add_widget(age)
+                result = MDLabel(
+                    text=f"{jsvac['tubList'][i]['tubResultList'][0]['reactionKind']}",
+                    theme_text_color='Custom',
+                    text_color=get_color_from_hex('#D4F5EC'),
+                    halign='center'
+                )
+                result.font_size = 40
+                result.pos_hint = {'center_x': .5, 'center_y': .4}
+                layout.add_widget(result)
+                layout.add_widget(timelab)
+                card.add_widget(layout)
+                self.manager.get_screen("privview").ids.scrollid.add_widget(card)
+            self.manager.current = 'privview'
+        except:
+            self.criterr()
