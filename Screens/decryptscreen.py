@@ -181,25 +181,23 @@ class Decrypt(Screen):
                     text=f"{jsanaliz['documents'][i]['title']}",
                     theme_text_color='Custom',
                     text_color=get_color_from_hex('#D4F5EC'),
-                    halign='center'
                 )
                 if len(jsanaliz['documents'][i]['title'])<88:
                     title.font_size = 40
                 else:
                     title.font_size = 30
                 title.font_name = 'Assets/fonts/roboto.ttf'
-                title.pos_hint = {'center_x': .5, 'center_y': .7}
+                title.pos_hint = {'center_x': .55, 'center_y': .7}
                 layout.add_widget(title)
                 time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
                 timelab = MDLabel(
                     text=f'{time.strftime("%a, %d %b %Y")}',
                     theme_text_color='Custom',
                     text_color=get_color_from_hex('#D4F5EC'),
-                    halign='center'
                 )
-                timelab.font_size = 30
+                timelab.font_size = 40
                 timelab.font_name = 'Assets/fonts/roboto.ttf'
-                timelab.pos_hint = {'center_x': .5, 'center_y': .45}
+                timelab.pos_hint = {'center_x': .55, 'center_y': .45}
                 if 'ОАК' in jsanaliz['documents'][i]['title'] or 'Общий клинический анализ крови' in \
                         jsanaliz['documents'][i]['title'] or (
                         'кров' in jsanaliz['documents'][i]['title'] and 'общ' in jsanaliz['documents'][i][

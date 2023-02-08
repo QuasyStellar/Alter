@@ -69,7 +69,6 @@ class MOSScreen(Screen):
             "user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
         chrome_options.add_argument(f"window-size={width},{height}")
         chrome_options.add_argument(f'window-position={int(width * 0.56)},{int(height * 0.05)}')
-        print(f'{int(width / 0.1)},{int(height / 0.1)}')
         chrome_options.add_experimental_option('prefs', {
             'credentials_enable_service': False,
             'profile': {
@@ -95,6 +94,9 @@ class MOSScreen(Screen):
                 authtoken = driver.execute_script(
                     "return window.localStorage.getItem('patient.web.v2.accessToken')"
                 ).replace('"', "")
+                refresh = driver.execute_script(
+                    "return window.localStorage.getItem('patient.web.v2.refreshToken')"
+                ).replace('"', "")
                 profdata = driver.execute_script(
                     "return window.sessionStorage.getItem('profile/profileData')"
                 )
@@ -117,7 +119,7 @@ class MOSScreen(Screen):
                 for cookie in driver.get_cookies():
                     c = {cookie["name"]: cookie["value"]}
                     s.cookies.update(c)
-                self.succ(names, sure, age, idus, authtoken, oms, bdates, s, gender)
+                self.succ(names, sure, age, idus, authtoken, refresh, oms, bdates, s, gender)
                 driver.quit()
         except Exception as ex:
             print(ex)
@@ -130,7 +132,7 @@ class MOSScreen(Screen):
         self.manager.current = 'load'
 
     @mainthread
-    def succ(self, names, sure, age, idus, authtoken, oms, bdates, s, gender):
+    def succ(self, names, sure, age, idus, authtoken, refresh, oms, bdates, s, gender):
         self.manager.current = "mosloged"
         self.manager.get_screen("mosloged").ids.authname.text = f'{names} {sure}'
         self.manager.get_screen("mosloged").age = age
@@ -138,7 +140,10 @@ class MOSScreen(Screen):
         self.manager.get_screen("lkcard").age = age
         self.manager.get_screen("lkcard").gender = gender
         self.manager.get_screen("lkcard").idus = idus
+        self.manager.get_screen("lkcard").s = s
         self.manager.get_screen("lkcard").authtoken = authtoken
+        self.manager.get_screen("lkcard").refresh = refresh
+        self.manager.get_screen("lkcard").tokens()
         self.manager.get_screen("decrypt").age = age
         self.manager.get_screen("decrypt").gender = gender
         self.manager.get_screen("decrypt").idus = idus
@@ -146,7 +151,6 @@ class MOSScreen(Screen):
         self.manager.get_screen("decrypt").s = s
         self.manager.get_screen("priv").idus = idus
         self.manager.get_screen("priv").authtoken = authtoken
-        self.manager.get_screen("lkcard").s = s
         self.manager.get_screen("priv").s = s
         self.manager.get_screen("loged").oms = oms
         self.manager.get_screen('loged').bdates = bdates

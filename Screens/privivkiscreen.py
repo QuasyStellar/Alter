@@ -52,18 +52,6 @@ class PrivivkiView(Screen):
 
 
 class Privivki(Screen):
-    def criterr(self):
-        self.manager.current = 'omserrorunk'
-        self.manager.get_screen('privview').ids.scrollid.clear_widgets()
-        self.manager.get_screen('history').ids.scrollid.clear_widgets()
-        self.manager.get_screen('anamn').ids.scrollid.clear_widgets()
-        self.manager.get_screen('decrypt').ids.scrollid.clear_widgets()
-        self.manager.get_screen('zapisi').ids.scrollid.clear_widgets()
-        self.manager.get_screen('perenos').ids.scrollid.clear_widgets()
-        self.manager.get_screen('timetable').ids.lay.clear_widgets()
-        self.manager.get_screen('prik').ids.lay.clear_widgets()
-        self.manager.get_screen('napr').ids.scrollid.clear_widgets()
-
     def on_touch_down(self, touch=None):
 
         def inactive(*args):
@@ -141,14 +129,16 @@ class Privivki(Screen):
                     age.text = f"Возраст: {jsvac['doneList'][i]['age']}"
                 age.font_size = 40
                 age.font_name = 'Assets/fonts/roboto.ttf'
-                age.pos_hint = {'center_x': .5, 'center_y': .5}
+                age.pos_hint = {'center_x': .5, 'center_y': .6}
                 layout.add_widget(age)
                 layout.add_widget(timelab)
                 card.add_widget(layout)
                 self.manager.get_screen("privview").ids.scrollid.add_widget(card)
             self.manager.current = 'privview'
         except:
-            self.criterr()
+            prof = self.s.post('https://lk.emias.mos.ru/api/auth/1/refresh', headers={'X-Access-JWT': self.authtoken}, json = {'refresh_token': self.refresh}).json()
+            self.authtoken = prof['access_token']
+            self.prof(instance)
 
     def immuno(self):
         try:
@@ -207,4 +197,6 @@ class Privivki(Screen):
                 self.manager.get_screen("privview").ids.scrollid.add_widget(card)
             self.manager.current = 'privview'
         except:
-            self.criterr()
+            prof = self.s.post('https://lk.emias.mos.ru/api/auth/1/refresh', headers={'X-Access-JWT': self.authtoken}, json = {'refresh_token': self.refresh}).json()
+            self.authtoken = prof['access_token']
+            self.immuno(instance)
