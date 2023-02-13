@@ -170,11 +170,11 @@ class LKCard(Screen):
                                     text=f"{jsanam['documents'][i]['doctorSpecialization']}",
                                     theme_text_color='Custom',
                                     text_color=get_color_from_hex('#D4F5EC'),
-                                    
+                                    halign='center'
                                 )
                                 doctorspec.font_size = 40
                                 doctorspec.font_name = 'Assets/fonts/roboto.ttf'
-                                doctorspec.pos_hint = {'center_x': .55, 'center_y': .7}
+                                doctorspec.pos_hint = {'center_x': .5, 'center_y': .8}
                                 layout.add_widget(doctorspec)
                         except:
                             if 'title' in jsanam['documents'][i] and jsanam['documents'][i]['title'] != None:
@@ -182,11 +182,11 @@ class LKCard(Screen):
                                     text=f"{jsanam['documents'][i]['title']}",
                                     theme_text_color='Custom',
                                     text_color=get_color_from_hex('#D4F5EC'),
-                                    
+                                    halign='center'
                                 )
                                 title.font_size = 40
                                 title.font_name = 'Assets/fonts/roboto.ttf'
-                                title.pos_hint = {'center_x': .55, 'center_y': .5}
+                                title.pos_hint = {'center_x': .5, 'center_y': .6}
                                 layout.add_widget(title)
                                 flag = True
                         if flag == False:
@@ -195,22 +195,22 @@ class LKCard(Screen):
                                     text=f"{jsanam['documents'][i]['title']}",
                                     theme_text_color='Custom',
                                     text_color=get_color_from_hex('#D4F5EC'),
-                                    
+                                    halign='center'
                                 )
                                 title.font_size = 40
                                 title.font_name = 'Assets/fonts/roboto.ttf'
-                                title.pos_hint = {'center_x': .55, 'center_y': .5}
+                                title.pos_hint = {'center_x': .5, 'center_y': .6}
                                 layout.add_widget(title)
                         if 'doctorName' in jsanam['documents'][i] and jsanam['documents'][i]['doctorName'] != None:
                             doctorname = MDLabel(
                                 text=f"{jsanam['documents'][i]['doctorName']}",
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
                             doctorname.font_name = 'Assets/fonts/roboto.ttf'
                             doctorname.font_size = 40
-                            doctorname.pos_hint = {'center_x': .55, 'center_y': .3}
+                            doctorname.pos_hint = {'center_x': .5, 'center_y': .4}
                             layout.add_widget(doctorname)
                         if 'appointmentDate' in jsanam['documents'][i] and jsanam['documents'][i][
                             'appointmentDate'] != None:
@@ -219,11 +219,11 @@ class LKCard(Screen):
                                 text=f'{time.strftime("%a, %d %b %Y")}',
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
-                            timelab.font_size = 40
+                            timelab.font_size = 30
                             timelab.font_name = 'Assets/fonts/roboto.ttf'
-                            timelab.pos_hint = {'center_x': 1.1, 'center_y': .3}
+                            timelab.pos_hint = {'center_x': .5, 'center_y': .2}
                             layout.add_widget(timelab)
                         card.add_widget(layout)
                         card.docid = jsanam["documents"][i]["documentId"]
@@ -249,25 +249,25 @@ class LKCard(Screen):
                             text=f"{jscov['documents'][i]['title']}",
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
                         if len(jscov['documents'][i]['title']) < 88:
                             title.font_size = 40
                         else:
                             title.font_size = 30
                         title.font_name = 'Assets/fonts/roboto.ttf'
-                        title.pos_hint = {'center_x': .55, 'center_y': .7}
+                        title.pos_hint = {'center_x': .5, 'center_y': .6}
                         layout.add_widget(title)
                         time = datetime.datetime.fromisoformat(jscov['documents'][i]['date'])
                         timelab = MDLabel(
                             text=f'{time.strftime("%a, %d %b %Y")}',
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
-                        timelab.font_size = 40
+                        timelab.font_size = 30
                         timelab.font_name = 'Assets/fonts/roboto.ttf'
-                        timelab.pos_hint = {'center_x': .55, 'center_y': .3}
+                        timelab.pos_hint = {'center_x': .5, 'center_y': .2}
                         layout.add_widget(timelab)
                         card.docid = jscov["documents"][i]["documentId"]
                         card.bind(on_release=self.documentview)
@@ -300,7 +300,7 @@ class LKCard(Screen):
                             text=f'Приемы за {i[0:4]} год.',
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            halign = 'center'
+                            halign='center'
                         )
                         timelab.font_size = 60
                         timelab.font_name = 'Assets/fonts/roboto.ttf'
@@ -334,25 +334,25 @@ class LKCard(Screen):
                                 text=f"{jsanaliz['documents'][i]['title']}",
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
                             if len(jsanaliz['documents'][i]['title']) < 88:
                                 title.font_size = 40
                             else:
                                 title.font_size = 30
                             title.font_name = 'Assets/fonts/roboto.ttf'
-                            title.pos_hint = {'center_x': .55, 'center_y': .7}
+                            title.pos_hint = {'center_x': .5, 'center_y': .7}
                             layout.add_widget(title)
                             time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
                             timelab = MDLabel(
                                 text=f'{time.strftime("%a, %d %b %Y")}',
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
-                            timelab.font_size = 40
+                            timelab.font_size = 30
                             timelab.font_name = 'Assets/fonts/roboto.ttf'
-                            timelab.pos_hint = {'center_x': .55, 'center_y': .45}
+                            timelab.pos_hint = {'center_x': .5, 'center_y': .45}
                             dec = MDFlatButton(
                                 text='Расшифровать',
                                 theme_text_color='Custom',
@@ -396,25 +396,25 @@ class LKCard(Screen):
                                 text=f"{jsanaliz['documents'][i]['title']}",
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
                             if len(jsanaliz['documents'][i]['title']) < 88:
                                 title.font_size = 40
                             else:
                                 title.font_size = 30
                             title.font_name = 'Assets/fonts/roboto.ttf'
-                            title.pos_hint = {'center_x': .55, 'center_y': .7}
+                            title.pos_hint = {'center_x': .5, 'center_y': .7}
                             layout.add_widget(title)
                             time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
                             timelab = MDLabel(
                                 text=f'{time.strftime("%a, %d %b %Y")}',
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
-                            timelab.font_size = 40
+                            timelab.font_size = 30
                             timelab.font_name = 'Assets/fonts/roboto.ttf'
-                            timelab.pos_hint = {'center_x': .55, 'center_y': .45}
+                            timelab.pos_hint = {'center_x': .5, 'center_y': .45}
                             dec = MDFlatButton(
                                 text='Расшифровать',
                                 theme_text_color='Custom',
@@ -453,25 +453,25 @@ class LKCard(Screen):
                                 text=f"{jsanaliz['documents'][i]['title']}",
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
                             title.font_name = 'Assets/fonts/roboto.ttf'
                             if len(jsanaliz['documents'][i]['title']) < 88:
                                 title.font_size = 40
                             else:
                                 title.font_size = 30
-                            title.pos_hint = {'center_x': .55, 'center_y': .6}
+                            title.pos_hint = {'center_x': .5, 'center_y': .6}
                             layout.add_widget(title)
                             time = datetime.datetime.fromisoformat(jsanaliz['documents'][i]['date'])
                             timelab = MDLabel(
                                 text=f'{time.strftime("%a, %d %b %Y")}',
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
-                            timelab.font_size = 40
+                            timelab.font_size = 30
                             timelab.font_name = 'Assets/fonts/roboto.ttf'
-                            timelab.pos_hint = {'center_x': .55, 'center_y': .6}
+                            timelab.pos_hint = {'center_x': .5, 'center_y': .2}
                             layout.add_widget(timelab)
                             card.add_widget(layout)
                             card.docid = jsanaliz['documents'][i]['documentId']
@@ -498,25 +498,25 @@ class LKCard(Screen):
                             text=f"{jsldp['documents'][i]['title']}",
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
                         title.font_name = 'Assets/fonts/roboto.ttf'
                         if len(jsldp['documents'][i]['title']) < 88:
                             title.font_size = 40
                         else:
                             title.font_size = 30
-                        title.pos_hint = {'center_x': .55, 'center_y': .6}
+                        title.pos_hint = {'center_x': .5, 'center_y': .6}
                         layout.add_widget(title)
                         time = datetime.datetime.fromisoformat(jsldp['documents'][i]['date'])
                         timelab = MDLabel(
                             text=f'{time.strftime("%a, %d %b %Y")}',
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
-                        timelab.font_size = 40
+                        timelab.font_size = 30
                         timelab.font_name = 'Assets/fonts/roboto.ttf'
-                        timelab.pos_hint = {'center_x': .55, 'center_y': .3}
+                        timelab.pos_hint = {'center_x': .5, 'center_y': .2}
                         layout.add_widget(timelab)
                         card.add_widget(layout)
                         card.docid = jsldp['documents'][i]['documentId']
@@ -547,7 +547,7 @@ class LKCard(Screen):
                                 text=f"{jssp['certificates095'][i]['educationalName']}",
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
                             if len(jssp['certificates095'][i]['educationalName'])>1:
                                 title.font_size = 40
@@ -556,41 +556,41 @@ class LKCard(Screen):
                                 text=f"Справка",
                                 theme_text_color='Custom',
                                 text_color=get_color_from_hex('#D4F5EC'),
-                                
+                                halign='center'
                             )
                         title.font_size = 40
                         title.font_name = 'Assets/fonts/roboto.ttf'
-                        title.pos_hint = {'center_x': .55, 'center_y': .8}
+                        title.pos_hint = {'center_x': .5, 'center_y': .8}
                         layout.add_widget(title)
                         doctorname = MDLabel(
                             text=f"{jssp['certificates095'][i]['medicalEmployeeName']}",
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
                         doctorname.font_size = 35
                         doctorname.font_name = 'Assets/fonts/roboto.ttf'
-                        doctorname.pos_hint = {'center_x': .55, 'center_y': .42}
+                        doctorname.pos_hint = {'center_x': .5, 'center_y': .42}
                         layout.add_widget(doctorname)
                         doctorspec = MDLabel(
                             text=f"{jssp['certificates095'][i]['medicalEmployeeSpeciality']}",
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
                         doctorspec.font_size = 35
                         doctorspec.font_name = 'Assets/fonts/roboto.ttf'
-                        doctorspec.pos_hint = {'center_x': .55, 'center_y': .62}
+                        doctorspec.pos_hint = {'center_x': .5, 'center_y': .62}
                         layout.add_widget(doctorspec)
                         mu = MDLabel(
                             text=f"{jssp['certificates095'][i]['muName']}",
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
                         mu.font_size = 35
                         mu.font_name = 'Assets/fonts/roboto.ttf'
-                        mu.pos_hint = {'center_x': .55, 'center_y': .22}
+                        mu.pos_hint = {'center_x': .5, 'center_y': .22}
                         layout.add_widget(mu)
                         card.docid = jssp['certificates095'][i]['documentId']
                         card.bind(on_release=self.documentview)
@@ -617,14 +617,14 @@ class LKCard(Screen):
                             text=f"{jsstac['documents'][i]['organisation']}",
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
                         if len(jsstac['documents'][i]['organisation']) < 88:
                             title.font_size = 40
                         else:
                             title.font_size = 30
                         title.font_name = 'Assets/fonts/roboto.ttf'
-                        title.pos_hint = {'center_x': .55, 'center_y': .7}
+                        title.pos_hint = {'center_x': .5, 'center_y': .6}
                         layout.add_widget(title)
                         time = datetime.datetime.strptime(jsstac['documents'][i]['dischargeDate'],
                                                           "%Y-%m-%dT%H:%M:%S%z")
@@ -632,11 +632,11 @@ class LKCard(Screen):
                             text=f'{time.strftime("%a, %d %b %Y")}',
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
                         timelab.font_size = 30
                         timelab.font_name = 'Assets/fonts/roboto.ttf'
-                        timelab.pos_hint = {'center_x': .55, 'center_y': .3}
+                        timelab.pos_hint = {'center_x': .5, 'center_y': .2}
                         layout.add_widget(timelab)
                         card.add_widget(layout)
                         card.docid = jsstac['documents'][i]['documentId']
@@ -666,7 +666,7 @@ class LKCard(Screen):
                             )
                             doctorspec.font_size = 35
                             doctorspec.font_name = 'Assets/fonts/roboto.ttf'
-                            doctorspec.pos_hint = {'center_x': .55, 'center_y': 58}
+                            doctorspec.pos_hint = {'center_x': .55, 'center_y': .62}
                             layout.add_widget(doctorspec)
                         else:
                             doctorspec = MDLabel(
@@ -676,7 +676,7 @@ class LKCard(Screen):
                             )
                             doctorspec.font_size = 35
                             doctorspec.font_name = 'Assets/fonts/roboto.ttf'
-                            doctorspec.pos_hint = {'center_x': .55, 'center_y': .58}
+                            doctorspec.pos_hint = {'center_x': .55, 'center_y': .62}
                             layout.add_widget(doctorspec)
                         title = MDLabel(
                             text=f"{jsrec['receipts'][i]['medicineName']}",
@@ -695,7 +695,7 @@ class LKCard(Screen):
                         )
                         timelab.font_size = 35
                         timelab.font_name = 'Assets/fonts/roboto.ttf'
-                        timelab.pos_hint = {'center_x': .55, 'center_y': .44}
+                        timelab.pos_hint = {'center_x': .55, 'center_y': .42}
                         layout.add_widget(timelab)
                         times = datetime.datetime.fromisoformat(jsrec['receipts'][i]['expirationDate'])
                         timelabs = MDLabel(
@@ -705,7 +705,7 @@ class LKCard(Screen):
                         )
                         timelabs.font_size = 35
                         timelabs.font_name = 'Assets/fonts/roboto.ttf'
-                        timelabs.pos_hint = {'center_x': .55, 'center_y': .24}
+                        timelabs.pos_hint = {'center_x': .55, 'center_y': .22}
                         prosmotr = self.s.get(
                             f"https://lk.emias.mos.ru/api/3/receipt/details?ehrId={self.idus}&prescriptionNumber={jsrec['receipts'][i]['prescriptionNumber']}",
                             headers={'X-Access-JWT': self.authtoken})
@@ -746,7 +746,7 @@ class LKCard(Screen):
                             text=f"{jsemg['documents'][i]['diagnosis']}",
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
                         title.font_size = 45
                         title.font_name = 'Assets/fonts/roboto.ttf'
@@ -758,7 +758,7 @@ class LKCard(Screen):
                             text=f'{time.strftime("%a, %d %b %Y")}',
                             theme_text_color='Custom',
                             text_color=get_color_from_hex('#D4F5EC'),
-                            
+                            halign='center'
                         )
                         timelab.font_size = 30
                         timelab.font_name = 'Assets/fonts/roboto.ttf'
