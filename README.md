@@ -5,6 +5,8 @@
 Исходя из результатов АльТер направляет на дополнительные обследования к врачам специалистам.
 # Использование
 АльТер планируется использовать на терминалах, оборудованных всем необходимым для сбора необходимой информации о пациенте, а также обеспечивающих необходимый уровень удобства пользования.
-#Cсылки
+# Cсылки
+
 Презентация - https://www.figma.com/proto/Rv98GK3NpQKUzNSIKzBsRN/present?page-id=0%3A1&node-id=281%3A9&viewport=389%2C617%2C0.1&scaling=contain&starting-point-node-id=281%3A12
+
 Компоненты - https://www.figma.com/file/0HvtdPQZix1DgVWHQ4BBVv/screen?node-id=0%3A1&t=KAYVbO12DFpo0m0L-1
