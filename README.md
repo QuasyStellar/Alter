@@ -7,6 +7,6 @@
 АльТер планируется использовать на терминалах, оборудованных всем необходимым для сбора необходимой информации о пациенте, а также обеспечивающих необходимый уровень удобства пользования.
 # Cсылки
 
-Презентация - https://www.figma.com/proto/Rv98GK3NpQKUzNSIKzBsRN/present?node-id=1-5&scaling=contain&page-id=0%3A1&starting-point-node-id=281%3A12
+Презентация - https://www.figma.com/file/Rv98GK3NpQKUzNSIKzBsRN/present?node-id=0%3A1&t=YdrX7awNnhj475HG-1
 
 Компоненты - https://www.figma.com/file/0HvtdPQZix1DgVWHQ4BBVv/screen?node-id=0%3A1&t=KAYVbO12DFpo0m0L-1
