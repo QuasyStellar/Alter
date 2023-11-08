@@ -7,7 +7,7 @@
 АльТер планируется использовать на терминалах, оборудованных всем необходимым для сбора необходимой информации о пациенте, а также обеспечивающих необходимый уровень удобства пользования.
 # Cсылки
 
-Презентация Pitchdeck (С анимациями) - https://pitchdeck.hypermatic.com/slides/lakozirc01167?token=UGtyUjM2OWlrSSolVW8=
+
 
 Презентация в Figma - https://www.figma.com/file/Rv98GK3NpQKUzNSIKzBsRN/present?node-id=0%3A1&t=YdrX7awNnhj475HG-1
 
